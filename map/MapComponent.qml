@@ -1,62 +1,11 @@
-/****************************************************************************
-**
-** Copyright (C) 2017 The Qt Company Ltd.
-** Contact: https://www.qt.io/licensing/
-**
-** This file is part of the examples of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and The Qt Company. For licensing terms
-** and conditions see https://www.qt.io/terms-conditions. For further
-** information use the contact form at https://www.qt.io/contact-us.
-**
-** BSD License Usage
-** Alternatively, you may use this file under the terms of the BSD license
-** as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of The Qt Company Ltd nor the names of its
-**     contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
-**
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtLocation 5.9
 import QtPositioning 5.5
 import "../helper.js" as Helper
 
-//! [top]
 Map {
     id: map
-//! [top]
     property variant markers
     property variant mapItems
     property int markerCounter: 0 // counter for total amount of markers. Resets to 0 when number of markers = 0
@@ -228,7 +177,6 @@ Map {
 
     function calculateCoordinateRoute(startCoordinate, endCoordinate)
     {
-        //! [routerequest0]
         // clear away any old data in the query
         routeQuery.clearWaypoints();
 
@@ -238,52 +186,39 @@ Map {
         routeQuery.travelModes = RouteQuery.CarTravel
         routeQuery.routeOptimizations = RouteQuery.FastestRoute
 
-        //! [routerequest0]
 
-        //! [routerequest0 feature weight]
         for (var i=0; i<9; i++) {
             routeQuery.setFeatureWeight(i, 0)
         }
         //for (var i=0; i<routeDialog.features.length; i++) {
         //    map.routeQuery.setFeatureWeight(routeDialog.features[i], RouteQuery.AvoidFeatureWeight)
         //}
-        //! [routerequest0 feature weight]
 
-        //! [routerequest1]
         routeModel.update();
 
-        //! [routerequest1]
-        //! [routerequest2]
         // center the map on the start coord
         map.center = startCoordinate;
-        //! [routerequest2]
     }
 
     function geocode(fromAddress)
     {
-        //! [geocode1]
         // send the geocode request
         geocodeModel.query = fromAddress
         geocodeModel.update()
-        //! [geocode1]
     }
 
 
-//! [coord]
     zoomLevel: (maximumZoomLevel - minimumZoomLevel)/2
     center {
         // The Qt Company in Oslo
         latitude: 59.9485
         longitude: 10.7686
     }
-//! [coord]
 
-//! [mapnavigation]
     // Enable pan, flick, and pinch gestures to zoom in and out
     gesture.acceptedGestures: MapGestureArea.PanGesture | MapGestureArea.FlickGesture | MapGestureArea.PinchGesture | MapGestureArea.RotationGesture | MapGestureArea.TiltGesture
     gesture.flickDeceleration: 3000
     gesture.enabled: true
-//! [mapnavigation]
     focus: true
     onCopyrightLinkActivated: Qt.openUrlExternally(link)
 
@@ -335,6 +270,7 @@ Map {
         }
     }
 
+    // TODO
     /* @todo
     Binding {
         target: map
@@ -421,7 +357,6 @@ Map {
         }
     }
 
-    //! [routemodel0]
     RouteModel {
         id: routeModel
         plugin : map.plugin
@@ -444,9 +379,7 @@ Map {
             }
         }
     }
-    //! [routemodel0]
 
-    //! [routedelegate0]
     Component {
         id: routeDelegate
 
@@ -457,7 +390,6 @@ Map {
             line.width: 5
             smooth: true
             opacity: 0.8
-     //! [routedelegate0]
             MouseArea {
                 id: routeMouseArea
                 anchors.fill: parent
@@ -487,12 +419,9 @@ Map {
                 }
 
             }
-    //! [routedelegate1]
         }
     }
-    //! [routedelegate1]
 
-    //! [geocodemodel0]
     GeocodeModel {
         id: geocodeModel
         plugin: map.plugin
@@ -508,9 +437,7 @@ Map {
             }
         }
     }
-    //! [geocodemodel0]
 
-    //! [pointdel0]
     Component {
         id: pointDelegate
 
@@ -523,7 +450,6 @@ Map {
             smooth: true
             opacity: 0.25
             center: locationData.coordinate
-            //! [pointdel0]
             MouseArea {
                 anchors.fill:parent
                 id: circleMouseArea
@@ -557,27 +483,19 @@ Map {
                     }
                 }
             }
-    //! [pointdel1]
         }
     }
-    //! [pointdel1]
 
-    //! [routeview0]
     MapItemView {
         model: routeModel
         delegate: routeDelegate
-    //! [routeview0]
         autoFitViewport: true
-    //! [routeview1]
     }
-    //! [routeview1]
 
-    //! [geocodeview]
     MapItemView {
         model: geocodeModel
         delegate: pointDelegate
     }
-    //! [geocodeview]
 
     Timer {
         id: scaleTimer
@@ -636,6 +554,4 @@ Map {
             }
         }
     }
-//! [end]
 }
-//! [end]

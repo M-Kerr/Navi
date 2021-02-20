@@ -25,20 +25,22 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #endif()
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick LinguistTools REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR}
+    COMPONENTS Core Quick LinguistTools Positioning Location REQUIRED)
 
 set(TS_FILES Navi_en_US.ts)
+set(QRC_FILES qml.qrc)
 
 if(ANDROID)
     add_library(Navi SHARED
       main.cpp
-      qml.qrc
+      ${QRC_FILES}
       ${TS_FILES}
     )
 else()
     add_executable(Navi
       main.cpp
-      qml.qrc
+      ${QRC_FILES}
       ${TS_FILES}
     )
 endif()
@@ -46,6 +48,9 @@ endif()
 target_compile_definitions(Navi
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(Navi
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
+  PRIVATE
+  Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick
+  Qt${QT_VERSION_MAJOR}::Positioning   Qt${QT_VERSION_MAJOR}::Location
+  )
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
