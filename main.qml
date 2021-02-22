@@ -11,15 +11,15 @@ import "helper.js" as Helper
 ApplicationWindow {
     id: appWindow
 
+    // Current map
     property variant map
     // Array of PluginParameter objects
     property variant parameters
 
-    //defaults
-    //! [routecoordinate]
+    // Route coordinates
+    //TODO: update default route coordinates
     property variant fromCoordinate: QtPositioning.coordinate(59.9483, 10.7695)
     property variant toCoordinate: QtPositioning.coordinate(59.9645, 10.671)
-    //! [routecoordinate]
 
     function createMap(provider)
     {
@@ -137,12 +137,12 @@ ApplicationWindow {
             stackView.pop()
             // TODO: remove providermenu from menu when deployment provider is
             // decided. (this loop simply displays checkmark)
-            for (var i = 0; i < providerMenu.items.length; i++) {
-                providerMenu.items[i].checked = providerMenu.items[i].text === providerName
+            for (var i = 0; i < providerMenu.contentData.length; i++) {
+                providerMenu.contentData[i].checked = providerMenu.contentData[i].text == providerName
             }
 
             createMap(providerName)
-            if (map.error === Map.NoError) {
+            if (map.error == Map.NoError) {
                 selectMapType(map.activeMapType)
                 toolsMenu.createMenu(map);
             } else {
@@ -153,10 +153,11 @@ ApplicationWindow {
 
         onSelectMapType: {
             stackView.pop(page)
-            for (var i = 0; i < mapTypeMenu.items.length; i++) {
-                mapTypeMenu.items[i].checked = mapTypeMenu.items[i].text === mapType.name
+            for (var i = 0; i < mapTypeMenu.contentData.length; i++) {
+                mapTypeMenu.contentData[i].checked = mapTypeMenu.contentData[i].text == mapType.name
             }
             map.activeMapType = mapType
+            print("activeMapType: ", map.activeMapType.name)
         }
 
 

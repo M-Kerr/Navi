@@ -28,7 +28,7 @@ MenuBar {
 
         function createProviderMenuItem(provider)
         {
-            var item = Qt.createQmlObject('import QtQuick 2.15;'
+            var item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
                                                + ' MenuItem{ text: "'
                                                + provider + '";'
                                                + ' checkable: true}',
@@ -44,7 +44,12 @@ MenuBar {
 
         function createMenu(map)
         {
-            for (var i = 0; i<map.supportedMapTypes.length; i++) {
+            // Clear the menu
+            for (var i = count - 1; i >= 0; i--)
+            {
+                removeItem(itemAt(i))
+            }
+            for (i = 0; i<map.supportedMapTypes.length; i++) {
                 createMapTypeMenuItem(map.supportedMapTypes[i]).checked =
                         (map.activeMapType === map.supportedMapTypes[i]);
             }
@@ -52,9 +57,16 @@ MenuBar {
 
         function createMapTypeMenuItem(mapType)
         {
-            var item = Qt.createQmlObject('import QtQuick 2.15;'
+            // TODO: delete print statement
+            print("creating mapTypeMenuItem: ", mapType.name)
+            var name = mapType.name
+            if (name.startsWith("mapbox://styles/mapbox/")) {
+                name = name.slice(23)
+            }
+
+            var item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
                                                + ' MenuItem{ text: "'
-                                               + mapType.name + '";'
+                                               + name + '";'
                                                + ' checkable: true}',
                                                mapTypeMenu)
             addItem(item);
