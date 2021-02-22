@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Controls 1.4 as QQC1
 import QtQuick.Window 2.15
 import QtQuick.VirtualKeyboard 2.15
 import QtLocation 5.15
@@ -360,8 +361,10 @@ ApplicationWindow {
         }
     }
 
+    // Rounded input area on top of the stack view
+
     // Main Map viewing area
-    StackView {
+    QQC1.StackView {
         id: stackView
         anchors.fill: parent
         focus: true

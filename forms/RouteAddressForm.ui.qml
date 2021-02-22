@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
-import QtQuick.Layouts 1.2
+import QtQuick.Layouts 1.15
 
 Item {
     property alias fromStreet: fromStreet
@@ -46,7 +46,6 @@ Item {
         GridLayout {
             id: gridLayout3
             rowSpacing: 10
-            rows: 1
             columns: 2
             anchors.fill: parent
 
@@ -54,7 +53,7 @@ Item {
                 id: label1
                 text: qsTr("From")
                 font.bold: true
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 Layout.columnSpan : 2
             }
 
@@ -92,7 +91,7 @@ Item {
                 id: label6
                 text: qsTr("To")
                 font.bold: true
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
                 Layout.columnSpan: 2
             }
 

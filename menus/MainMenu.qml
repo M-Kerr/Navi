@@ -61,6 +61,14 @@ MenuBar {
 
         property variant currentSelection
 
+        function clear()
+        {
+            for (var i = count - 1; i >= 0; i--)
+            {
+                removeItem(itemAt(i))
+            }
+        }
+
         function createMapTypeMenuItem(mapType)
         {
             var name = mapType.name
@@ -84,13 +92,8 @@ MenuBar {
 
         function createMenu(map)
         {
-            // Clear the menu
-            for (var i = count - 1; i >= 0; i--)
-            {
-                removeItem(itemAt(i))
-            }
-            // Build new menu
-            for (i = 0; i < map.supportedMapTypes.length; i++) {
+            clear()
+            for (var i = 0; i < map.supportedMapTypes.length; i++) {
                 var item = createMapTypeMenuItem(map.supportedMapTypes[i])
                 if (map.activeMapType === map.supportedMapTypes[i]) {
                     item.checked = true
@@ -100,31 +103,123 @@ MenuBar {
         }
     }
 
-    QQC1.Menu {
+    Menu {
         id: toolsMenu
         property bool isFollowMe: false;
         title: qsTr("Tools")
 
+        function clear()
+        {
+            for (var i = count - 1; i >= 0; i--)
+            {
+                removeItem(itemAt(i))
+            }
+        }
+
         function createMenu(map)
         {
+            clear()
+            var item
             if (map.plugin.supportsGeocoding(Plugin.ReverseGeocodingFeature)) {
-                addItem(qsTr("Reverse geocode")).triggered.connect(function(){selectTool("RevGeocode")})
+                item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                               + ' MenuItem{ text: "'
+                                               + qsTr("Reverse Geocode") + '"}',
+                                               toolsMenu)
+                item.triggered.connect(function(){selectTool("RevGeocode")})
+                addItem(item)
             }
             if (map.plugin.supportsGeocoding()) {
-                addItem(qsTr("Geocode")).triggered.connect(function(){selectTool("Geocode")})
+                item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                               + ' MenuItem{ text: "'
+                                               + qsTr("Geocode") + '"}',
+                                               toolsMenu)
+                item.triggered.connect(function(){selectTool("Geocode")})
+                addItem(item)
             }
             if (map.plugin.supportsRouting()) {
-                addItem(qsTr("Route with coordinates")).triggered.connect(function(){selectTool("CoordinateRoute")})
-                addItem(qsTr("Route with address")).triggered.connect(function(){selectTool("AddressRoute")})
+                item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                               + ' MenuItem{ text: "'
+                                               + qsTr("Route with coordinates") + '"}',
+                                               toolsMenu)
+                item.triggered.connect(function(){selectTool("CoordinateRoute")})
+                addItem(item)
+                item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                               + ' MenuItem{ text: "'
+                                               + qsTr("Route with address") + '"}',
+                                               toolsMenu)
+                item.triggered.connect(function(){selectTool("AddressRoute")})
+                addItem(item)
             }
 
-            var item = addItem("")
-            item.text = Qt.binding(function() { return isFollowMe ? qsTr("Stop following") : qsTr("Follow me")})
-            item.triggered.connect(function() {toggleMapState("FollowMe")})
+            item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                      + ' MenuItem{}',
+                                      toolsMenu)
+            item.triggered.connect(function(){toggleMapState("FollowMe")})
+            item.text = Qt.binding(function() {
+                return isFollowMe ? qsTr("Stop following") : qsTr("Follow me")})
+            addItem(item)
 
-            addItem(qsTr("Language")).triggered.connect(function(){selectTool("Language")})
-            addItem(qsTr("Prefetch Map Data")).triggered.connect(function(){selectTool("Prefetch")})
-            addItem(qsTr("Clear Map Data")).triggered.connect(function(){selectTool("Clear")})
+            item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                      + ' MenuItem{ text: "'
+                                      + qsTr("Language") + '"}',
+                                      toolsMenu)
+            item.triggered.connect(function(){selectTool("Language")})
+            addItem(item)
+
+            item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                      + ' MenuItem{ text: "'
+                                      + qsTr("Prefetch Map Data") + '"}',
+                                      toolsMenu)
+            item.triggered.connect(function(){selectTool("Prefetch")})
+            addItem(item)
+
+            item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                      + ' MenuItem{ text: "'
+                                      + qsTr("Clear Map Data") + '"}',
+                                      toolsMenu)
+            item.triggered.connect(function(){selectTool("Clear")})
+            addItem(item)
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

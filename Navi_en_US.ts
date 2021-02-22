@@ -113,52 +113,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="106"/>
+        <location filename="menus/MainMenu.qml" line="109"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="111"/>
-        <source>Reverse geocode</source>
+        <location filename="menus/MainMenu.qml" line="126"/>
+        <source>Reverse Geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="114"/>
+        <location filename="menus/MainMenu.qml" line="134"/>
         <source>Geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="117"/>
+        <location filename="menus/MainMenu.qml" line="142"/>
         <source>Route with coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="118"/>
+        <location filename="menus/MainMenu.qml" line="148"/>
         <source>Route with address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="122"/>
+        <location filename="menus/MainMenu.qml" line="159"/>
         <source>Stop following</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="122"/>
+        <location filename="menus/MainMenu.qml" line="159"/>
         <source>Follow me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="125"/>
+        <location filename="menus/MainMenu.qml" line="164"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="126"/>
+        <location filename="menus/MainMenu.qml" line="171"/>
         <source>Prefetch Map Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="menus/MainMenu.qml" line="127"/>
+        <location filename="menus/MainMenu.qml" line="178"/>
         <source>Clear Map Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -358,45 +358,45 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="55"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="54"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="63"/>
-        <location filename="forms/RouteAddressForm.ui.qml" line="101"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="62"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="100"/>
         <source>Street</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="73"/>
-        <location filename="forms/RouteAddressForm.ui.qml" line="111"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="72"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="110"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="83"/>
-        <location filename="forms/RouteAddressForm.ui.qml" line="121"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="82"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="120"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="93"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="92"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="136"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="135"/>
         <source>Proceed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="141"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="140"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteAddressForm.ui.qml" line="146"/>
+        <location filename="forms/RouteAddressForm.ui.qml" line="145"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,39 +409,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="53"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="52"/>
         <source>From</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="61"/>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="89"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="60"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="88"/>
         <source>Latitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="71"/>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="99"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="70"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="98"/>
         <source>Longitude</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="81"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="80"/>
         <source>To</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="113"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="112"/>
         <source>Proceed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="118"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="117"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="forms/RouteCoordinateForm.ui.qml" line="123"/>
+        <location filename="forms/RouteCoordinateForm.ui.qml" line="122"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -465,85 +465,85 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="107"/>
+        <location filename="main.qml" line="108"/>
         <source>Navi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="281"/>
+        <location filename="main.qml" line="276"/>
         <source>New Coordinate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="314"/>
+        <location filename="main.qml" line="309"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="314"/>
+        <location filename="main.qml" line="309"/>
         <source>Distance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="431"/>
+        <location filename="main.qml" line="428"/>
         <source>Latitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="431"/>
+        <location filename="main.qml" line="428"/>
         <source>Longitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="432"/>
+        <location filename="main.qml" line="429"/>
         <source>Coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="437"/>
-        <location filename="main.qml" line="445"/>
+        <location filename="main.qml" line="434"/>
+        <location filename="main.qml" line="442"/>
         <source>Geocode Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="437"/>
-        <location filename="main.qml" line="445"/>
+        <location filename="main.qml" line="434"/>
+        <location filename="main.qml" line="442"/>
         <source>Unsuccessful geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="439"/>
+        <location filename="main.qml" line="436"/>
         <source>Ambiguous geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="440"/>
+        <location filename="main.qml" line="437"/>
         <source>results found for the given address, please specify location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="442"/>
-        <location filename="main.qml" line="450"/>
+        <location filename="main.qml" line="439"/>
+        <location filename="main.qml" line="447"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="448"/>
+        <location filename="main.qml" line="445"/>
         <source>Route Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="448"/>
+        <location filename="main.qml" line="445"/>
         <source>Unable to find a route for the given points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="454"/>
+        <location filename="main.qml" line="451"/>
         <source>ProviderError</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="455"/>
+        <location filename="main.qml" line="452"/>
         <source>Error connecting to mapbox</source>
         <translation type="unfinished"></translation>
     </message>
