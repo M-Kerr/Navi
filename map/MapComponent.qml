@@ -20,7 +20,6 @@ Map {
     property alias routeQuery: routeQuery
     property alias routeModel: routeModel
     property alias geocodeModel: geocodeModel
-    property alias slidersExpanded: sliders.expanded
 
     signal showGeocodeInfo()
     signal geocodeFinished()
@@ -309,13 +308,6 @@ Map {
         }
         coordinate: poiTheQtComapny.coordinate
         anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
-    }
-
-    MapSliders {
-        id: sliders
-        z: map.z + 3
-        mapSource: map
-        edge: Qt.LeftEdge
     }
 
     Item {

@@ -41,8 +41,6 @@ ApplicationWindow {
         var bearing = null
         var fov = null
         var center = null
-        // TODO: delete setting panel/slider
-        var panelExpanded = null
         if (map) {
             zoomLevel = map.zoomLevel
             tilt = map.tilt
@@ -62,8 +60,6 @@ ApplicationWindow {
             map.fieldOfView = fov
             map.zoomLevel = zoomLevel
             map.center = center
-        // TODO: delete setting panel/slider
-            map.slidersExpanded = panelExpanded
         } else {
             // TODO: adjust initial default zoom level to more pleasant value
             // Use an integer ZL to enable nearest interpolation, if possible.

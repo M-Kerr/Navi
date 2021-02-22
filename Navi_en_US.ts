@@ -465,85 +465,85 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="main.qml" line="101"/>
+        <location filename="main.qml" line="97"/>
         <source>Navi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="279"/>
+        <location filename="main.qml" line="275"/>
         <source>New Coordinate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="312"/>
+        <location filename="main.qml" line="308"/>
         <source>Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="312"/>
+        <location filename="main.qml" line="308"/>
         <source>Distance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="429"/>
+        <location filename="main.qml" line="425"/>
         <source>Latitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="429"/>
+        <location filename="main.qml" line="425"/>
         <source>Longitude:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="430"/>
+        <location filename="main.qml" line="426"/>
         <source>Coordinates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="435"/>
-        <location filename="main.qml" line="443"/>
+        <location filename="main.qml" line="431"/>
+        <location filename="main.qml" line="439"/>
         <source>Geocode Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="435"/>
-        <location filename="main.qml" line="443"/>
+        <location filename="main.qml" line="431"/>
+        <location filename="main.qml" line="439"/>
         <source>Unsuccessful geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="437"/>
+        <location filename="main.qml" line="433"/>
         <source>Ambiguous geocode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="438"/>
+        <location filename="main.qml" line="434"/>
         <source>results found for the given address, please specify location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="440"/>
-        <location filename="main.qml" line="448"/>
+        <location filename="main.qml" line="436"/>
+        <location filename="main.qml" line="444"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="446"/>
+        <location filename="main.qml" line="442"/>
         <source>Route Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="446"/>
+        <location filename="main.qml" line="442"/>
         <source>Unable to find a route for the given points</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="452"/>
+        <location filename="main.qml" line="448"/>
         <source>ProviderError</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="main.qml" line="453"/>
+        <location filename="main.qml" line="449"/>
         <source>Error connecting to mapbox</source>
         <translation type="unfinished"></translation>
     </message>
