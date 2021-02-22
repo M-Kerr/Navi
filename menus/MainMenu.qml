@@ -15,10 +15,21 @@ MenuBar {
     signal selectTool(string tool);
     signal toggleMapState(string state)
 
+    Component {
+        id: menuItem
+
+        MenuItem {
+            checkable: true
+        }
+    }
+
     Menu {
         id: providerMenu
         title: qsTr("Provider")
 
+        property variant currentSelection
+
+        // plugins: array<string>
         function createMenu(plugins)
         {
             for (var i = 0; i < plugins.length; i++) {
@@ -33,14 +44,43 @@ MenuBar {
                                                + provider + '";'
                                                + ' checkable: true}',
                                                providerMenu)
+            item.triggered.connect(function(){
+                if (providerMenu.currentSelection)
+                        providerMenu.currentSelection.checked = false;
+                item.checked = true
+                providerMenu.currentSelection = item
+                selectProvider(provider)
+            })
             addItem(item);
-            item.triggered.connect(function(){selectProvider(provider)})
         }
     }
 
     Menu {
         id: mapTypeMenu
         title: qsTr("MapType")
+
+        property variant currentSelection
+
+        function createMapTypeMenuItem(mapType)
+        {
+            var name = mapType.name
+            if (name.startsWith("mapbox://styles/mapbox/")) {
+                name = name.slice(23)
+            }
+            var item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
+                                               + ' MenuItem{ text: "'
+                                               + name + '";'
+                                               + ' checkable: true}',
+                                               mapTypeMenu)
+            item.triggered.connect(function(){
+                mapTypeMenu.currentSelection.checked = false;
+                item.checked = true
+                mapTypeMenu.currentSelection = item
+                selectMapType(mapType)
+            })
+            addItem(item);
+            return item;
+        }
 
         function createMenu(map)
         {
@@ -49,29 +89,14 @@ MenuBar {
             {
                 removeItem(itemAt(i))
             }
-            for (i = 0; i<map.supportedMapTypes.length; i++) {
-                createMapTypeMenuItem(map.supportedMapTypes[i]).checked =
-                        (map.activeMapType === map.supportedMapTypes[i]);
+            // Build new menu
+            for (i = 0; i < map.supportedMapTypes.length; i++) {
+                var item = createMapTypeMenuItem(map.supportedMapTypes[i])
+                if (map.activeMapType === map.supportedMapTypes[i]) {
+                    item.checked = true
+                    mapTypeMenu.currentSelection = item
+                }
             }
-        }
-
-        function createMapTypeMenuItem(mapType)
-        {
-            // TODO: delete print statement
-            print("creating mapTypeMenuItem: ", mapType.name)
-            var name = mapType.name
-            if (name.startsWith("mapbox://styles/mapbox/")) {
-                name = name.slice(23)
-            }
-
-            var item = Qt.createQmlObject('import QtQuick.Controls 2.15;'
-                                               + ' MenuItem{ text: "'
-                                               + name + '";'
-                                               + ' checkable: true}',
-                                               mapTypeMenu)
-            addItem(item);
-            item.triggered.connect(function(){selectMapType(mapType)})
-            return item;
         }
     }
 

@@ -47,7 +47,6 @@ ApplicationWindow {
             bearing = map.bearing
             fov = map.fieldOfView
             center = map.center
-            panelExpanded = map.slidersExpanded
             map.destroy()
         }
 
@@ -71,6 +70,17 @@ ApplicationWindow {
                         map.maximumFieldOfView)
         }
 
+
+        // Map type defaults
+        for (var i = 0; i < mainMenu.mapTypeMenu.contentData.length; i++) {
+            if ((provider === "mapboxgl" && mainMenu.mapTypeMenu.contentData[i].
+                 text.includes("guidance-day"))
+            || (provider === "esri" && mainMenu.mapTypeMenu.contentData[i].
+                 text.includes("Street"))) {
+                mainMenu.mapTypeMenu.contentData[i].triggered()
+            }
+        }
+
         map.forceActiveFocus()
     }
 
@@ -91,7 +101,7 @@ ApplicationWindow {
         // TODO: remove providermenu from menu when deployment provider is
         // decided
         mainMenu.providerMenu.createMenu(["mapboxgl", "esri"])
-        mainMenu.selectProvider("mapboxgl") // default
+        mainMenu.providerMenu.contentData[0].triggered(); // mapboxgl default
     }
 
     title: qsTr("Navi")
@@ -100,7 +110,7 @@ ApplicationWindow {
     visible: true
     menuBar: mainMenu
 
-    //! [geocode0]
+    // TODO: Delete these addresses
     Address {
         id :fromAddress
         street: "Sandakerveien 116"
@@ -109,7 +119,6 @@ ApplicationWindow {
         state : ""
         postalCode: "0484"
     }
-    //! [geocode0]
 
     Address {
         id: toAddress
@@ -131,14 +140,9 @@ ApplicationWindow {
         // signal argument providerName: string
         onSelectProvider: {
             stackView.pop()
-            // TODO: remove providermenu from menu when deployment provider is
-            // decided. (this loop simply displays checkmark)
-            for (var i = 0; i < providerMenu.contentData.length; i++) {
-                providerMenu.contentData[i].checked = providerMenu.contentData[i].text == providerName
-            }
 
             createMap(providerName)
-            if (map.error == Map.NoError) {
+            if (map.error === Map.NoError) {
                 selectMapType(map.activeMapType)
                 toolsMenu.createMenu(map);
             } else {
@@ -149,11 +153,7 @@ ApplicationWindow {
 
         onSelectMapType: {
             stackView.pop(page)
-            for (var i = 0; i < mapTypeMenu.contentData.length; i++) {
-                mapTypeMenu.contentData[i].checked = mapTypeMenu.contentData[i].text == mapType.name
-            }
             map.activeMapType = mapType
-            print("activeMapType: ", map.activeMapType.name)
         }
 
 
