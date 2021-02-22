@@ -16,7 +16,8 @@ Map {
     property int pressY : -1
     property int jitterThreshold : 30
     property bool followme: false
-    property variant scaleLengths: [5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000]
+    property variant scaleLengths: [5, 10, 20, 50, 100, 200, 500, 1000, 2000,
+        5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000]
     property alias routeQuery: routeQuery
     property alias routeModel: routeModel
     property alias geocodeModel: geocodeModel
@@ -209,9 +210,8 @@ Map {
 
     zoomLevel: (maximumZoomLevel - minimumZoomLevel)/2
     center {
-        // The Qt Company in Oslo
-        latitude: 59.9485
-        longitude: 10.7686
+        latitude: 34.151615805211875
+        longitude: -118.34314094063794
     }
 
     // Enable pan, flick, and pinch gestures to zoom in and out
@@ -219,6 +219,7 @@ Map {
     gesture.flickDeceleration: 3000
     gesture.enabled: true
     focus: true
+    copyrightsVisible: false
     onCopyrightLinkActivated: Qt.openUrlExternally(link)
 
     onCenterChanged:{
@@ -298,17 +299,18 @@ Map {
         anchorPoint: Qt.point(sourceItem.width/2, sourceItem.height/2)
     }
 
-    MapQuickItem {
-        sourceItem: Text{
-            text: "The Qt Company"
-            color:"#242424"
-            font.bold: true
-            styleColor: "#ECECEC"
-            style: Text.Outline
-        }
-        coordinate: poiTheQtComapny.coordinate
-        anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
-    }
+    // TODO: Delete commented example code
+//    MapQuickItem {
+//        sourceItem: Text{
+//            text: "The Qt Company"
+//            color:"#242424"
+//            font.bold: true
+//            styleColor: "#ECECEC"
+//            style: Text.Outline
+//        }
+//        coordinate: poiTheQtComapny.coordinate
+//        anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
+//    }
 
     Item {
         id: scale
