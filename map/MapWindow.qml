@@ -7,11 +7,10 @@ import QtQuick 2.15
 Item {
     id: mapWindow
 
-    // Km/h
-    property var carSpeed: 35
     property var navigating: true
-    property var traffic: true
-    property var night: true
+    property alias
+//    property var traffic: true
+//    property var night: true
 
     states: [
         State {
@@ -582,28 +581,6 @@ Item {
             anchorPoint.x: carMarker.width / 2
             anchorPoint.y: carMarker.height / 2
         }
-
-        CheapRuler {
-            id: ruler
-
-            PropertyAnimation on currentDistance {
-                id: currentDistanceAnimation
-
-                duration: ruler.distance / mapWindow.carSpeed * 60 * 60 * 1000
-                alwaysRunToEnd: false
-            }
-
-            onCurrentDistanceChanged: {
-                var total = 0;
-                var i = 0;
-
-                // XXX: Use car speed in meters to pre-warn the turn instruction
-                while (total - mapWindow.carSpeed < ruler.currentDistance * 1000 && i < routeModel.get(0).segments.length)
-                    total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
-
-                turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
-            }
-        }
     }
 
     RouteModel {
@@ -615,7 +592,6 @@ Item {
         plugin: Plugin {
             name: "mapbox"
 
-            // Development access token, do not use in production.
             PluginParameter {
                 name: "mapbox.access_token"
                 value: "pk.eyJ1IjoicXRzZGsiLCJhIjoiY2l5azV5MHh5MDAwdTMybzBybjUzZnhxYSJ9.9rfbeqPjX2BusLRDXHCOBA"

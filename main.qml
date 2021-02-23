@@ -4,6 +4,7 @@ import QtPositioning 5.0
 import QtQuick 2.0
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.0
+import "map"
 
 ApplicationWindow {
     id: window
@@ -22,15 +23,12 @@ ApplicationWindow {
         rotation: -90
 
         MapWindow {
-            anchors.top: statusBar.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
+            anchors.fill: parent
 
             z: 0
 
-            traffic: bottomBar.traffic
-            night: bottomBar.night
+//            traffic: bottomBar.traffic
+//            night: bottomBar.night
         }
     }
 }
