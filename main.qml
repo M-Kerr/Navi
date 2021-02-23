@@ -425,29 +425,29 @@ support"
             onFollowmeChanged: mainMenu.isFollowMe = map.followme
             onSupportedMapTypesChanged: mainMenu.mapTypeMenu.createMenu(map)
             onCoordinatesCaptured: {
-                var text = "<b>" + qsTr("Latitude:") + "</b> " + Helper.roundNumber(latitude,4) + "<br/><b>" + qsTr("Longitude:") + "</b> " + Helper.roundNumber(longitude,4)
-                stackView.showMessage(qsTr("Coordinates"),text);
+                var text = "<b>" + qsTr("Latitude:") + "</b> " + Helper.roundNumber(latitude, 4) + "<br/><b>" + qsTr("Longitude:") + "</b> " + Helper.roundNumber(longitude, 4)
+                stackView.showMessage(qsTr("Coordinates"), text);
             }
             onGeocodeFinished:{
-                if (map.geocodeModel.status == GeocodeModel.Ready) {
-                    if (map.geocodeModel.count == 0) {
-                        stackView.showMessage(qsTr("Geocode Error"),qsTr("Unsuccessful geocode"))
+                if (map.geocodeModel.status === GeocodeModel.Ready) {
+                    if (map.geocodeModel.count === 0) {
+                        stackView.showMessage(qsTr("Geocode Error"), qsTr("Unsuccessful geocode"))
                     } else if (map.geocodeModel.count > 1) {
                         stackView.showMessage(qsTr("Ambiguous geocode"), map.geocodeModel.count + " " +
                                               qsTr("results found for the given address, please specify location"))
                     } else {
-                        stackView.showMessage(qsTr("Location"), geocodeMessage(),page)
+                        stackView.showMessage(qsTr("Location"), geocodeMessage(), page)
                     }
-                } else if (map.geocodeModel.status == GeocodeModel.Error) {
+                } else if (map.geocodeModel.status === GeocodeModel.Error) {
                     stackView.showMessage(qsTr("Geocode Error"),qsTr("Unsuccessful geocode"))
                 }
             }
-            onRouteError: stackView.showMessage(qsTr("Route Error"),qsTr("Unable to find a route for the given points"),page)
+            onRouteError: stackView.showMessage(qsTr("Route Error"), qsTr("Unable to find a route for the given points"), page)
 
-            onShowGeocodeInfo: stackView.showMessage(qsTr("Location"),geocodeMessage(),page)
+            onShowGeocodeInfo: stackView.showMessage(qsTr("Location"), geocodeMessage(), page)
 
             onErrorChanged: {
-                if (map.error != Map.NoError) {
+                if (map.error !== Map.NoError) {
                     var title = qsTr("ProviderError")
                     var message =  map.errorString + "<br/><br/><b>" + qsTr("Error connecting to mapbox") + "</b>"
                     stackView.showMessage(title,message);

@@ -63,8 +63,8 @@ Map {
     {
         var coord1, coord2, dist, text, f
         f = 0
-        coord1 = map.toCoordinate(Qt.point(0,scale.y))
-        coord2 = map.toCoordinate(Qt.point(0+scaleImage.sourceSize.width,scale.y))
+        coord1 = map.toCoordinate(Qt.point(0 , scale.y))
+        coord2 = map.toCoordinate(Qt.point(0 + scaleImage.sourceSize.width , scale.y))
         dist = Math.round(coord1.distanceTo(coord2))
 
         if (dist === 0) {
@@ -119,7 +119,7 @@ Map {
         marker.coordinate = mouseArea.lastCoordinate
 
         //update list of markers
-        var myArray = new Array()
+        var myArray = []
         for (var i = 0; i<count; i++){
             myArray.push(markers[i])
         }
@@ -130,14 +130,14 @@ Map {
     function addGeoItem(item)
     {
         var count = map.mapItems.length
-        var co = Qt.createComponent(item+'.qml')
-        if (co.status == Component.Ready) {
+        var co = Qt.createComponent(item + '.qml')
+        if (co.status === Component.Ready) {
             var o = co.createObject(map)
             o.setGeometry(map.markers, currentMarker)
             map.addMapItem(o)
             //update list of items
-            var myArray = new Array()
-            for (var i = 0; i<count; i++){
+            var myArray = []
+            for (var i = 0; i < count; i++){
                 myArray.push(mapItems[i])
             }
             myArray.push(o)
@@ -151,22 +151,22 @@ Map {
     function deleteMarker(index)
     {
         //update list of markers
-        var myArray = new Array()
+        var myArray = []
         var count = map.markers.length
-        for (var i = 0; i<count; i++){
-            if (index != i) myArray.push(map.markers[i])
+        for (var i = 0; i < count; i++){
+            if (index !== i) myArray.push(map.markers[i])
         }
 
         map.removeMapItem(map.markers[index])
         map.markers[index].destroy()
         map.markers = myArray
-        if (markers.length == 0) markerCounter = 0
+        if (markers.length === 0) markerCounter = 0
     }
 
     function calculateMarkerRoute()
     {
         routeQuery.clearWaypoints();
-        for (var i = currentMarker; i< map.markers.length; i++){
+        for (var i = currentMarker; i < map.markers.length; i++){
             routeQuery.addWaypoint(markers[i].coordinate)
         }
         routeQuery.travelModes = RouteQuery.CarTravel
@@ -187,7 +187,7 @@ Map {
         routeQuery.routeOptimizations = RouteQuery.FastestRoute
 
 
-        for (var i=0; i<9; i++) {
+        for (var i = 0; i < 9; i++) {
             routeQuery.setFeatureWeight(i, 0)
         }
         //for (var i=0; i<routeDialog.features.length; i++) {
@@ -225,7 +225,7 @@ Map {
     onCenterChanged:{
         scaleTimer.restart()
         if (map.followme)
-            if (map.center != positionSource.position.coordinate) map.followme = false
+            if (map.center !== positionSource.position.coordinate) map.followme = false
     }
 
     onZoomLevelChanged:{
@@ -242,8 +242,8 @@ Map {
     }
 
     Component.onCompleted: {
-        markers = new Array();
-        mapItems = new Array();
+        markers = []
+        mapItems = []
     }
 
     Keys.onPressed: {
@@ -406,7 +406,7 @@ Map {
                 }
 
                 onPressAndHold:{
-                    if (Math.abs(map.pressX - parent.x- mouse.x ) < map.jitterThreshold
+                    if (Math.abs(map.pressX - parent.x - mouse.x ) < map.jitterThreshold
                             && Math.abs(map.pressY - parent.y - mouse.y ) < map.jitterThreshold) {
                         showRouteMenu(lastCoordinate);
                     }
