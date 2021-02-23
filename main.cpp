@@ -45,8 +45,9 @@ int main(int argc, char *argv[])
 
     QObject *item = engine.rootObjects().first();
     Q_ASSERT(item);
-    QMetaObject::invokeMethod(item, "initializeProviders",
-                              Q_ARG(QVariant, QVariant::fromValue(parameters)));
+    item->setProperty("parameters", parameters);
+//    QMetaObject::invokeMethod(item, "initializeProviders",
+//                              Q_ARG(QVariant, QVariant::fromValue(parameters)));
 
     return application.exec();
 }
