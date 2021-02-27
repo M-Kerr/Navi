@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>map/MapWindow.qml</file>
+        <file>map/CustomLabel.qml</file>
+        <file>main.qml</file>
     </qresource>
 </RCC>

@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>car-focus2.png</file>
+        <file>marker2.png</file>
+        <file>scale_end.png</file>
+        <file>scale.png</file>
+        <file>current-location.png</file>
+        <file>edge-gradient.png</file>
+        <file>output.nmea.txt</file>
+    </qresource>
+</RCC>
