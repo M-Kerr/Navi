@@ -20,7 +20,7 @@ ApplicationWindow {
         anchors.centerIn: parent
         width: parent.height
         height: parent.width
-        //        rotation: -90
+//        rotation: -90
 
         MapWindow {
             anchors.fill: parent
