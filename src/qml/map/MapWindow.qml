@@ -9,6 +9,7 @@ Item {
     property bool following
     property bool traffic
     property bool night
+    property var plugin
 
     states: [
         State {
@@ -128,14 +129,14 @@ Item {
         // belong to the single road network component, Traffic property.
 
         // TODO: Delete this real-time paint and assign the color within the map studio
-        DynamicParameter {
-            type: "paint"
-            property var layer: "building-extrusion"
-            property var fillExtrusionColor: "#00617f"
-            property var fillExtrusionOpacity: .6
-            property var fillExtrusionHeight: { return { type: "identity", property: "height" } }
-            property var fillExtrusionBase: { return { type: "identity", property: "min_height" } }
-        }
+//        DynamicParameter {
+//            type: "paint"
+//            property var layer: "building-extrusion"
+//            property var fillExtrusionColor: "#00617f"
+//            property var fillExtrusionOpacity: .6
+//            property var fillExtrusionHeight: { return { type: "identity", property: "height" } }
+//            property var fillExtrusionBase: { return { type: "identity", property: "min_height" } }
+//        }
 
         MouseArea {
             anchors.fill: parent
@@ -244,15 +245,16 @@ Item {
 
         autoUpdate: true
         query: routeQuery
-        plugin: Plugin {
-            name: "mapbox"
+        plugin: mapWindow.plugin
+//        plugin: Plugin {
+//            name: "mapbox"
 
-            PluginParameter {
-                name: "mapbox.access_token"
-                //     WARNING: Dev environment only, not meant for production
-                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
-            }
-        }
+//            PluginParameter {
+//                name: "mapbox.access_token"
+//                //     WARNING: Dev environment only, not meant for production
+//                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
+//            }
+//        }
 
         //        Component.onCompleted: {
         //            if (map) {

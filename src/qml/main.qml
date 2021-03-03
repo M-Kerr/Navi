@@ -9,12 +9,22 @@ import "map"
 ApplicationWindow {
     id: root
 
-    property bool following: true
-
     width: 1024
     height: 768
     visible: true
     //    visibility: ApplicationWindow.FullScreen
+
+    property bool following: true
+    property string mapboxToken: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
+    property var plugin: Plugin {
+        name: "mapbox"
+
+        PluginParameter {
+            name: "mapbox.access_token"
+            //     WARNING: Dev environment only, not meant for production
+            value: mapboxToken
+        }
+    }
 
     Item {
         anchors.centerIn: parent
@@ -25,6 +35,7 @@ ApplicationWindow {
         MapWindow {
             anchors.fill: parent
             z: 0
+            plugin: root.plugin
             following: root.following
 //            traffic: bottomBar.traffic
 //            night: bottomBar.night

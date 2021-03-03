@@ -3,5 +3,6 @@
         <file>map/MapWindow.qml</file>
         <file>map/CustomLabel.qml</file>
         <file>main.qml</file>
+        <file>components/SearchBar.qml</file>
     </qresource>
 </RCC>
