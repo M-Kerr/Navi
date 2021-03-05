@@ -9,7 +9,8 @@ class NmeaLog : public QNmeaPositionInfoSource
 {
     Q_OBJECT
     Q_PROPERTY(QString logFile READ logFile WRITE setLogFile)
-    Q_PROPERTY(QGeoCoordinate coordinate READ coordinate NOTIFY coordinateChanged)
+    Q_PROPERTY(QGeoCoordinate coordinate READ coordinate WRITE setCoordinate
+               NOTIFY coordinateChanged)
 
 public:
     explicit NmeaLog(QObject *parent = nullptr);
@@ -20,6 +21,7 @@ public:
     void setLogFile(QString fileName);
 
     QGeoCoordinate coordinate();
+    void setCoordinate(QGeoCoordinate);
 
     //! Debugging function to see if NMEA sentences are reading
     Q_INVOKABLE void printUpdates();

@@ -4,5 +4,10 @@
         <file>map/CustomLabel.qml</file>
         <file>main.qml</file>
         <file>components/SearchBar.qml</file>
+        <file>components/MapboxPlugin.qml</file>
+        <file>components/CenterWindow.qml</file>
+        <file>components/SearchPage.qml</file>
+        <file>components/LeftDrawer.qml</file>
+        <file>components/RightDrawer.qml</file>
     </qresource>
 </RCC>

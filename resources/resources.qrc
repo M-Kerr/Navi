@@ -8,5 +8,6 @@
         <file>output.nmea.txt</file>
         <file>car-focus.png</file>
         <file>car-focus2.png</file>
+        <file>searchIcon.png</file>
     </qresource>
 </RCC>

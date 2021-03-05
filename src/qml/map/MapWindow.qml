@@ -1,7 +1,6 @@
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtQuick 2.15
-import com.mkerr.navi 1.0
 
 Item {
     id: mapWindow
@@ -11,6 +10,8 @@ Item {
     property bool night
     property var plugin
 
+    property var currentCoordinate
+
     states: [
         State {
             name: ""
@@ -18,6 +19,7 @@ Item {
         },
         State {
             name: "following"
+            // TODO: Change tilt and zoomLevel to more comfortable values
             PropertyChanges { target: map; tilt: 60; zoomLevel: 20 }
         }
     ]
@@ -57,7 +59,7 @@ Item {
         height: 80
         width: 80
         anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.margins: 20
         z: 3
         visible: !mapWindow.following
@@ -115,7 +117,7 @@ Item {
         }
 
         // WARNING: Dev environment only, not meant for production
-        center: mapWindow.following ? nmeaLog.coordinate : map.center;
+        center: mapWindow.following ? mapWindow.currentCoordinate : map.center;
         //                        positionSource.position.coordinate : map.center;
 
         zoomLevel: 12.25
@@ -234,7 +236,7 @@ Item {
             }
 
             zoomLevel: map.zoomLevel
-            coordinate: nmeaLog.coordinate //positionSource.position.coordinate
+            coordinate: mapWindow.currentCoordinate
             anchorPoint.x: carMarker.width / 2
             anchorPoint.y: carMarker.height / 2
         }
@@ -266,15 +268,4 @@ Item {
         id: routeQuery
     }
 
-    // WARNING: Dev environment only, not meant for production
-    // Substitute NmeaLog with PositionSource for live GPS
-    NmeaLog {
-        id: nmeaLog
-
-        logFile: "://output.nmea.txt"
-
-        Component.onCompleted: {
-            startUpdates()
-        }
-    }
 }

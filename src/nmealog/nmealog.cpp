@@ -42,6 +42,12 @@ QGeoCoordinate NmeaLog::coordinate()
     return m_coordinate;
 }
 
+void NmeaLog::setCoordinate(QGeoCoordinate coord)
+{
+    m_coordinate = coord;
+    emit coordinateChanged(m_coordinate);
+}
+
 QString NmeaLog::logFile()
 {
     return m_logFile->fileName();
