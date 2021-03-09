@@ -9,5 +9,6 @@
         <file>components/SearchPage.qml</file>
         <file>components/LeftDrawer.qml</file>
         <file>components/RightDrawer.qml</file>
+        <file>components/MapboxSearchModel.qml</file>
     </qresource>
 </RCC>

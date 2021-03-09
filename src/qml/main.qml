@@ -32,14 +32,12 @@ ApplicationWindow {
         }
     }
 
-    PlaceSearchModel {
+    MapboxSearchModel{
         id: searchModel
         searchTerm: searchBar.text
         plugin: root.plugin
-        //        searchArea: QtPositioning.circle(currentCoordinate, 0.0);
-    }
-    // TODO
-    PlaceSearchSuggestionModel{
+
+        searchLocation: currentCoordinate
     }
 
     Item {

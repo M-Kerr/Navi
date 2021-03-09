@@ -1,20 +1,14 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtLocation 5.15
 
 Pane {
     id: root
-//    width: parent.width
-//    height: parent.height
 
     property alias header: headerRect
     property var model
     property var bgColor
-
-//    background: Rectangle {
-//        anchors.fill: parent
-//        color: root.bgColor
-//    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -31,13 +25,16 @@ Pane {
 
         // ListView
         ListView {
+            id: listView
             width: parent.width
             Layout.fillHeight: true
             model: root.model
             delegate: Rectangle {
 
+                // TODO: use loader objects to load Components depending on the
+                // result's `type`
                 height: 60
-                width: parent.width
+                width: listView.width
                 border.width: 1
                 border.color: "darkgrey"
                 color: bgColor
@@ -60,7 +57,13 @@ Pane {
                             anchors.fill: parent
                             fillMode: Image.PreserveAspectFit
                             asynchronous: true
-                            source: icon.url(icon.parameters["singleUrl"])
+                            source: {
+                                if (place.icon.url().toString())
+                                    "qrc:///" + place.icon.url().toString().slice(7);
+                                // TODO: else display a default marker
+                                // icon
+                                else "";
+                            }
                         }
                     }
 
@@ -81,7 +84,8 @@ Pane {
                         width: height
                         Layout.alignment: Qt.AlignVCenter
 
-                        Text { text: distance + "m" }
+                        // TODO: Unit setting with meters to miles conversion
+                        Text { text: Math.round(distance) + " meters" }
                     }
                 }
             }
