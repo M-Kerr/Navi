@@ -27,7 +27,7 @@ ApplicationWindow {
         id: nmeaLog
 //        logFile: "://output.nmea.txt"
         logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-resources/output.nmea.txt"
+src/qml/resources/output.nmea.txt"
 
         Component.onCompleted: {
             startUpdates()

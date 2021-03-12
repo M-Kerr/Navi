@@ -11,6 +11,5 @@
         <file>components/RightDrawer.qml</file>
         <file>components/MapboxSearchModel.qml</file>
         <file>components/SearchPageImpl.qml</file>
-        <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>

@@ -39,7 +39,8 @@ Item {
         anchors.fill: parent
         z: 2
 
-        source: "qrc:edge-gradient.png"
+//        source: "qrc:edge-gradient.png"
+        source: "../resources/edge-gradient.png"
         opacity: 0.7
         visible: following
     }
@@ -63,7 +64,8 @@ Item {
         anchors.margins: 20
         z: 3
         visible: !mapWindow.following
-        source: "qrc:car-focus.png"
+//        source: "qrc:car-focus.png"
+        source: "../resources/car-focus.png"
 
         MouseArea {
             id: area
@@ -232,7 +234,8 @@ Item {
         MapQuickItem {
             sourceItem: Image {
                 id: carMarker
-                source: "qrc:///current-location.png"
+//                source: "qrc:///current-location.png"
+                source: "../resources/current-location.png"
             }
 
             zoomLevel: map.zoomLevel
