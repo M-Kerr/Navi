@@ -76,11 +76,11 @@ ColumnLayout {
                         source: {
                             if (place.icon.url().toString())
 //                                "qrc:///" + place.icon.url().toString().slice(7);
-                                "../../../resources/" + place.icon.url().toString().slice(7);
+                                "../resources/" + place.icon.url().toString().slice(7);
 
                             // TODO: else display a default marker
                             // icon
-                            else "../../../resources/marker2.png"
+                            else "../resources/marker2.png"
                         }
                     }
                 }

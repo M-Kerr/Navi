@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
-import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
@@ -13,9 +13,10 @@ Item {
     property var plugin
     property var night
     property var currentCoordinate
+    property alias input: input
     property color bgColor
     property var stateStack
-    property alias input: input
+
     property string text: input.text
 
     SequentialAnimation {
@@ -67,18 +68,15 @@ Item {
         width: root.width
         height: root.height
 
-        RoundButton {
-//        Rectangle {
+        Rectangle {
             id: backRect
             height: parent.height
             width:  height
             radius: height
-//            color: root.bgColor
+            color: root.bgColor
             clip: true
             enabled: false
             opacity: 0.0
-
-            Material.elevation: 0
 
             Behavior on x { SmoothedAnimation { velocity: 200 } }
             Behavior on y { SmoothedAnimation { velocity: 200 } }
@@ -88,10 +86,11 @@ Item {
                 }
             }
 
-            Label {
+            Text {
                 anchors.centerIn: parent
                 text: "≺"
                 font.bold: true
+                color: night? "grey" : "black"
             }
 
             MouseArea {
@@ -107,45 +106,42 @@ Item {
             }
         }
 
-        Item {
+        Rectangle {
+            id: inputRect
             Layout.fillWidth: true
             height: parent.height
-
-            InnerShadow {
-                anchors.fill: inputRect
-                source: inputRect
+            radius: height / 2
+            color: root.bgColor
+            border.color: Qt.rgba(0, 0, 0, 0.01)
+            border.width: 1
+            clip: true
+            layer.enabled: true
+            layer.effect: InnerShadow {
                 radius: 6
-                samples: 20
-                //                spread: 0.15
-                verticalOffset: 0.75
-                horizontalOffset: -0.75
-                z: 1
+                samples: 12
+                spread: 0.15
+                verticalOffset: 1.5
+                horizontalOffset: -1.5
             }
 
-            Rectangle {
-                id: inputRect
+            Behavior on x { NumberAnimation { duration: 1000 } }
+            Behavior on width { NumberAnimation { duration: 1000 } }
+
+            RowLayout {
+                id: inputRow
                 anchors.fill: parent
-                radius: height / 2
-                //            color: root.bgColor
-                border.color: Qt.rgba(0, 0, 0, 0.01)
-                border.width: 1
-                clip: true
 
-                Behavior on x { NumberAnimation { duration: 1000 } }
-                Behavior on width { NumberAnimation { duration: 1000 } }
-
-                Item {
+                Rectangle {
                     id: searchIconRect
-                    height: parent.height * 0.5
+                    height: inputRow.height * 0.5
                     width: height
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.left
-                    anchors.leftMargin: 20
+                    Layout.leftMargin: 20
+                    color: root.bgColor
 
                     Image {
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectFit
-                        //                        source: "qrc:searchIcon.png"
+//                        source: "qrc:searchIcon.png"
                         source: "../resources/searchIcon.png"
                         asynchronous: true
                     }
@@ -153,16 +149,11 @@ Item {
 
                 TextField {
                     id: input
-                    height: parent.height //* 0.5
-                    width: parent.width - searchIconRect.width - 50
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.verticalCenterOffset: 4
-                    anchors.left: searchIconRect.right
-                    anchors.leftMargin: 20
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
 
                     placeholderText: "Where to?"
-//                    background: Item {} // Transparent background
+                    background: Item {} // Transparent background
 
                     onActiveFocusChanged: {
                         if (activeFocus) {
@@ -170,6 +161,7 @@ Item {
                             backRectShow.start();
                         }
                     }
+
                 }
             }
         }
