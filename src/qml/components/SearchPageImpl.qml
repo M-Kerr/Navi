@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
+import GlobalStatus 1.0
 
 ColumnLayout {
     id: resultColumn
@@ -34,6 +35,53 @@ ColumnLayout {
 
     // TODO: Categories row. Should be some kind of ToolBar or TabBar
     //    with ToolSeparators
+    // if listView.items < 1... searching = false
+    ScrollView {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        Frame {
+            id: categoriesFrame
+            width: parent.width
+            height: 60
+            visible: !GlobalStatus.searching
+
+            background: Rectangle {
+                border.width: 1
+                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
+                color: bgColor
+            }
+
+            RowLayout {
+                anchors.fill: parent
+                ToolButton {
+                    Layout.leftMargin: 20
+                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+                    text: "C1"
+                }
+                ToolSeparator {id: sep1}
+                ToolButton {
+                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+                    text: "C2"
+                }
+                ToolSeparator {}
+                ToolButton {
+                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+                    text: "C3"
+                }
+                ToolSeparator {}
+                ToolButton {
+                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+                    text: "C4"
+                }
+                ToolSeparator {}
+                ToolButton {
+                    Layout.rightMargin: 20
+                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+                    text: "⋯"
+                }
+            }
+        }
+    }
 
     // ListView
     ListView {
@@ -43,6 +91,7 @@ ColumnLayout {
         model: root.model
         spacing: -1
         clip: true
+        visible: GlobalStatus.searching
         delegate:
             Frame {
             contentWidth: listView.width
