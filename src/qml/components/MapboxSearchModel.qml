@@ -16,7 +16,10 @@ PlaceSearchModel {
         //TODO: add logic to force update() the model if search input has
         // stopped. I think the update() function is on a timer and may not
         // search the final token
-        update()
+        if (searchTerm)
+        {
+            update()
+        }
     }
 
     onStatusChanged: {

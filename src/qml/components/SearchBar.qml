@@ -98,6 +98,7 @@ Item {
                 onClicked: {
                     if (backRectHide.running) return;
 
+                    input.text = ""
                     backRectHide.start();
                     searchIconRect.visible = true;
                     stateStack.pop();
