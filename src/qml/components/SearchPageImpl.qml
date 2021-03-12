@@ -15,7 +15,7 @@ ColumnLayout {
     Item {
         id: headerWrapper
         Layout.fillWidth: true
-        height: 80
+        height: 90
         z: 1
 
         Rectangle {
@@ -44,19 +44,16 @@ ColumnLayout {
         spacing: -1
         clip: true
         delegate:
-            Pane {
+            Frame {
             contentWidth: listView.width
             contentHeight: 60
-//            Rectangle {
-//            height: 60
-
-//            width: listView.width + (border.width * 2)
-//            transform: Translate {x: -1}
-//            border.width: 1
-//            border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
-//            color: bgColor
-
             z: listView.currentIndex === model.index ? 2 : 1
+
+            background: Rectangle {
+                border.width: 1
+                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
+                color: bgColor
+            }
 
             RowLayout {
                 anchors.fill: parent
