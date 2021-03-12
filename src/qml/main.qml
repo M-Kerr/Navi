@@ -25,7 +25,9 @@ ApplicationWindow {
     property var currentCoordinate: nmeaLog.coordinate
     NmeaLog {
         id: nmeaLog
-        logFile: "://output.nmea.txt"
+//        logFile: "://output.nmea.txt"
+        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
+resources/output.nmea.txt"
 
         Component.onCompleted: {
             startUpdates()
@@ -51,7 +53,7 @@ ApplicationWindow {
 
         property bool following: true
         property bool night
-        property color bgColor: night? "black" : "grey"
+        property color bgColor: night? "black" : "lightgrey"
 
         states: [
             State {
@@ -124,6 +126,7 @@ ApplicationWindow {
             anchors.right: itemWindow.right
 
             bgColor: itemWindow.bgColor
+            night: itemWindow.night
             model: searchModel
         }
 

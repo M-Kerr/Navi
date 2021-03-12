@@ -2,7 +2,9 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QSettings>
+#include <QDebug>
 #include "nmealog/nmealog.h"
+#include "hotreload/hotreloadqmlapplicationengine.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,13 +17,17 @@ int main(int argc, char *argv[])
     settings.sync();
 
     QGuiApplication application(argc, argv);
-    QQmlApplicationEngine engine;
+    // WARNING: remove QML HotReload for production
+//    QQmlApplicationEngine engine;
+    HotReloadQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("$QmlEngine", &engine);
+
 
     qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
 
-    // TODO delete this line
-//    engine.addImportPath(QStringLiteral(":/imports"));
-    QUrl url(QStringLiteral("qrc:///main.qml"));
+    // WARNING: remove qgetenv for production
+//    QUrl url(QStringLiteral("qrc:///main.qml"));
+    QUrl url(qgetenv("MAIN_QML"));
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

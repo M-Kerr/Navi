@@ -27,13 +27,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick LinguistTools REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR}
-    COMPONENTS Core Quick LinguistTools Positioning Location REQUIRED)
+    COMPONENTS Core Quick QuickControls2 LinguistTools Positioning Location REQUIRED)
 
 set(TS_FILES Navi_en_US.ts)
 set(SRC_FILES main.cpp )
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/qml)
 
 add_library(NmeaLog nmealog/nmealog.cpp)
+# WARNING: remove the QML HotReload library for production
+add_library(HotReload hotreload/hotreloadqmlapplicationengine.cpp)
+target_link_libraries(HotReload PUBLIC Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Quick)
+
 target_link_libraries(NmeaLog
     PUBLIC
     Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Positioning
@@ -49,7 +54,8 @@ if(ANDROID)
 else()
     add_executable(Navi
         ${SRC_FILES}
-        $CACHE{QRC_FILES}
+        #WARNING: add the qrc_files for release
+#        $CACHE{QRC_FILES}
         ${TS_FILES}
     )
 endif()
@@ -59,8 +65,11 @@ target_compile_definitions(Navi
 target_link_libraries(Navi
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::QuickControls2
   Qt${QT_VERSION_MAJOR}::Location
   NmeaLog
+# WARNING: remove the QML HotReload library for production
+  HotReload
   )
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
