@@ -100,7 +100,7 @@ Item {
 
                     input.text = ""
                     backRectHide.start();
-                    searchIconRect.visible = true;
+                    searchIcon.visible = true;
                     stateStack.pop();
                     root.parent.state = stateStack[stateStack.length - 1];
                 }
@@ -119,10 +119,9 @@ Item {
             layer.enabled: true
             layer.effect: InnerShadow {
                 radius: 6
-                samples: 12
-                spread: 0.15
-                verticalOffset: 1.5
-                horizontalOffset: -1.5
+                samples: 20
+                verticalOffset: 0.75
+                horizontalOffset: -0.75
             }
 
             Behavior on x { NumberAnimation { duration: 1000 } }
@@ -132,12 +131,12 @@ Item {
                 id: inputRow
                 anchors.fill: parent
 
-                Rectangle {
-                    id: searchIconRect
+                Item {
+                    id: searchIcon
                     height: inputRow.height * 0.5
                     width: height
                     Layout.leftMargin: 20
-                    color: root.bgColor
+//                    color: root.bgColor
 
                     Image {
                         anchors.fill: parent
@@ -158,11 +157,46 @@ Item {
 
                     onActiveFocusChanged: {
                         if (activeFocus) {
-                            searchIconRect.visible = false;
+                            searchIcon.visible = false;
                             backRectShow.start();
                         }
                     }
+                }
 
+//                Item {
+//                    height: inputRow.height * 0.3
+//                    width: height
+//                    Layout.rightMargin: 20
+//                    visible: input.text.length > 0
+//                    clip: true
+
+                Rectangle {
+                    id: clearSearchTerm
+                    height: inputRow.height * 0.5
+                    width: height
+                    Layout.rightMargin: 20
+                    visible: input.text.length > 0
+                    radius: height / 2
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        radius: 2
+                        samples: 9
+                        verticalOffset: 0.75
+                        horizontalOffset: -0.75
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: "X"
+                        font.pixelSize: parent.height / 2
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: input.text = ""
+                        onPressed: parent.layer.enabled = false
+                        onReleased: parent.layer.enabled = true
+                    }
                 }
             }
         }
