@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtLocation 5.15
 import QtPositioning 5.15
+import GlobalStatus 1.0
 
 PlaceSearchModel {
     id: searchModel
@@ -16,9 +17,12 @@ PlaceSearchModel {
         //TODO: add logic to force update() the model if search input has
         // stopped. I think the update() function is on a timer and may not
         // search the final token
-        if (searchTerm)
-        {
+        if (searchTerm) {
+            GlobalStatus.searching = true
             update()
+        }
+        else {
+            GlobalStatus.searching = false
         }
     }
 
