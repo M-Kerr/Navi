@@ -11,5 +11,6 @@
         <file>components/RightDrawer.qml</file>
         <file>components/MapboxSearchModel.qml</file>
         <file>components/SearchPageImpl.qml</file>
+        <file>singletons/GlobalStatus.qml</file>
     </qresource>
 </RCC>
