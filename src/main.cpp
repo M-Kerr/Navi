@@ -24,6 +24,11 @@ int main(int argc, char *argv[])
 
 
     qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
+//    qmlRegisterSingletonType(QUrl("qrc://singletons/GlobalStatus.qml"),
+//                             "GlobalStatus", 1, 0, "GlobalStatus");
+    QUrl status("file:" + qgetenv("GLOBALSTATUS_QML"));
+    qmlRegisterSingletonType(status,
+                             "GlobalStatus", 1, 0, "GlobalStatus");
 
     // WARNING: remove qgetenv for production
 //    QUrl url(QStringLiteral("qrc:///main.qml"));
