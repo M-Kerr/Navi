@@ -194,8 +194,14 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: input.text = ""
-                        onPressed: parent.layer.enabled = false
-                        onReleased: parent.layer.enabled = true
+                        onPressed: {
+                            parent.scale = 1.25
+                            parent.layer.enabled = false
+                        }
+                        onReleased: {
+                            parent.scale = 1
+                            parent.layer.enabled = true
+                        }
                     }
                 }
             }
