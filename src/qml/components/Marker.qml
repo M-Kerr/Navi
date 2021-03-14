@@ -1,3 +1,4 @@
+// TODO: Probably will delete this file. I believe it comes from a Qt example
 import QtQuick 2.5;
 import QtLocation 5.6
 
