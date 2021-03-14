@@ -4,6 +4,9 @@ import QtLocation 5.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import com.mkerr.navi 1.0
+import AppUtil 1.0
+import MapboxPlugin 1.0
+import MapboxSearchModel 1.0
 import "map"
 import "components"
 
@@ -19,28 +22,7 @@ ApplicationWindow {
     //    visibility: ApplicationWindow.FullScreen
 
     //     WARNING: Dev environment only, not meant for production
-    property string mapboxToken: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
-    property var plugin: MapboxPlugin {token: mapboxToken}
     // from GPS: positionSource.position.coordinate
-    property var currentCoordinate: nmeaLog.coordinate
-    NmeaLog {
-        id: nmeaLog
-//        logFile: "://output.nmea.txt"
-        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-src/qml/resources/output.nmea.txt"
-
-        Component.onCompleted: {
-            startUpdates()
-        }
-    }
-
-    MapboxSearchModel{
-        id: searchModel
-        searchTerm: searchBar.text
-        plugin: root.plugin
-
-        searchLocation: currentCoordinate
-    }
 
     Item {
         id: itemWindow
@@ -127,7 +109,6 @@ src/qml/resources/output.nmea.txt"
 
             bgColor: itemWindow.bgColor
             night: itemWindow.night
-            model: searchModel
         }
 
         SearchBar {
@@ -138,14 +119,19 @@ src/qml/resources/output.nmea.txt"
             width: parent.width * 0.75
             z: 2
             bgColor: itemWindow.bgColor
-            plugin: root.plugin
-            currentCoordinate: root.currentCoordinate
+            plugin: MapboxPlugin
             stateStack: itemWindow.stateStack
 
             input.onActiveFocusChanged: {
                 if (input.activeFocus) {
                     itemWindow.state = "searchPage";
                 }
+            }
+
+            Binding {
+                target: MapboxSearchModel
+                property: "searchTerm"
+                value: searchBar.text
             }
         }
 
@@ -154,9 +140,8 @@ src/qml/resources/output.nmea.txt"
             anchors.fill: parent
             z: 0
 
-            plugin: root.plugin
+            plugin: MapboxPlugin
             following: itemWindow.following
-            currentCoordinate: root.currentCoordinate
             night: itemWindow.night
             //            traffic: bottomBar.traffic
             //            night: bottomBar.night

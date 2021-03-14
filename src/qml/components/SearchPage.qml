@@ -10,14 +10,12 @@ Pane {
     padding: 0
 
     //    property alias header: headerRect
-    property var model
     property var bgColor
     property bool night
 
 //    SearchPageImpl {}
 
     HotReloader {
-        property var model: root.model
         property var bgColor: root.bgColor
         property bool night: root.night
         source: "components/SearchPageImpl.qml"

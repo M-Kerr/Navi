@@ -1,3 +1,4 @@
+pragma Singleton
 import QtQuick 2.0
 import QtLocation 5.15
 import QtPositioning 5.15
@@ -11,6 +12,7 @@ PlaceSearchModel {
     property variant _searchRegion: QtPositioning.circle(searchLocation,
                                                         searchRadius)
 
+    plugin: MapboxPlugin
     searchArea: _searchRegion
 
     onSearchTermChanged: {
@@ -29,20 +31,13 @@ PlaceSearchModel {
     onStatusChanged: {
         switch (status) {
         case PlaceSearchModel.Null: print("No query executed"); break;
-//        case PlaceSearchModel.Ready: print("Search results available"); break;
-//        case PlaceSearchModel.Loading: print("Loading search query"); break;
+        case PlaceSearchModel.Ready: break;
+        case PlaceSearchModel.Loading: break;
         case PlaceSearchModel.Error: print("Error occurred during previous search query:",
-                                           errorString());
-            break;
+                                           errorString()); break;
         }
     }
 }
-
-
-
-
-
-
 
 //    // TODO
 //    PlaceSearchSuggestionModel{

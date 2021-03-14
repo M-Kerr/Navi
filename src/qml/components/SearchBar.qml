@@ -12,7 +12,6 @@ Item {
 
     property var plugin
     property var night
-    property var currentCoordinate
     property alias input: input
     property color bgColor
     property var stateStack

@@ -9,8 +9,9 @@
         <file>components/RightDrawer.qml</file>
         <file>components/SearchPageImpl.qml</file>
         <file>singletons/GlobalStatus.qml</file>
-        <file>map/MapboxPlugin.qml</file>
-        <file>map/MapboxSearchModel.qml</file>
         <file>components/CustomLabel.qml</file>
+        <file>singletons/AppUtil.qml</file>
+        <file>singletons/MapboxPlugin.qml</file>
+        <file>singletons/MapboxSearchModel.qml</file>
     </qresource>
 </RCC>

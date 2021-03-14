@@ -21,18 +21,47 @@ int main(int argc, char *argv[])
 //    QQmlApplicationEngine engine;
     HotReloadQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("$QmlEngine", &engine);
-
-
     qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
-//    qmlRegisterSingletonType(QUrl("qrc://singletons/GlobalStatus.qml"),
-//                             "GlobalStatus", 1, 0, "GlobalStatus");
-    QUrl status("file:" + qgetenv("GLOBALSTATUS_QML"));
+
+/*******************************
+    Production objects, uncomment for production
+
+    qmlRegisterSingletonType(QUrl("qrc://singletons/GlobalStatus.qml"),
+                             "GlobalStatus", 1, 0, "GlobalStatus");
+    qmlRegisterSingletonType(QUrl("qrc://singletons/AppUtil.qml"),
+                             "AppUtil", 1, 0, "AppUtil");
+    qmlRegisterSingletonType(QUrl("qrc://singletons/MapboxPlugin.qml"),
+                             "MapboxPlugin", 1, 0, "MapboxPlugin");
+    qmlRegisterSingletonType(QUrl("qrc://singletons/MapboxSearchModel.qml"),
+                             "MapboxSearchModel", 1, 0, "MapboxSearchModel");
+
+    QUrl url(QStringLiteral("qrc:///main.qml"));
+ *******************************/
+
+/*******************************
+    Dev Objects, delete for production
+ *******************************/
+    QUrl status("file:" + qgetenv("SINGLETONS_QML") + "GlobalStatus.qml");
     qmlRegisterSingletonType(status,
                              "GlobalStatus", 1, 0, "GlobalStatus");
 
-    // WARNING: remove qgetenv for production
-//    QUrl url(QStringLiteral("qrc:///main.qml"));
+    QUrl appUtil("file:" + qgetenv("SINGLETONS_QML") + "GlobalStatus.qml");
+    qmlRegisterSingletonType(appUtil,
+                             "AppUtil", 1, 0, "AppUtil");
+
+    QUrl mapboxPlugin("file:" + qgetenv("SINGLETONS_QML") + "MapboxPlugin.qml");
+    qmlRegisterSingletonType(mapboxPlugin,
+                             "MapboxPlugin", 1, 0, "MapboxPlugin");
+
+    QUrl mapboxSearchModel("file:" + qgetenv("SINGLETONS_QML") + "MapboxSearchModel.qml");
+    qmlRegisterSingletonType(mapboxSearchModel,
+                             "MapboxSearchModel", 1, 0, "MapboxSearchModel");
+
     QUrl url(qgetenv("MAIN_QML"));
+/*******************************
+    /DevObjects
+ *******************************/
+
     QObject::connect(&engine, SIGNAL(quit()), qApp, SLOT(quit()));
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

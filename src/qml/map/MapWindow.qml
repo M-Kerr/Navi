@@ -1,6 +1,8 @@
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtQuick 2.15
+import com.mkerr.navi 1.0
+import MapboxSearchModel 1.0
 import "../components"
 
 Item {
@@ -11,7 +13,24 @@ Item {
     property bool night
     property var plugin
 
-    property var currentCoordinate
+    property var currentCoordinate: nmeaLog.coordinate
+
+    Binding {
+        target: MapboxSearchModel
+        property: "searchLocation"
+        value: currentCoordinate
+    }
+
+    NmeaLog {
+        id: nmeaLog
+//        logFile: "://output.nmea.txt"
+        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
+src/qml/resources/output.nmea.txt"
+
+        Component.onCompleted: {
+            startUpdates()
+        }
+    }
 
     states: [
         State {
