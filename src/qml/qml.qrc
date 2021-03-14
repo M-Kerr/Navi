@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>map/MapWindow.qml</file>
-        <file>map/CustomLabel.qml</file>
         <file>main.qml</file>
         <file>components/SearchBar.qml</file>
         <file>components/CenterWindow.qml</file>
@@ -12,5 +11,6 @@
         <file>singletons/GlobalStatus.qml</file>
         <file>map/MapboxPlugin.qml</file>
         <file>map/MapboxSearchModel.qml</file>
+        <file>components/CustomLabel.qml</file>
     </qresource>
 </RCC>
