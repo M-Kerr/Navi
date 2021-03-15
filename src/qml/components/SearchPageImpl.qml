@@ -100,6 +100,10 @@ Item {
                 color: bgColor
             }
 
+//            MouseArea {
+//                onClicked: // Connect to mapItemView's matching index
+//            }
+
             Item {
                 id: markerRect
                 height: parent.height * 0.5
@@ -131,17 +135,11 @@ Item {
                 Layout.minimumWidth: 662
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
-                Component.onCompleted: {
-                    print("infoBox HEIGHT: " + height, "WIDTH: " + width)
-                }
 
                 ColumnLayout {
                     anchors.fill: parent
                     spacing: 3
                     clip: true
-                    Component.onCompleted: {
-                        print("columnLayout HEIGHT: " + height, "WIDTH: " + width)
-                    }
 
                     // TODO: if/else logic to determine place result type
                     // and its visual representation
@@ -149,16 +147,10 @@ Item {
                         height: parent.height / 2
                         text: title
                         font.bold: true
-                        Component.onCompleted: {
-                            print("title HEIGHT: " + height, "WIDTH: " + width)
-                        }
                     }
                     Label {
                         height: parent.height / 2
                         text: place.location.address.street
-                        Component.onCompleted: {
-                            print("address HEIGHT: " + height, "WIDTH: " + width)
-                        }
                     }
                 }
             }
