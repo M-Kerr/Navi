@@ -7,97 +7,92 @@ import com.mkerr.navi 1.0
 import MapboxSearchModel 1.0
 import GlobalStatus 1.0
 
-ColumnLayout {
-    id: resultColumn
+Item {
+    id: searchPage
     anchors.fill: parent
-    spacing: 0
 
     property bool night
 
-    Item {
-        id: headerWrapper
-        Layout.fillWidth: true
+    Rectangle {
+        id: headerRect
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
         height: 90
         z: 1
-
-        Rectangle {
-            id: headerRect
-            anchors.fill: parent
-            color: "white"
-        }
-        DropShadow {
-            source: headerRect
-            anchors.fill: headerRect
-            radius: 16
-            samples: 32
-            verticalOffset: -0.15
-        }
+        color: "white"
     }
 
-//    ScrollView {
-//        id: categoriesView
-//        Layout.fillHeight: true
-//        Layout.fillWidth: true
-//        Frame {
-//            id: categoriesFrame
-//            width: parent.width
-//            height: 60
-//            visible: !GlobalStatus.searching
+    DropShadow {
+        source: headerRect
+        anchors.fill: headerRect
+        radius: 16
+        samples: 32
+        verticalOffset: -0.15
+    }
 
-//            background: Rectangle {
-//                border.width: 1
-//                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
-//                color: bgColor
-//            }
+    //    ScrollView {
+    //        id: categoriesView
+    //        Layout.fillHeight: true
+    //        Layout.fillWidth: true
+    //        Frame {
+    //            id: categoriesFrame
+    //            width: parent.width
+    //            height: 60
+    //            visible: !GlobalStatus.searching
 
-//            RowLayout {
-//                anchors.fill: parent
-//                ToolButton {
-//                    Layout.leftMargin: 20
-//                    width: (parent.width / 5) - 40 - (sep1.width * 4)
-//                    text: "C1"
-//                }
-//                ToolSeparator {id: sep1}
-//                ToolButton {
-//                    width: (parent.width / 5) - 40 - (sep1.width * 4)
-//                    text: "C2"
-//                }
-//                ToolSeparator {}
-//                ToolButton {
-//                    width: (parent.width / 5) - 40 - (sep1.width * 4)
-//                    text: "C3"
-//                }
-//                ToolSeparator {}
-//                ToolButton {
-//                    width: (parent.width / 5) - 40 - (sep1.width * 4)
-//                    text: "C4"
-//                }
-//                ToolSeparator {}
-//                ToolButton {
-//                    Layout.rightMargin: 20
-//                    width: (parent.width / 5) - 40 - (sep1.width * 4)
-//                    text: "⋯"
-//                }
-//            }
-//        }
-//    }
+    //            background: Rectangle {
+    //                border.width: 1
+    //                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
+    //                color: bgColor
+    //            }
+
+    //            RowLayout {
+    //                anchors.fill: parent
+    //                ToolButton {
+    //                    Layout.leftMargin: 20
+    //                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+    //                    text: "C1"
+    //                }
+    //                ToolSeparator {id: sep1}
+    //                ToolButton {
+    //                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+    //                    text: "C2"
+    //                }
+    //                ToolSeparator {}
+    //                ToolButton {
+    //                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+    //                    text: "C3"
+    //                }
+    //                ToolSeparator {}
+    //                ToolButton {
+    //                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+    //                    text: "C4"
+    //                }
+    //                ToolSeparator {}
+    //                ToolButton {
+    //                    Layout.rightMargin: 20
+    //                    width: (parent.width / 5) - 40 - (sep1.width * 4)
+    //                    text: "⋯"
+    //                }
+    //            }
+    //        }
+    //    }
 
     ListView {
         id: listView
-        Layout.fillWidth: true
-        Layout.fillHeight: true
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: headerRect.bottom
+        anchors.bottom: parent.bottom
         model: MapboxSearchModel
-//        spacing: -1
-//        clip: true
         visible: GlobalStatus.searching
 
         delegate:
             Frame {
-            contentWidth: listView.width
-            contentHeight: 60
+            width: listView.width
+            height: 110
             z: listView.currentIndex === model.index ? 2 : 1
-
-            Component.onCompleted: print("Result Element created")
 
             background: Rectangle {
                 border.width: 1
@@ -105,79 +100,88 @@ ColumnLayout {
                 color: bgColor
             }
 
-            RowLayout {
-                anchors.fill: parent
-                spacing: 15
+            Item {
+                id: markerRect
+                height: parent.height * 0.5
+                width: height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
 
-                Item {
-                    id: markerRect
-                    height: parent.height * 0.5
-                    width: height
-                    Layout.leftMargin: 15
-                    Layout.alignment: Qt.AlignVCenter
+                Image {
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    asynchronous: true
+                    source: {
+                        if (place.icon.url().toString())
+                            //                            "qrc:///" + place.icon.url().toString().slice(7);
+                            "../resources/" + place.icon.url().toString().slice(7);
 
-                    Image {
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectFit
-                        asynchronous: true
-                        source: {
-                            if (place.icon.url().toString())
-//                                "qrc:///" + place.icon.url().toString().slice(7);
-                                "../resources/" + place.icon.url().toString().slice(7);
-
-                            else "../resources/marker2.png"
-                        }
+                        else "../resources/marker2.png"
                     }
                 }
+            }
 
-                Item {
-                    height: parent.height * 0.5
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignVCenter
-
-                    ColumnLayout {
-                        anchors.fill: parent
-                        spacing: 3
-
-                        // TODO: if/else logic to determine place result type
-                        // and its visual representation
-                        Label {
-                            height: parent.height / 2
-                            text: title
-                            font.bold: true
-                        }
-                        Label {
-                            height: parent.height / 2
-                            text: place.location.address.street
-                        }
-                    }
+            Item {
+                height: parent.height * 0.5
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: markerRect.right
+                anchors.right: distanceColumn.left
+                anchors.leftMargin: 15
+                anchors.rightMargin: 15
+                Layout.minimumWidth: 662
+                Layout.fillWidth: true
+                Layout.alignment: Qt.AlignVCenter
+                Component.onCompleted: {
+                    print("infoBox HEIGHT: " + height, "WIDTH: " + width)
                 }
 
-                Item {
-                    height: parent.height * 0.5
-                    width: height + 13
-                    Layout.rightMargin: 25
-                    Layout.alignment: Qt.AlignVCenter
+                ColumnLayout {
+                    anchors.fill: parent
+                    spacing: 3
                     clip: true
+                    Component.onCompleted: {
+                        print("columnLayout HEIGHT: " + height, "WIDTH: " + width)
+                    }
 
-                    ColumnLayout {
-                        id: distanceRect
-                        anchors.fill: parent
-                        spacing: 0
-
-                        Label {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: Math.round(distance)
-                            font.bold: true
-                            verticalAlignment: Text.AlignBottom
-                        }
-                        Label {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: "meters"
-                            font.weight: Font.Thin
-                            verticalAlignment: Text.AlignTop
+                    // TODO: if/else logic to determine place result type
+                    // and its visual representation
+                    Label {
+                        height: parent.height / 2
+                        text: title
+                        font.bold: true
+                        Component.onCompleted: {
+                            print("title HEIGHT: " + height, "WIDTH: " + width)
                         }
                     }
+                    Label {
+                        height: parent.height / 2
+                        text: place.location.address.street
+                        Component.onCompleted: {
+                            print("address HEIGHT: " + height, "WIDTH: " + width)
+                        }
+                    }
+                }
+            }
+
+            ColumnLayout {
+                id: distanceColumn
+                height: parent.height * 0.5
+                width: height + 13
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                spacing: 0
+
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: Math.round(distance)
+                    font.bold: true
+                    verticalAlignment: Text.AlignBottom
+                }
+                Label {
+                    Layout.alignment: Qt.AlignHCenter
+                    text: "meters"
+                    font.weight: Font.Thin
+                    verticalAlignment: Text.AlignTop
                 }
             }
         }
