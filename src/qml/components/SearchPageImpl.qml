@@ -88,8 +88,7 @@ Item {
         model: MapboxSearchModel
         visible: GlobalStatus.searching
 
-        delegate:
-            Frame {
+        delegate: Frame {
             width: listView.width
             height: 110
             z: listView.currentIndex === model.index ? 2 : 1
