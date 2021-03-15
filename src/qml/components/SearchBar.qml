@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.15
+import MapboxSearchModel 1.0
 
 Item {
     id: root
@@ -14,7 +15,6 @@ Item {
     property var night
     property alias input: input
     property color bgColor
-    property var stateStack
 
     property string text: input.text
 
@@ -100,8 +100,7 @@ Item {
                     input.text = ""
                     backRectHide.start();
                     searchIcon.visible = true;
-                    stateStack.pop();
-                    root.parent.state = stateStack[stateStack.length - 1];
+                    itemWindow.previousState();
                 }
             }
         }
@@ -158,6 +157,13 @@ Item {
                         if (activeFocus) {
                             searchIcon.visible = false;
                             backRectShow.start();
+                        }
+                    }
+
+                    onAccepted: {
+                        if (text)
+                        {
+                            itemWindow.previousState()
                         }
                     }
                 }

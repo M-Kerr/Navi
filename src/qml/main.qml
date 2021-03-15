@@ -37,6 +37,13 @@ ApplicationWindow {
         property bool night
         property color bgColor: night? "black" : "lightgrey"
 
+        function previousState() {
+            if (stateStack.length > 1) {
+            stateStack.pop();
+            state = stateStack[stateStack.length - 1];
+            }
+        }
+
         states: [
             State {
                 name: ""
@@ -120,7 +127,6 @@ ApplicationWindow {
             z: 2
             bgColor: itemWindow.bgColor
             plugin: MapboxPlugin
-            stateStack: itemWindow.stateStack
 
             input.onActiveFocusChanged: {
                 if (input.activeFocus) {
