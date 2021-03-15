@@ -21,17 +21,6 @@ Item {
         value: currentCoordinate
     }
 
-    NmeaLog {
-        id: nmeaLog
-//        logFile: "://output.nmea.txt"
-        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-src/qml/resources/output.nmea.txt"
-
-        Component.onCompleted: {
-            startUpdates()
-        }
-    }
-
     states: [
         State {
             name: ""
@@ -55,6 +44,17 @@ src/qml/resources/output.nmea.txt"
 
     state: following ? "following" : ""
 
+    NmeaLog {
+        id: nmeaLog
+//        logFile: "://output.nmea.txt"
+        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
+src/qml/resources/output.nmea.txt"
+
+        Component.onCompleted: {
+            startUpdates()
+        }
+    }
+
     Image {
         anchors.fill: parent
         z: 2
@@ -75,6 +75,10 @@ src/qml/resources/output.nmea.txt"
 
 //        font.pixelSize: 38
 //    }
+
+    PlacesMap {
+        id: placesMap
+    }
 
     Image {
         height: 80
