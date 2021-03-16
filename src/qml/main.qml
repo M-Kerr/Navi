@@ -14,8 +14,8 @@ ApplicationWindow {
     id: root
 
     // WARNING: return to widescreen for production
-//    width: 1024
-//    height: 768
+    //    width: 1024
+    //    height: 768
     width: 1024
     height: 1024
     visible: true
@@ -29,7 +29,7 @@ ApplicationWindow {
         anchors.centerIn: parent
         width: parent.height
         height: parent.width
-//        rotation: -90
+        //        rotation: -90
 
         property var stateStack: [""]
 
@@ -39,8 +39,8 @@ ApplicationWindow {
 
         function previousState() {
             if (stateStack.length > 1) {
-            stateStack.pop();
-            state = stateStack[stateStack.length - 1];
+                stateStack.pop();
+                state = stateStack[stateStack.length - 1];
             }
         }
 
@@ -151,6 +151,20 @@ ApplicationWindow {
             night: itemWindow.night
             //            traffic: bottomBar.traffic
             //            night: bottomBar.night
+        }
+        // WARNING: Dev tool, remove zoomInfo on release
+        Text {
+            id: zoomInfo
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 100
+//            anchors.centerIn: parent
+            text: "zoom: " + Math.round(mapWindow.map.zoomLevel * 100) / 100
+            color: "black"
+            font.pixelSize: 16
+            font.bold: true
+            opacity: 0.7
+            z: 1
         }
     }
 }
