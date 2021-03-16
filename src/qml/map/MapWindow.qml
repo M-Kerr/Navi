@@ -14,6 +14,7 @@ Item {
     property var plugin
 
     property var currentCoordinate: nmeaLog.coordinate
+    property alias map: map
 
     Binding {
         target: MapboxSearchModel
@@ -265,10 +266,39 @@ src/qml/resources/output.nmea.txt"
             anchorPoint.y: carMarker.height / 2
         }
 
-        PlacesMap {
-            id: placesMap
-            visible: true
+        // WARNING: dev tool, delete and replace with PlacesMap
+        property var placesMap: null
+        function createPlacesMap () {
+            // Dynamically insert a PlacesMap into the Map
+            // remove the current placesmap
+            if (placesMap) {
+                map.removeMapItemView(placesMap)
+                placesMap.destroy()
+            }
+            placesMap = null
+            $QmlEngine.clearCache();
+            var comp = Qt.createComponent("PlacesMap.qml")
+            placesMap = comp.createObject(map, {})
+            map.addMapItemView(placesMap)
+            print("PlacesMap component updated")
         }
+        Component.onCompleted: {
+            createPlacesMap()
+        }
+        Shortcut {
+            id: placesMapReloader
+            sequence: "F5"
+            context: Qt.ApplicationShortcut
+            onActivated: {
+                print("PlacesMap reload activated")
+                map.createPlacesMap()
+            }
+            onActivatedAmbiguously: activated();
+        }
+        //        PlacesMap {
+        //            id: placesMap
+        //        }
+
 
     }
 
