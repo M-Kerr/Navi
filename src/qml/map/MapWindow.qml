@@ -46,7 +46,7 @@ Item {
 
     NmeaLog {
         id: nmeaLog
-//        logFile: "://output.nmea.txt"
+        //        logFile: "://output.nmea.txt"
         logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
 src/qml/resources/output.nmea.txt"
 
@@ -59,26 +59,23 @@ src/qml/resources/output.nmea.txt"
         anchors.fill: parent
         z: 2
 
-//        source: "qrc:edge-gradient.png"
+        //        source: "qrc:edge-gradient.png"
         source: "../resources/edge-gradient.png"
         opacity: 0.7
         visible: following
     }
 
-//    CustomLabel {
-//        id: turnInstructions
+    //    CustomLabel {
+    //        id: turnInstructions
 
-//        anchors.top: parent.top
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.margins: 20
-//        z: 3
+    //        anchors.top: parent.top
+    //        anchors.horizontalCenter: parent.horizontalCenter
+    //        anchors.margins: 20
+    //        z: 3
 
-//        font.pixelSize: 38
-//    }
+    //        font.pixelSize: 38
+    //    }
 
-    PlacesMap {
-        id: placesMap
-    }
 
     Image {
         height: 80
@@ -88,7 +85,7 @@ src/qml/resources/output.nmea.txt"
         anchors.margins: 20
         z: 3
         visible: !mapWindow.following
-//        source: "qrc:car-focus.png"
+        //        source: "qrc:car-focus.png"
         source: "../resources/car-focus.png"
 
         MouseArea {
@@ -126,7 +123,7 @@ src/qml/resources/output.nmea.txt"
             PluginParameter {
                 name: "mapboxgl.mapping.additional_style_urls"
                 value: "mapbox://styles/m-kerr/cklo1x8c226o018mvgfvhxj6c/draft,mapbox://styles/m-kerr/cklqr3b7z6lq317og47js6g0j/draft,mapbox://styles/m-kerr/cklo1x8c226o018mvgfvhxj6c/draft,mapbox://styles/m-kerr/cklqr3b7z6lq317og47js6g0j/draft"
-//                value: "mapbox://styles/mapbox/navigation-guidance-day-v4,mapbox://styles/mapbox/navigation-guidance-night-v4,mapbox://styles/mapbox/navigation-preview-day-v4,mapbox://styles/mapbox/navigation-preview-night-v4"
+                //                value: "mapbox://styles/mapbox/navigation-guidance-day-v4,mapbox://styles/mapbox/navigation-guidance-night-v4,mapbox://styles/mapbox/navigation-preview-day-v4,mapbox://styles/mapbox/navigation-preview-night-v4"
             }
         }
 
@@ -157,14 +154,14 @@ src/qml/resources/output.nmea.txt"
         // belong to the single road network component, Traffic property.
 
         // TODO: Delete this real-time paint and assign the color within the map studio
-//        DynamicParameter {
-//            type: "paint"
-//            property var layer: "building-extrusion"
-//            property var fillExtrusionColor: "#00617f"
-//            property var fillExtrusionOpacity: .6
-//            property var fillExtrusionHeight: { return { type: "identity", property: "height" } }
-//            property var fillExtrusionBase: { return { type: "identity", property: "min_height" } }
-//        }
+        //        DynamicParameter {
+        //            type: "paint"
+        //            property var layer: "building-extrusion"
+        //            property var fillExtrusionColor: "#00617f"
+        //            property var fillExtrusionOpacity: .6
+        //            property var fillExtrusionHeight: { return { type: "identity", property: "height" } }
+        //            property var fillExtrusionBase: { return { type: "identity", property: "min_height" } }
+        //        }
 
         MouseArea {
             anchors.fill: parent
@@ -258,7 +255,7 @@ src/qml/resources/output.nmea.txt"
         MapQuickItem {
             sourceItem: Image {
                 id: carMarker
-//                source: "qrc:///current-location.png"
+                //                source: "qrc:///current-location.png"
                 source: "../resources/current-location.png"
             }
 
@@ -267,6 +264,12 @@ src/qml/resources/output.nmea.txt"
             anchorPoint.x: carMarker.width / 2
             anchorPoint.y: carMarker.height / 2
         }
+
+        PlacesMap {
+            id: placesMap
+            visible: true
+        }
+
     }
 
     RouteModel {
@@ -275,15 +278,15 @@ src/qml/resources/output.nmea.txt"
         autoUpdate: true
         query: routeQuery
         plugin: mapWindow.plugin
-//        plugin: Plugin {
-//            name: "mapbox"
+        //        plugin: Plugin {
+        //            name: "mapbox"
 
-//            PluginParameter {
-//                name: "mapbox.access_token"
-//                //     WARNING: Dev environment only, not meant for production
-//                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
-//            }
-//        }
+        //            PluginParameter {
+        //                name: "mapbox.access_token"
+        //                //     WARNING: Dev environment only, not meant for production
+        //                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
+        //            }
+        //        }
 
         //        Component.onCompleted: {
         //            if (map) {
