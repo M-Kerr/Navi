@@ -1,7 +1,7 @@
 import QtQuick 2.15
 
 Item {
-    id: root
+    id: reloader
     anchors.fill: parent
 
     property string source
@@ -10,20 +10,23 @@ Item {
     property alias loader: _loader
     property alias item: _loader.item
 
+    signal reload()
+    onReload: load()
+
+    function load() {
+        _loader.source = ""
+        $QmlEngine.clearCache();
+        _loader.source = reloader.source
+        print("Source Component " + reloader.source + " Updated")
+    }
+
     Loader {
         id: _loader
 
-        function reload() {
-            source = ""
-            $QmlEngine.clearCache();
-            source = root.source
-            print("Source Component " + root.source + " Updated")
-        }
-
         anchors.fill: parent
-        Component.onCompleted: source = root.source
+        Component.onCompleted: source = reloader.source
 
-        onLoaded: root.ready = true
+        onLoaded: reloader.ready = true
     }
 
     Shortcut {
@@ -31,7 +34,7 @@ Item {
         context: Qt.ApplicationShortcut
         onActivated: {
             print("Reload activated")
-            _loader.reload();
+            reloader.reload();
         }
         onActivatedAmbiguously: activated();
     }
