@@ -127,7 +127,11 @@ MapQuickItem {
                     Layout.alignment: Qt.AlignHCenter
                     Layout.topMargin: 8
 
-                    text: place.location.address.street + ","
+                    text: {
+                        if (place.location.address.street )
+                            place.location.address.street + ",";
+                        else "";
+                    }
 
                     font { family: "Arial" }
                     color: "grey"
@@ -140,8 +144,18 @@ MapQuickItem {
                     Layout.topMargin: 3
 
                     text: {
-                        place.location.address.city + ", "
-                        + place.location.address.state
+                        let t = "";
+
+                        if (place.location.address.city)
+                            t += place.location.address.city;
+
+                        if (t && place.location.address.state)
+                            t += ", " + place.location.address.state
+
+                        if (!t && place.location.address.state)
+                            t +=  place.location.address.state
+
+                        return t;
                     }
 
                     font { family: "Arial" }
