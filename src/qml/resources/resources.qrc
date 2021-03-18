@@ -196,5 +196,6 @@
         <file>mapbox/wheelchair.svg</file>
         <file>mapbox/windmill.svg</file>
         <file>mapbox/zoo.svg</file>
+        <file>marker.png</file>
     </qresource>
 </RCC>

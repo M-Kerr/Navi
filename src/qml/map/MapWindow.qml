@@ -167,6 +167,8 @@ src/qml/resources/output.nmea.txt"
         MouseArea {
             anchors.fill: parent
 
+            onClicked: parent.focus = true
+
             onWheel: {
                 mapWindow.following = false
                 wheel.accepted = false

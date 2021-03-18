@@ -12,14 +12,9 @@ MapItemView {
     delegate: MapQuickItem {
         id: mapQuickItem
 
-        function select() {
-            map.center = place.location.coordinate
-            map.zoomLevel = 18.5
-        }
-
         coordinate: place.location.coordinate
         anchorPoint.x: 30
-        anchorPoint.y: 60
+        anchorPoint.y: 50
 
         sourceItem: Loader {
             id: loader
@@ -29,13 +24,31 @@ MapItemView {
             Component {
                 id: placeResult
 
-                // TODO: place a loader on top that animates up an info
-                // box onClicked.
-
                 Item {
                     id: resultItem
                     height: 90
                     width: 60
+
+                    // TODO: place a loader on top that animates up an info
+                    // box onClicked.
+                    property var markerInfoBox: null
+                    function select() {
+                        map.center = place.location.coordinate
+                        map.zoomLevel = 18.5
+                        if (!markerInfoBox) {
+                            var comp = Qt.createComponent("../components/MarkerDialog.qml")
+                            if (comp.status !== Component.Ready) print(comp.errorString())
+                            markerInfoBox = comp.createObject(map, {})
+                            map.addMapItem(markerInfoBox)
+                            markerInfoBox.closeAnimation.stopped.connect(deselect)
+                            markerInfoBox.focus = true
+                        }
+                    }
+                    function deselect() {
+                        map.removeMapItem(markerInfoBox)
+                        markerInfoBox.destroy()
+                        markerInfoBox = null
+                    }
 
                     Item {
                         id: imageItem
@@ -72,7 +85,7 @@ MapItemView {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: mapQuickItem.select()
+                        onClicked: resultItem.select()
                     }
                 }
             }
