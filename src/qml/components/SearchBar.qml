@@ -6,6 +6,7 @@ import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.15
 import MapboxSearchModel 1.0
+import "../animations"
 
 Item {
     id: root
@@ -13,201 +14,154 @@ Item {
 
     property var plugin
     property var night
-    property alias input: input
     property color bgColor
 
+    property alias input: input
     property string text: input.text
 
-    SequentialAnimation {
-        id: backRectShow
+    function activate() { activateAnim.start() }
+    function deactivate() { deactivateAnim.start() }
 
-        ScriptAction {
-            script: {
-                backRectHide.stop()
-                backRect.enabled = true;
-                backRect.scale = 1.0
-            }
+    ActivateSearchBarAnimation { id: activateAnim }
+    DeactivateSearchBarAnimation { id: deactivateAnim }
+
+    Rectangle {
+        id: backRect
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        height: parent.height
+        width:  0
+        radius: width
+        color: root.bgColor
+        clip: true
+        enabled: false
+        opacity: 0.0
+
+        Label {
+            anchors.centerIn: parent
+            text: "≺"
+            font.bold: true
+            font.family: "Arial"
+            color: night? "grey" : "black"
         }
 
-        ParallelAnimation {
-            NumberAnimation {
-                target: backRect
-                property: "opacity"
-                to: 1.0
-                duration: 250
-                easing.type: Easing.InQuad
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                itemWindow.previousState();
             }
         }
     }
 
-    SequentialAnimation {
-        id: backRectHide
+    Rectangle {
+        id: inputRect
 
-        ScriptAction {
-            script: {
-                backRectShow.stop()
-            }
+        anchors.left: backRect.right
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 15
+
+        height: parent.height
+        radius: height / 2
+
+        color: root.bgColor
+        border.color: Qt.rgba(0, 0, 0, 0.01)
+        border.width: 1
+
+        clip: true
+
+        layer.enabled: true
+        layer.effect: InnerShadow {
+            radius: 6
+            samples: 20
+            verticalOffset: 0.75
+            horizontalOffset: -0.75
         }
 
-        ParallelAnimation {
-            NumberAnimation {
-                target: backRect
-                property: "opacity"
-                to: 0.0
-                duration: 250
-                easing.type: Easing.OutQuad
-            }
-        }
+        Item {
+            id: searchIcon
 
-        ScriptAction { script: backRect.enabled = false }
-    }
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            anchors.verticalCenter: parent.verticalCenter
 
-    RowLayout {
-        id: outerRow
-        width: root.width
-        height: root.height
+            height: parent.height * 0.5
+            width: height
 
-        Rectangle {
-            id: backRect
-            height: parent.height
-            width:  height
-            radius: height
-            color: root.bgColor
-            clip: true
-            enabled: false
-            opacity: 0.0
-
-            Behavior on x { SmoothedAnimation { velocity: 200 } }
-            Behavior on y { SmoothedAnimation { velocity: 200 } }
-            Behavior on scale { NumberAnimation {
-                    duration: 100
-                    easing.type: Easing.InOutQuad
-                }
-            }
-
-            Text {
-                anchors.centerIn: parent
-                text: "≺"
-                font.bold: true
-                color: night? "grey" : "black"
-            }
-
-            MouseArea {
+            Image {
                 anchors.fill: parent
-                onClicked: {
+                fillMode: Image.PreserveAspectFit
+                //                        source: "qrc:searchIcon.png"
+                source: "../resources/searchIcon.png"
+                asynchronous: true
+            }
+        }
 
-                    if (backRectHide.running) return;
+        TextField {
+            id: input
 
-                    backRectHide.start();
-                    searchIcon.visible = true;
-                    itemWindow.previousState();
+            anchors.left: searchIcon.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: clearSearchTerm.left
+
+            placeholderText: "Where to?"
+            background: Item {} // Transparent background
+
+            font.family: "Arial"
+
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    itemWindow.state = "searchPage";
+                }
+            }
+
+            onAccepted: {
+                if (text)
+                {
+                    itemWindow.previousState()
                 }
             }
         }
 
         Rectangle {
-            id: inputRect
-            Layout.fillWidth: true
-            height: parent.height
+            id: clearSearchTerm
+
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            anchors.verticalCenter: parent.verticalCenter
+
+            height: parent.height * 0.5
+            width: height
             radius: height / 2
-            color: root.bgColor
-            border.color: Qt.rgba(0, 0, 0, 0.01)
-            border.width: 1
-            clip: true
+
+            visible: input.text.length > 0
+
             layer.enabled: true
-            layer.effect: InnerShadow {
-                radius: 6
-                samples: 20
+            layer.effect: DropShadow {
+                radius: 2
+                samples: 9
                 verticalOffset: 0.75
                 horizontalOffset: -0.75
             }
 
-            Behavior on x { NumberAnimation { duration: 1000 } }
-            Behavior on width { NumberAnimation { duration: 1000 } }
+            Label {
+                anchors.centerIn: parent
+                text: "X"
+                font.pixelSize: parent.height / 2
+                font.family: "Arial"
+            }
 
-            RowLayout {
-                id: inputRow
+            MouseArea {
                 anchors.fill: parent
-
-                Item {
-                    id: searchIcon
-                    height: inputRow.height * 0.5
-                    width: height
-                    Layout.leftMargin: 20
-//                    color: root.bgColor
-
-                    Image {
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectFit
-//                        source: "qrc:searchIcon.png"
-                        source: "../resources/searchIcon.png"
-                        asynchronous: true
-                    }
+                onClicked: input.text = ""
+                onPressed: {
+                    parent.scale = 1.25
+                    parent.layer.enabled = false
                 }
-
-                TextField {
-                    id: input
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-
-                    placeholderText: "Where to?"
-                    background: Item {} // Transparent background
-
-                    onActiveFocusChanged: {
-                        if (activeFocus) {
-                            searchIcon.visible = false;
-                            backRectShow.start();
-                        }
-                    }
-
-                    onAccepted: {
-                        if (text)
-                        {
-                            itemWindow.previousState()
-                        }
-                    }
-                }
-
-//                Item {
-//                    height: inputRow.height * 0.3
-//                    width: height
-//                    Layout.rightMargin: 20
-//                    visible: input.text.length > 0
-//                    clip: true
-
-                Rectangle {
-                    id: clearSearchTerm
-                    height: inputRow.height * 0.5
-                    width: height
-                    Layout.rightMargin: 20
-                    visible: input.text.length > 0
-                    radius: height / 2
-                    layer.enabled: true
-                    layer.effect: DropShadow {
-                        radius: 2
-                        samples: 9
-                        verticalOffset: 0.75
-                        horizontalOffset: -0.75
-                    }
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "X"
-                        font.pixelSize: parent.height / 2
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: input.text = ""
-                        onPressed: {
-                            parent.scale = 1.25
-                            parent.layer.enabled = false
-                        }
-                        onReleased: {
-                            parent.scale = 1
-                            parent.layer.enabled = true
-                        }
-                    }
+                onReleased: {
+                    parent.scale = 1
+                    parent.layer.enabled = true
                 }
             }
         }

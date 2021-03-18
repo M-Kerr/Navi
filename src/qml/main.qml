@@ -88,6 +88,7 @@ ApplicationWindow {
                 AnchorAnimation { duration: 200 }
                 NumberAnimation { target: searchPage;
                     property: "opacity"; duration: 150 }
+                ScriptAction { script: searchBar.activate() }
             },
             Transition {
                 from: "searchPage"
@@ -95,6 +96,7 @@ ApplicationWindow {
                 AnchorAnimation { duration: 200 }
                 NumberAnimation { target: searchPage;
                     property: "opacity"; duration: 150 }
+                ScriptAction { script: searchBar.deactivate() }
             }
         ]
 
@@ -127,12 +129,6 @@ ApplicationWindow {
             z: 2
             bgColor: itemWindow.bgColor
             plugin: MapboxPlugin
-
-            input.onActiveFocusChanged: {
-                if (input.activeFocus) {
-                    itemWindow.state = "searchPage";
-                }
-            }
 
             Binding {
                 target: MapboxSearchModel
