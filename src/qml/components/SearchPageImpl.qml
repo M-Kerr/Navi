@@ -146,10 +146,13 @@ Item {
                         height: parent.height / 2
                         text: title
                         font.bold: true
+                        font.family: "Arial"
                     }
+
                     Label {
                         height: parent.height / 2
                         text: place.location.address.street
+                        font.family: "Arial"
                     }
                 }
             }
@@ -166,12 +169,14 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     text: Math.round(distance)
                     font.bold: true
+                    font.family: "Arial"
                     verticalAlignment: Text.AlignBottom
                 }
                 Label {
                     Layout.alignment: Qt.AlignHCenter
                     text: "meters"
                     font.weight: Font.Thin
+                    font.family: "Arial"
                     verticalAlignment: Text.AlignTop
                 }
             }
