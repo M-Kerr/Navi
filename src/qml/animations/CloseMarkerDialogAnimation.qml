@@ -11,21 +11,29 @@ SequentialAnimation {
             target: scope
             property: "height"
             to: 0
-            duration: 250
+            duration: 400
             easing {
                 type: Easing.InBack
-                overshoot: 2
+                overshoot: 1
             }
+        }
+
+        NumberAnimation {
+            target: imageRect
+            property: "opacity"
+            to: 0
+            duration: 200
+            easing.type: Easing.InQuad
         }
 
         NumberAnimation {
             target: scope
             property: "width"
             to: 0
-            duration: 235
+            duration: 200
             easing {
                 type: Easing.InBack
-                overshoot: 2
+                overshoot: 3
             }
         }
 
