@@ -86,7 +86,6 @@ Item {
         anchors.top: headerRect.bottom
         anchors.bottom: parent.bottom
         model: MapboxSearchModel
-        visible: GlobalStatus.searching
 
         delegate: Frame {
             width: listView.width
