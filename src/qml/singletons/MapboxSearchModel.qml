@@ -2,7 +2,6 @@ pragma Singleton
 import QtQuick 2.0
 import QtLocation 5.15
 import QtPositioning 5.15
-import GlobalStatus 1.0
 
 PlaceSearchModel {
     id: searchModel
@@ -19,17 +18,14 @@ PlaceSearchModel {
         // stopped. I think the update() function is on a timer and may not
         // search the final token
         if (searchTerm) {
-            GlobalStatus.searching = true
             update()
         }
-        else {
-            GlobalStatus.searching = false
-        }
+        else reset();
     }
 
     onStatusChanged: {
         switch (status) {
-        case PlaceSearchModel.Null: print("No query executed"); break;
+        case PlaceSearchModel.Null: break; //print("No query executed");
         case PlaceSearchModel.Ready: break;
         case PlaceSearchModel.Loading: break;
         case PlaceSearchModel.Error: print("Error occurred during previous search query:",
