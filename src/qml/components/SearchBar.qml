@@ -95,9 +95,9 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+
                     if (backRectHide.running) return;
 
-                    input.text = ""
                     backRectHide.start();
                     searchIcon.visible = true;
                     itemWindow.previousState();
