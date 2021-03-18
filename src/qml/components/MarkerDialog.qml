@@ -22,7 +22,6 @@ MapQuickItem {
         }
         // pass focus responsibility to infoButton
         else if (infoButton.focus);
-
         else {
             closeAnimation.start();
         }
@@ -34,7 +33,14 @@ MapQuickItem {
     sourceItem: Item {
         id: scope
 
-        property real _height: 200
+        property real _height: {
+            (imageRect.height / 2)
+            + clipItem.anchors.topMargin + clipItem.anchors.bottomMargin
+            + titleLabel.height
+            + streetLabel.height + streetLabel.Layout.topMargin
+            + cityStateLabel.height + cityStateLabel.Layout.topMargin
+            + (infoButton.anchors.margins * 2) + infoButton.height
+        }
         property real _width: 200
         property real _radius: _width / 8
 
@@ -42,7 +48,7 @@ MapQuickItem {
         width: 0
         clip: false
 
-        // Prevents clicks on dialog from closing dialog
+        // Prevents clicks within the dialog from closing the dialog
         MouseArea {
             id: mouseArea
             anchors.fill: parent
@@ -78,16 +84,6 @@ MapQuickItem {
                 source: "../resources/marker.png"
                 scale: 0.4
             }
-
-            //            DropShadow {
-            //                id: imageShadow
-            //                anchors.fill: markerImage
-            //                source: markerImage
-            //                radius: 1.5
-            //                samples: 9
-            //                verticalOffset: 0.75
-            //                scale: markerImage.scale
-            //            }
         }
 
         DropShadow {
@@ -107,17 +103,17 @@ MapQuickItem {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: infoButton.top
-            anchors.topMargin: 20
+            anchors.topMargin: 5
             anchors.leftMargin: 5
             anchors.rightMargin: 5
             anchors.bottomMargin: 5
 
             ColumnLayout {
                 anchors.fill: parent
-                spacing: 10
+                spacing: 0
 
                 Label {
-                    id: titleText;
+                    id: titleLabel;
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
 
@@ -126,12 +122,30 @@ MapQuickItem {
                 }
 
                 Label {
-                    id: addressText;
+                    id: streetLabel
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 8
 
-                    text: place.location.address.street;
+                    text: place.location.address.street + ","
+
                     font { family: "Arial" }
+                    color: "grey"
+                }
+
+                Label {
+                    id: cityStateLabel
+                    width: parent.width
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.topMargin: 3
+
+                    text: {
+                        place.location.address.city + ", "
+                        + place.location.address.state
+                    }
+
+                    font { family: "Arial" }
+                    color: "grey"
                 }
 
                 Item {
@@ -146,7 +160,7 @@ MapQuickItem {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.margins: 10
+            anchors.margins: 5
             radius: width / 8
             hoverEnabled: true
 
@@ -171,40 +185,5 @@ MapQuickItem {
             samples: 6
             verticalOffset: 0.60
         }
-
-        //        Dialog {
-        //            id: dialog
-        //            anchors.centerIn: parent
-
-        //            Component.onCompleted: print("Dialog created, height:", height,
-        //                                         "width:", width)
-
-        //            background: Rectangle { id: backgroundRect
-        //                radius: height / 5
-        //            }
-
-        //            header: Column {
-        //            }
-        //        }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
