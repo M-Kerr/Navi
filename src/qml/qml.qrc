@@ -16,5 +16,6 @@
         <file>components/MarkerDialog.qml</file>
         <file>animations/OpenMarkerDialogAnimation.qml</file>
         <file>animations/CloseMarkerDialogAnimation.qml</file>
+        <file>components/PullPane.qml</file>
     </qresource>
 </RCC>

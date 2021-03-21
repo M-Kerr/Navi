@@ -304,6 +304,10 @@ src/qml/resources/output.nmea.txt"
 
     }
 
+    PullPane {
+        id: placeInfoPane
+    }
+
     RouteModel {
         id: routeModel
 
