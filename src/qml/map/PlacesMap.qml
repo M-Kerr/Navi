@@ -9,6 +9,8 @@ MapItemView {
     id: mapItemView
     model: MapboxSearchModel
 
+    signal placeSelected (var modelItem);
+
     delegate: MapQuickItem {
         id: mapQuickItem
 
@@ -32,7 +34,7 @@ MapItemView {
                     // TODO: place a loader on top that animates up an info
                     // box onClicked.
                     property var markerInfoBox: null
-                    function select() {
+                    function selectMarker() {
                         map.center = place.location.coordinate
                         map.zoomLevel = 18.5
                         if (!markerInfoBox) {
@@ -40,11 +42,11 @@ MapItemView {
                             if (comp.status !== Component.Ready) print(comp.errorString())
                             markerInfoBox = comp.createObject(map, {})
                             map.addMapItem(markerInfoBox)
-                            markerInfoBox.closeAnimation.stopped.connect(deselect)
+                            markerInfoBox.closeAnimation.stopped.connect(deselectMarker)
                             markerInfoBox.focus = true
                         }
                     }
-                    function deselect() {
+                    function deselectMarker() {
                         map.removeMapItem(markerInfoBox)
                         markerInfoBox.destroy()
                         markerInfoBox = null
@@ -85,7 +87,7 @@ MapItemView {
 
                     MouseArea {
                         anchors.fill: parent
-                        onClicked: resultItem.select()
+                        onClicked: resultItem.selectMarker()
                     }
                 }
             }
