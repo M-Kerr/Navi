@@ -10,28 +10,20 @@ Rectangle {
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
+    visible: modelItem
 
     color: "lightsteelblue"
 
     property int minHeight: 150
     property int maxHeight: parent.height * 0.75
     height: minHeight
-    //    property var place
-    // temporary component for code completion
-    Place {
-        id: place
-        name: "My Place!"
-        location.address: Address {
-            street: "123 My Street"
-            city: "My City!"
-        }
-    }
+
+    property var modelItem: null
 
     MouseArea {
         id: mouseArea
         anchors.fill:parent
-        // on clicked, parentheight += difference between mouse starting y
-        // and current y
+
         property bool dragging: false
         property real lastY
 
@@ -48,8 +40,11 @@ Rectangle {
             lastY = mouse.y
             dragging = true
         }
+
         onReleased: dragging = false
     }
+
+    //TODO place.imageModel
 
     Rectangle {
         id: imageRect
@@ -60,6 +55,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
 
         Image {
+            //TODO place.icon
             id: markerImage
             anchors.centerIn: parent
             // TODO: source should be the place's icon
@@ -86,12 +82,12 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: footer.top
-        anchors.topMargin: 10
+        anchors.topMargin: 15
         anchors.leftMargin: 20
         anchors.rightMargin: 20
         anchors.bottomMargin: 5
 
-        spacing: 5
+        spacing: 10
 
         // TODO:
         // If the section doesn't exist, the ColumnLayout.visible = false
@@ -101,14 +97,14 @@ Rectangle {
             //                anchors.top: parent.top
             //                anchors.right: parent.right
             //                anchors.left: parent.left
-            spacing: 3
+            spacing: 4
 
             Label {
                 id: nameLabel;
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
 
-                text: place.name;
+                text: modelItem? modelItem.place.name : ""
                 font { family: "Arial"; bold: true }
             }
 
@@ -116,24 +112,39 @@ Rectangle {
                 id: streetCityLabel
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
+                visible: text
 
                 font { family: "Arial" }
                 color: "grey"
                 text: {
                     let t = ""
 
-                    if (place.location.address.street
-                            && place.location.address.city)
-                    {
-                        t += place.location.address.street + ", "
-                        t += place.location.address.city
+                    if (modelItem) {
+                        if (modelItem.place.location.address.street
+                                && modelItem.place.location.address.city)
+                        {
+                            t += modelItem.place.location.address.street + ", "
+                            t += modelItem.place.location.address.city
+                        }
+                        else if (modelItem.place.location.address.street)
+                            t += modelItem.place.location.address.street;
+                        else if (modelItem.place.location.address.city)
+                            t += modelItem.place.location.address.city;
                     }
-                    else if (place.location.address.street)
-                        t += place.location.address.street;
-                    else if (place.location.address.city)
-                        t += place.location.address.city;
 
                     return t
+                }
+            }
+
+            Label {
+                id: distance
+                width: parent.width
+                Layout.alignment: Qt.AlignHCenter
+                text: modelItem? Math.round(modelItem.distance)
+                                 + " meters away" : ""
+                font {
+                    family: "Arial"
+                    weight: Font.Thin
                 }
             }
         }
@@ -165,7 +176,8 @@ Rectangle {
                     id: contactPhone
                     //                        Layout.minimumWidth: 200
                     // TODO
-                    text: "Phone here"
+                    text: modelItem? modelItem.place.primaryPhone : ""
+//                    text: place? place.contactDetails["phone"][0].value : ""
                     horizontalAlignment: Text.AlignHCenter
                 }
 
@@ -175,11 +187,22 @@ Rectangle {
                     id: contactWebsite
                     //                        Layout.minimumWidth: 200
                     // TODO
-                    text: "Website here"
+                    text: modelItem? modelItem.place.primaryWebsite : ""
+//                    text: place? place.contactDetails["website"][0].value : ""
                     horizontalAlignment: Text.AlignHCenter
                 }
             }
         }
+
+        //TODO place.extendedAttributes
+        //TODO place.editorialModel
+
+        //TODO place.reviewModel
+        //TODO rest of data etc
+//        ColumnLayout {
+//            id:
+//            Layout.alignment: Qt.AlignHCenter
+//        }
 
         Item {id: filler; Layout.fillHeight: true }
     }
