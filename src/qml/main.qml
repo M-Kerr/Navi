@@ -128,7 +128,6 @@ ApplicationWindow {
             width: parent.width * 0.75
             z: 2
             bgColor: itemWindow.bgColor
-            plugin: MapboxPlugin
 
             Binding {
                 target: MapboxSearchModel
