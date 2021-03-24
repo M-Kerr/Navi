@@ -12,7 +12,6 @@ Item {
     id: root
     height: 35
 
-    property var plugin
     property var night
     property color bgColor
 
