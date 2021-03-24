@@ -184,7 +184,10 @@ MapQuickItem {
             onFocusChanged: {
                 if (!focus) closeAnimation.start();
             }
-            onClicked: closeAnimation.start()
+            onClicked: {
+                mapItemView.placeSelected(model)
+                closeAnimation.start()
+            }
 
             onPressed: infoButtonShadow.visible = false
             onReleased: infoButtonShadow.visible = true
