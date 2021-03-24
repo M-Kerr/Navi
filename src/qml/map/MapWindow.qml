@@ -306,6 +306,13 @@ src/qml/resources/output.nmea.txt"
 
     PullPane {
         id: placeInfoPane
+
+        Connections {
+            target: map.placesMap
+            function onPlaceSelected(modelItem) {
+                placeInfoPane.modelItem = modelItem
+            }
+        }
     }
 
     RouteModel {
