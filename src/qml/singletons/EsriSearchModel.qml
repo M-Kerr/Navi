@@ -26,8 +26,8 @@ PlaceSearchModel {
     onStatusChanged: {
         switch (status) {
         case PlaceSearchModel.Null: break; //print("No query executed");
-        case PlaceSearchModel.Ready: break;
-        case PlaceSearchModel.Loading: break;
+        case PlaceSearchModel.Ready: break; //print("Search results ready");
+        case PlaceSearchModel.Loading: break; //print("Search loading");
         case PlaceSearchModel.Error: print("Error occurred during previous search query:",
                                            errorString()); break;
         }
