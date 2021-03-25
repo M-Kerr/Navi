@@ -104,7 +104,16 @@ Rectangle {
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
 
-                text: modelItem? modelItem.place.name : ""
+                text:{
+                    if (modelItem)
+                    {
+                        let i = modelItem.place.name.indexOf(",")
+                        if (i !== -1) modelItem.place.name.slice(0, i);
+                        else modelItem.place.name
+                    }
+                    else ""
+                }
+
                 font { family: "Arial"; bold: true }
             }
 
@@ -137,6 +146,18 @@ Rectangle {
             }
 
             Label {
+                id: contactPhone
+                Layout.alignment: Qt.AlignHCenter
+                text: {
+                    if (modelItem) "Phone: " + modelItem.place.primaryPhone;
+                    else "";
+                }
+
+                font.family: "Arial"
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Label {
                 id: distance
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
@@ -149,50 +170,51 @@ Rectangle {
             }
         }
 
-        ColumnLayout {
-            id: contactSection
-            Layout.alignment: Qt.AlignHCenter
-            //                anchors.top: titleSection.bottom
-            //                anchors.right: parent.right
-            //                anchors.left: parent.left
-            spacing: 10
+        // NOTE: Deprecate contactSection. Esri Model doesn't include website
+//        ColumnLayout {
+//            id: contactSection
+//            Layout.alignment: Qt.AlignHCenter
+//            //                anchors.top: titleSection.bottom
+//            //                anchors.right: parent.right
+//            //                anchors.left: parent.left
+//            spacing: 10
 
-            Rectangle {
-                id: contactSectionSeparator
-                implicitWidth: clipItem.width * 0.75
-                height: 1.25
-                color: "grey"
-                Layout.alignment: Qt.AlignHCenter
-            }
+//            Rectangle {
+//                id: contactSectionSeparator
+//                implicitWidth: clipItem.width * 0.75
+//                height: 1.25
+//                color: "grey"
+//                Layout.alignment: Qt.AlignHCenter
+//            }
 
-            RowLayout {
-                id: contactRow
-                Layout.alignment: Qt.AlignHCenter
-                Layout.maximumWidth: {
-                    contactSectionSeparator.implicitWidth - 20
-                }
+//            RowLayout {
+//                id: contactRow
+//                Layout.alignment: Qt.AlignHCenter
+//                Layout.maximumWidth: {
+//                    contactSectionSeparator.implicitWidth - 20
+//                }
 
-                Label {
-                    id: contactPhone
-                    //                        Layout.minimumWidth: 200
-                    // TODO
-                    text: modelItem? modelItem.place.primaryPhone : ""
-//                    text: place? place.contactDetails["phone"][0].value : ""
-                    horizontalAlignment: Text.AlignHCenter
-                }
+//                Label {
+//                    id: contactPhone
+//                    //                        Layout.minimumWidth: 200
+//                    // TODO
+//                    text: modelItem? modelItem.place.primaryPhone : ""
+////                    text: place? place.contactDetails["phone"][0].value : ""
+//                    horizontalAlignment: Text.AlignHCenter
+//                }
 
-                Item { Layout.fillWidth: true }
+//                Item { Layout.fillWidth: true }
 
-                Label {
-                    id: contactWebsite
-                    //                        Layout.minimumWidth: 200
-                    // TODO
-                    text: modelItem? modelItem.place.primaryWebsite : ""
-//                    text: place? place.contactDetails["website"][0].value : ""
-                    horizontalAlignment: Text.AlignHCenter
-                }
-            }
-        }
+//                Label {
+//                    id: contactWebsite
+//                    //                        Layout.minimumWidth: 200
+//                    // TODO
+//                    text: modelItem? modelItem.place.primaryWebsite : ""
+////                    text: place? place.contactDetails["website"][0].value : ""
+//                    horizontalAlignment: Text.AlignHCenter
+//                }
+//            }
+//        }
 
         //TODO place.extendedAttributes
         //TODO place.editorialModel

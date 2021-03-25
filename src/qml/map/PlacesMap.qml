@@ -27,10 +27,35 @@ MapItemView {
             Component {
                 id: placeResult
 
+
                 Item {
                     id: resultItem
                     height: 90
                     width: 60
+
+                    Component.onCompleted: {
+                        switch (type) {
+                        case PlaceSearchModel.UnknownSearchResult:
+                            print("Result type unknown");
+                            break;
+                        case PlaceSearchModel.PlaceResult:
+                            print ("Result type:", "Place")
+                            break;
+                        case PlaceSearchModel.ProposedSearchResult:
+                            print("Result type:", "ProposedSearchResult")
+                            break;
+                        default: break;
+                        }
+
+                        let keys = place.contactDetails.keys()
+                        console.error("Contact detail keys: ")
+                        for ( let i=0; i < keys.length; i++)
+                        {
+                            console.error(keys[i] + ", ")
+                        }
+
+
+                    }
 
                     // TODO: place a loader on top that animates up an info
                     // box onClicked.
@@ -74,7 +99,11 @@ MapItemView {
                         anchors.left: imageItem.left
                         anchors.right: imageItem.right
                         anchors.bottom: imageItem.bottom
-                        text: title;
+                        text:{
+                            let i = place.name.indexOf(",")
+                            if (i !== -1) place.name.slice(0, i);
+                            else place.name
+                        }
                         font.bold: true
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment: Qt.AlignVCenter

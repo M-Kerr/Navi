@@ -117,7 +117,12 @@ MapQuickItem {
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
 
-                    text: title;
+                    text:{
+                        let i = place.name.indexOf(",")
+                        if (i !== -1) place.name.slice(0, i);
+                        else place.name
+                    }
+
                     font { family: "Arial"; bold: true }
                 }
 
@@ -144,18 +149,8 @@ MapQuickItem {
                     Layout.topMargin: 3
 
                     text: {
-                        let t = "";
-
-                        if (place.location.address.city)
-                            t += place.location.address.city;
-
-                        if (t && place.location.address.state)
-                            t += ", " + place.location.address.state
-
-                        if (!t && place.location.address.state)
-                            t +=  place.location.address.state
-
-                        return t;
+                        let addr = place.name.split(",").slice(2)
+                        addr.slice(0, 2).join(",");
                     }
 
                     font { family: "Arial" }
