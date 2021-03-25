@@ -170,52 +170,6 @@ Rectangle {
             }
         }
 
-        // NOTE: Deprecate contactSection. Esri Model doesn't include website
-//        ColumnLayout {
-//            id: contactSection
-//            Layout.alignment: Qt.AlignHCenter
-//            //                anchors.top: titleSection.bottom
-//            //                anchors.right: parent.right
-//            //                anchors.left: parent.left
-//            spacing: 10
-
-//            Rectangle {
-//                id: contactSectionSeparator
-//                implicitWidth: clipItem.width * 0.75
-//                height: 1.25
-//                color: "grey"
-//                Layout.alignment: Qt.AlignHCenter
-//            }
-
-//            RowLayout {
-//                id: contactRow
-//                Layout.alignment: Qt.AlignHCenter
-//                Layout.maximumWidth: {
-//                    contactSectionSeparator.implicitWidth - 20
-//                }
-
-//                Label {
-//                    id: contactPhone
-//                    //                        Layout.minimumWidth: 200
-//                    // TODO
-//                    text: modelItem? modelItem.place.primaryPhone : ""
-////                    text: place? place.contactDetails["phone"][0].value : ""
-//                    horizontalAlignment: Text.AlignHCenter
-//                }
-
-//                Item { Layout.fillWidth: true }
-
-//                Label {
-//                    id: contactWebsite
-//                    //                        Layout.minimumWidth: 200
-//                    // TODO
-//                    text: modelItem? modelItem.place.primaryWebsite : ""
-////                    text: place? place.contactDetails["website"][0].value : ""
-//                    horizontalAlignment: Text.AlignHCenter
-//                }
-//            }
-//        }
-
         //TODO place.extendedAttributes
         //TODO place.editorialModel
 
