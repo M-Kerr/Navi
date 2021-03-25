@@ -170,39 +170,6 @@ Rectangle {
             }
         }
 
-        ColumnLayout {
-            id: extendedAttributesSection
-            Layout.alignment: Qt.AlignHCenter
-            spacing: 10
-
-            Rectangle {
-                id: extendedAttributesSectionSeparator
-                implicitWidth: clipItem.width * 0.75
-                height: 1.25
-                color: "grey"
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            // NOTE: EsriSearchModel doesn't seem to return ratings
-            Label {
-                id: ratingsLabel
-                Layout.alignment: Qt.AlignHCenter
-                visible: modelItem? modelItem.place.ratings.average : modelItem
-
-                text: {
-                    if (modelItem)
-                    {
-                        "Rating: " + modelItem.place.ratings.average +
-                        " out of " + modelItem.place.ratings.maximum
-                    }
-                    else "";
-                }
-
-                font.family: "Arial"
-                horizontalAlignment: Text.AlignHCenter
-            }
-        }
-
         //TODO place.extendedAttributes
         //TODO place.editorialModel
 
