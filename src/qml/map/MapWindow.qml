@@ -2,7 +2,7 @@ import QtLocation 5.15
 import QtPositioning 5.15
 import QtQuick 2.15
 import com.mkerr.navi 1.0
-import MapboxSearchModel 1.0
+import EsriSearchModel 1.0
 import "../components"
 
 Item {
@@ -17,7 +17,7 @@ Item {
     property alias map: map
 
     Binding {
-        target: MapboxSearchModel
+        target: EsriSearchModel
         property: "searchLocation"
         value: currentCoordinate
     }

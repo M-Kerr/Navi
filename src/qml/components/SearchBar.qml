@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
 import QtGraphicalEffects 1.15
-import MapboxSearchModel 1.0
+import EsriSearchModel 1.0
 import "../animations"
 
 Item {

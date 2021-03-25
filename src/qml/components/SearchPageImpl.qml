@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
-import MapboxSearchModel 1.0
+import EsriSearchModel 1.0
 import GlobalStatus 1.0
 
 Item {
@@ -85,7 +85,7 @@ Item {
         anchors.right: parent.right
         anchors.top: headerRect.bottom
         anchors.bottom: parent.bottom
-        model: MapboxSearchModel
+        model: EsriSearchModel
 
         delegate: Frame {
             width: listView.width

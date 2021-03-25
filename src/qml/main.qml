@@ -6,7 +6,7 @@ import QtQuick.Controls 2.15
 import com.mkerr.navi 1.0
 import AppUtil 1.0
 import MapboxPlugin 1.0
-import MapboxSearchModel 1.0
+import EsriSearchModel 1.0
 import "map"
 import "components"
 
@@ -130,7 +130,7 @@ ApplicationWindow {
             bgColor: itemWindow.bgColor
 
             Binding {
-                target: MapboxSearchModel
+                target: EsriSearchModel
                 property: "searchTerm"
                 value: searchBar.text
             }

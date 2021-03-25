@@ -2,12 +2,12 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtLocation 5.15
 import MapboxPlugin 1.0
-import MapboxSearchModel 1.0
+import EsriSearchModel 1.0
 import GlobalStatus 1.0
 
 MapItemView {
     id: mapItemView
-    model: MapboxSearchModel
+    model: EsriSearchModel
 
     signal placeSelected (var modelItem);
 
