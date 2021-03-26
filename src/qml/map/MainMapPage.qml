@@ -280,10 +280,10 @@ src/qml/resources/output.nmea.txt"
             anchorPoint.y: carMarker.height / 2
         }
 
-        // WARNING: dev tool, delete and replace with PlacesMap
+        // WARNING: dev tool, delete and replace with PlacesMapView
         property var placesMap: null
-        function createPlacesMap () {
-            // Dynamically insert a PlacesMap into the Map
+        function createPlacesMapView () {
+            // Dynamically insert a PlacesMapView into the Map
             // remove the current placesmap
             if (placesMap) {
                 map.removeMapItemView(placesMap)
@@ -291,25 +291,25 @@ src/qml/resources/output.nmea.txt"
             }
             placesMap = null
             $QmlEngine.clearCache();
-            var comp = Qt.createComponent("PlacesMap.qml")
+            var comp = Qt.createComponent("PlacesMapView.qml")
             placesMap = comp.createObject(map, {})
             map.addMapItemView(placesMap)
-            print("PlacesMap component updated")
+            print("PlacesMapView component updated")
         }
         Component.onCompleted: {
-            createPlacesMap()
+            createPlacesMapView()
         }
         Shortcut {
             id: placesMapReloader
             sequence: "F5"
             context: Qt.ApplicationShortcut
             onActivated: {
-                print("PlacesMap reload activated")
-                map.createPlacesMap()
+                print("PlacesMapView reload activated")
+                map.createPlacesMapView()
             }
             onActivatedAmbiguously: activated();
         }
-        //        PlacesMap {
+        //        PlacesMapView {
         //            id: placesMap
         //        }
 

@@ -1,9 +1,7 @@
 <RCC>
     <qresource prefix="/">
-        <file>map/MapWindow.qml</file>
         <file>main.qml</file>
         <file>components/SearchBar.qml</file>
-        <file>components/CenterWindow.qml</file>
         <file>components/SearchPage.qml</file>
         <file>components/LeftDrawer.qml</file>
         <file>components/RightDrawer.qml</file>
@@ -18,5 +16,6 @@
         <file>components/PullPane.qml</file>
         <file>singletons/EsriPlugin.qml</file>
         <file>singletons/EsriSearchModel.qml</file>
+        <file>map/MainMapPage.qml</file>
     </qresource>
 </RCC>

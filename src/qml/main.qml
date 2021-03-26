@@ -136,7 +136,7 @@ ApplicationWindow {
             }
         }
 
-        MapWindow {
+        MainMapPage {
             id: mapWindow
             anchors.fill: parent
             z: 0
