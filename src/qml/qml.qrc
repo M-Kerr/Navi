@@ -4,7 +4,6 @@
         <file>components/SearchBar.qml</file>
         <file>components/SearchPage.qml</file>
         <file>components/SearchPageImpl.qml</file>
-        <file>singletons/GlobalStatus.qml</file>
         <file>singletons/AppUtil.qml</file>
         <file>singletons/MapboxPlugin.qml</file>
         <file>components/MarkerDialog.qml</file>
