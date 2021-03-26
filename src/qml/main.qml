@@ -137,11 +137,10 @@ ApplicationWindow {
         }
 
         MainMapPage {
-            id: mapWindow
+            id: mainMapPage
             anchors.fill: parent
             z: 0
 
-            plugin: MapboxPlugin
             following: itemWindow.following
             night: itemWindow.night
             //            traffic: bottomBar.traffic
@@ -154,7 +153,7 @@ ApplicationWindow {
             anchors.top: parent.top
             anchors.margins: 100
 //            anchors.centerIn: parent
-            text: "zoom: " + Math.round(mapWindow.map.zoomLevel * 100) / 100
+            text: "zoom: " + Math.round(mainMapPage.map.zoomLevel * 100) / 100
             color: "black"
             font.pixelSize: 16
             font.bold: true
