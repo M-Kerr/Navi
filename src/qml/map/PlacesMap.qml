@@ -33,6 +33,9 @@ MapItemView {
 
                     property var markerInfoBox: null
                     function selectMarker() {
+
+                        map.centerView(place.location.coordinate)
+
                         if (!markerInfoBox) {
                             var comp = Qt.createComponent("../components/MarkerDialog.qml")
                             if (comp.status !== Component.Ready) print(comp.errorString())
