@@ -147,7 +147,11 @@ Item {
                     // and its visual representation
                     Label {
                         height: parent.height / 2
-                        text: title
+                        text:{
+                            let i = place.name.indexOf(",")
+                            if (i !== -1) place.name.slice(0, i);
+                            else place.name
+                        }
                         font.bold: true
                         font.family: "Arial"
                     }
