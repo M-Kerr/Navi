@@ -108,11 +108,15 @@ src/qml/resources/output.nmea.txt"
         id: map
         anchors.fill: parent
 
+        function centerView(itemCoordinate) {
+            map.center = itemCoordinate
+            map.zoomLevel = 18.5
+        }
+
         Connections {
             target: EsriSearchModel
             function onPlaceSelected(modelItem) {
-                map.center = place.location.coordinate
-                map.zoomLevel = 18.5
+                map.centerView(modelItem.place.location.coordinate)
             }
         }
 
