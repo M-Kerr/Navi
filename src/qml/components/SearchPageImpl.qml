@@ -5,7 +5,6 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
-import GlobalStatus 1.0
 
 Item {
     id: searchPage
