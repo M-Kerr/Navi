@@ -45,6 +45,7 @@ Item {
         }
 
         MouseArea {
+            id: backRectMouseArea
             anchors.fill: parent
             onClicked: {
                 itemWindow.previousState();
