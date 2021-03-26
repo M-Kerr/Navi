@@ -98,9 +98,13 @@ Item {
                 color: bgColor
             }
 
-//            MouseArea {
-//                onClicked: // Connect to mapItemView's matching index
-//            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    EsriSearchModel.placeSelected(model)
+                    itemWindow.previousState()
+                }
+            }
 
             Item {
                 id: markerRect
