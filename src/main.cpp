@@ -26,8 +26,6 @@ int main(int argc, char *argv[])
 /*******************************
     Production objects, uncomment for production
 
-    qmlRegisterSingletonType(QUrl("qrc://singletons/GlobalStatus.qml"),
-                             "GlobalStatus", 1, 0, "GlobalStatus");
     qmlRegisterSingletonType(QUrl("qrc://singletons/AppUtil.qml"),
                              "AppUtil", 1, 0, "AppUtil");
     qmlRegisterSingletonType(QUrl("qrc://singletons/MapboxPlugin.qml"),
@@ -43,11 +41,7 @@ int main(int argc, char *argv[])
 /*******************************
     Dev Objects, delete for production
  *******************************/
-    QUrl status("file:" + qgetenv("SINGLETONS_QML") + "GlobalStatus.qml");
-    qmlRegisterSingletonType(status,
-                             "GlobalStatus", 1, 0, "GlobalStatus");
-
-    QUrl appUtil("file:" + qgetenv("SINGLETONS_QML") + "GlobalStatus.qml");
+    QUrl appUtil("file:" + qgetenv("SINGLETONS_QML") + "AppUtil.qml");
     qmlRegisterSingletonType(appUtil,
                              "AppUtil", 1, 0, "AppUtil");
 
