@@ -3,11 +3,8 @@
         <file>main.qml</file>
         <file>components/SearchBar.qml</file>
         <file>components/SearchPage.qml</file>
-        <file>components/LeftDrawer.qml</file>
-        <file>components/RightDrawer.qml</file>
         <file>components/SearchPageImpl.qml</file>
         <file>singletons/GlobalStatus.qml</file>
-        <file>components/CustomLabel.qml</file>
         <file>singletons/AppUtil.qml</file>
         <file>singletons/MapboxPlugin.qml</file>
         <file>components/MarkerDialog.qml</file>
@@ -17,5 +14,6 @@
         <file>singletons/EsriPlugin.qml</file>
         <file>singletons/EsriSearchModel.qml</file>
         <file>map/MainMapPage.qml</file>
+        <file>components/PlacesMapView.qml</file>
     </qresource>
 </RCC>
