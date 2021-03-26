@@ -7,14 +7,66 @@ import EsriSearchModel 1.0
 import "../components"
 
 Item {
-    id: root
+    id: mainMapPage
 
     property bool following
     property bool traffic
     property bool night
+    property color bgColor
 
     // NOTE Allows zoom level dev tool to read map. delete for release
     property alias map: map
+
+    MainMapPageStates{id: mainMapPageStates}
+    states: mainMapPageStates.states
+    transitions: mainMapPageStates.transitions
+    state: ""
+
+    property var stateStack: [""]
+
+    function previousState() {
+        if (stateStack.length > 1) {
+            stateStack.pop();
+            state = stateStack[stateStack.length - 1];
+        }
+    }
+
+    onStateChanged: {
+        if (state !== stateStack[stateStack.length - 1])
+            stateStack.push(state);
+    }
+
+    SearchBar {
+        id: searchBar
+        z: 2
+
+        anchors.top: parent.top
+        anchors.topMargin: 40
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: parent.width * 0.75
+
+        bgColor: parent.bgColor
+
+        Binding {
+            target: EsriSearchModel
+            property: "searchTerm"
+            value: searchBar.text
+        }
+    }
+
+    SearchPage {
+        id: searchPage
+        visible: false
+        z: 1
+
+        anchors.bottom: parent.top
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        bgColor: parent.bgColor
+        night: parent.night
+    }
 
     Item {
         id: mapWindow
@@ -31,7 +83,7 @@ Item {
         MainMapStates { id: mainMapStates }
         states: mainMapStates.states
         transitions: mainMapStates.transitions
-        state: root.following ? "following" : ""
+        state: mainMapPage.following ? "following" : ""
 
         NmeaLog {
             id: nmeaLog
@@ -51,7 +103,7 @@ src/qml/resources/output.nmea.txt"
             //        source: "qrc:edge-gradient.png"
             source: "../resources/edge-gradient.png"
             opacity: 0.7
-            visible: root.following
+            visible: mainMapPage.following
         }
 
         //    CustomLabel {
@@ -73,7 +125,7 @@ src/qml/resources/output.nmea.txt"
             anchors.bottom: parent.bottom
             anchors.margins: 20
             z: 3
-            visible: !root.following
+            visible: !mainMapPage.following
             //        source: "qrc:car-focus.png"
             source: "../resources/car-focus.png"
 
@@ -81,7 +133,7 @@ src/qml/resources/output.nmea.txt"
                 id: area
                 anchors.fill: parent
                 onClicked: {
-                    root.following = true
+                    mainMapPage.following = true
                 }
             }
 
@@ -112,17 +164,17 @@ src/qml/resources/output.nmea.txt"
             activeMapType: {
                 var style;
 
-                if (root.following) {
-                    style = root.night ? supportedMapTypes[1] : supportedMapTypes[0];
+                if (mainMapPage.following) {
+                    style = mainMapPage.night ? supportedMapTypes[1] : supportedMapTypes[0];
                 } else {
-                    style = root.night ? supportedMapTypes[3] : supportedMapTypes[2];
+                    style = mainMapPage.night ? supportedMapTypes[3] : supportedMapTypes[2];
                 }
 
                 return style;
             }
 
             // WARNING: Dev environment only, not meant for production
-            center: root.following ? mapWindow.currentCoordinate : map.center;
+            center: mainMapPage.following ? mapWindow.currentCoordinate : map.center;
             //                        positionSource.position.coordinate : map.center;
 
             zoomLevel: 12.25
@@ -138,17 +190,17 @@ src/qml/resources/output.nmea.txt"
                 onClicked: parent.focus = true
 
                 onWheel: {
-                    root.following = false
+                    mainMapPage.following = false
                     wheel.accepted = false
                 }
             }
 
             gesture.onPanStarted: {
-                root.following = false
+                mainMapPage.following = false
             }
 
             gesture.onPinchStarted: {
-                root.following = false
+                mainMapPage.following = false
             }
 
             RotationAnimation on bearing {
@@ -157,7 +209,7 @@ src/qml/resources/output.nmea.txt"
                 duration: 250
                 alwaysRunToEnd: false
                 direction: RotationAnimation.Shortest
-                running: root.following
+                running: mainMapPage.following
             }
 
             Location {
@@ -166,7 +218,7 @@ src/qml/resources/output.nmea.txt"
             }
 
             onCenterChanged: {
-                if (previousLocation.coordinate === center || !root.following)
+                if (previousLocation.coordinate === center || !mainMapPage.following)
                     return;
 
                 bearingAnimation.to = previousLocation.coordinate.azimuthTo(center);
@@ -203,25 +255,25 @@ src/qml/resources/output.nmea.txt"
             //            }
             //        }
 
-//            MapItemView {
-//                model: routeModel
+            //            MapItemView {
+            //                model: routeModel
 
-//                delegate: MapRoute {
-//                    route: routeData
-//                    line.color: "#ec0f73"
-//                    line.width: map.zoomLevel - 5
-//                    opacity: (index == 0) ? 1.0 : 0.3
+            //                delegate: MapRoute {
+            //                    route: routeData
+            //                    line.color: "#ec0f73"
+            //                    line.width: map.zoomLevel - 5
+            //                    opacity: (index == 0) ? 1.0 : 0.3
 
-//                    //onRouteChanged: {
-//                    //ruler.path = routeData.path;
-//                    //ruler.currentDistance = 0;
+            //                    //onRouteChanged: {
+            //                    //ruler.path = routeData.path;
+            //                    //ruler.currentDistance = 0;
 
-//                    //currentDistanceAnimation.stop();
-//                    //currentDistanceAnimation.to = ruler.distance;
-//                    //currentDistanceAnimation.start();
-//                    //}
-//                }
-//            }
+            //                    //currentDistanceAnimation.stop();
+            //                    //currentDistanceAnimation.to = ruler.distance;
+            //                    //currentDistanceAnimation.start();
+            //                    //}
+            //                }
+            //            }
 
             MapQuickItem {
                 sourceItem: Image {
@@ -286,31 +338,31 @@ src/qml/resources/output.nmea.txt"
             }
         }
 
-//        RouteModel {
-//            id: routeModel
+        //        RouteModel {
+        //            id: routeModel
 
-//            autoUpdate: true
-//            query: routeQuery
-//            plugin: plugin
-            //        plugin: Plugin {
-            //            name: "mapbox"
+        //            autoUpdate: true
+        //            query: routeQuery
+        //            plugin: plugin
+        //        plugin: Plugin {
+        //            name: "mapbox"
 
-            //            PluginParameter {
-            //                name: "mapbox.access_token"
-            //                //     WARNING: Dev environment only, not meant for production
-            //                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
-            //            }
-            //        }
+        //            PluginParameter {
+        //                name: "mapbox.access_token"
+        //                //     WARNING: Dev environment only, not meant for production
+        //                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
+        //            }
+        //        }
 
-            //        Component.onCompleted: {
-            //            if (map) {
-            //                map.updateRoute();
-            //            }
-            //        }
-//        }
-//        RouteQuery {
-//            id: routeQuery
-//        }
+        //        Component.onCompleted: {
+        //            if (map) {
+        //                map.updateRoute();
+        //            }
+        //        }
+        //        }
+        //        RouteQuery {
+        //            id: routeQuery
+        //        }
 
     }
 }

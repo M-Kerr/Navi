@@ -101,7 +101,7 @@ Item {
                 anchors.fill: parent
                 onClicked: {
                     EsriSearchModel.placeSelected(model)
-                    itemWindow.previousState()
+                    mainMapPage.previousState()
                 }
             }
 

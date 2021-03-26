@@ -48,7 +48,7 @@ Item {
             id: backRectMouseArea
             anchors.fill: parent
             onClicked: {
-                itemWindow.previousState();
+                mainMapPage.previousState();
             }
         }
     }
@@ -112,14 +112,14 @@ Item {
 
             onActiveFocusChanged: {
                 if (activeFocus) {
-                    itemWindow.state = "searchPage";
+                    mainMapPage.state = "searchPage";
                 }
             }
 
             onAccepted: {
                 if (text)
                 {
-                    itemWindow.previousState()
+                    mainMapPage.previousState()
                 }
             }
         }
