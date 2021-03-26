@@ -117,13 +117,7 @@ Item {
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
                     asynchronous: true
-                    source: {
-                        if (place.icon.url().toString())
-                            //                            "qrc:///" + place.icon.url().toString().slice(7);
-                            "../resources/" + place.icon.url().toString().slice(7);
-
-                        else "../resources/marker2.png"
-                    }
+                    source: "../resources/marker2.png"
                 }
             }
 
