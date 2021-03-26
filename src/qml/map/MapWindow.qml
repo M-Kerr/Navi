@@ -108,6 +108,14 @@ src/qml/resources/output.nmea.txt"
         id: map
         anchors.fill: parent
 
+        Connections {
+            target: EsriSearchModel
+            function onPlaceSelected(modelItem) {
+                map.center = place.location.coordinate
+                map.zoomLevel = 18.5
+            }
+        }
+
         plugin: Plugin {
             name: "mapboxgl"
 
@@ -308,7 +316,7 @@ src/qml/resources/output.nmea.txt"
         id: placeInfoPane
 
         Connections {
-            target: map.placesMap
+            target: EsriSearchModel
             function onPlaceSelected(modelItem) {
                 placeInfoPane.modelItem = modelItem
             }

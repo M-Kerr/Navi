@@ -9,8 +9,6 @@ MapItemView {
     id: mapItemView
     model: EsriSearchModel
 
-    signal placeSelected (var modelItem);
-
     delegate: MapQuickItem {
         id: mapQuickItem
 
@@ -33,34 +31,8 @@ MapItemView {
                     height: 90
                     width: 60
 
-//                    Component.onCompleted: {
-//                        switch (type) {
-//                        case PlaceSearchModel.UnknownSearchResult:
-//                            print("Result type unknown");
-//                            break;
-//                        case PlaceSearchModel.PlaceResult:
-//                            print ("Result type:", "Place")
-//                            break;
-//                        case PlaceSearchModel.ProposedSearchResult:
-//                            print("Result type:", "ProposedSearchResult")
-//                            break;
-//                        default: break;
-//                        }
-
-//                        let keys = place.contactDetails.keys()
-//                        console.error("Contact detail keys: ")
-//                        for ( let i=0; i < keys.length; i++)
-//                        {
-//                            console.error(keys[i] + ", ")
-//                        }
-//                    }
-
-                    // TODO: place a loader on top that animates up an info
-                    // box onClicked.
                     property var markerInfoBox: null
                     function selectMarker() {
-                        map.center = place.location.coordinate
-                        map.zoomLevel = 18.5
                         if (!markerInfoBox) {
                             var comp = Qt.createComponent("../components/MarkerDialog.qml")
                             if (comp.status !== Component.Ready) print(comp.errorString())
@@ -77,14 +49,14 @@ MapItemView {
                     }
 
                     Item {
-                        id: imageItem
+                        id: markerItem
                         anchors.top: resultItem.top
                         anchors.left: resultItem.left
                         anchors.right: resultItem.right
                         height: 60
 
                         Image {
-                            id: image;
+                            id: markerImage;
                             anchors.fill: parent
                             source: "../resources/marker2.png"
                         }
@@ -92,11 +64,11 @@ MapItemView {
 
                     Label {
                         id: resultTitle
-                        anchors.top: imageItem.bottom
+                        anchors.top: markerItem.bottom
                         anchors.topMargin: 5
-                        anchors.left: imageItem.left
-                        anchors.right: imageItem.right
-                        anchors.bottom: imageItem.bottom
+                        anchors.left: markerItem.left
+                        anchors.right: markerItem.right
+                        anchors.bottom: markerItem.bottom
                         text:{
                             let i = place.name.indexOf(",")
                             if (i !== -1) place.name.slice(0, i);

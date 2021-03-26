@@ -10,6 +10,9 @@ PlaceSearchModel {
     property real searchRadius: 5000
     property variant _searchRegion: QtPositioning.circle(searchLocation,
                                                         searchRadius)
+
+    signal placeSelected (var modelItem);
+
     plugin: EsriPlugin
     searchArea: _searchRegion
 

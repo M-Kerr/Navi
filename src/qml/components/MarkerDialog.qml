@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtGraphicalEffects 1.15
+import EsriSearchModel 1.0
 import "../animations"
 
 MapQuickItem {
@@ -180,7 +181,7 @@ MapQuickItem {
                 if (!focus) closeAnimation.start();
             }
             onClicked: {
-                mapItemView.placeSelected(model)
+                EsriSearchModel.placeSelected(model)
                 closeAnimation.start()
             }
 
