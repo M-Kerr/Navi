@@ -35,7 +35,7 @@ ApplicationWindow {
     property bool night
     property color bgColor: night? "black" : "lightgrey"
 
-     MainMapPage {
+    MainMapPage {
         id: mainMapPage
 
         following: applicationWindow.following
@@ -46,11 +46,11 @@ ApplicationWindow {
     StackView {
         id: stackView
         anchors.fill: parent
-    // WARNING: rotate stackview -90 for mobile production, remove anchors.fill
-    //        anchors.centerIn: parent
-    //        width: parent.height
-    //        height: parent.width
-    //        rotation: -90
+        // WARNING: rotate stackview -90 for mobile production, remove anchors.fill
+        //        anchors.centerIn: parent
+        //        width: parent.height
+        //        height: parent.width
+        //        rotation: -90
 
         initialItem: mainMapPage
     }
