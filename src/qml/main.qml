@@ -8,7 +8,7 @@ import "map"
 import "components"
 
 ApplicationWindow {
-    id: root
+    id: applicationWindow
 
     width: 1024
     height: 1024
@@ -17,13 +17,7 @@ ApplicationWindow {
     //    width: 1024
     //    height: 768
     //    visibility: ApplicationWindow.FullScreen
-    // WARNING: rotate stackview -90 for mobile production
-    //        rotation: -90
     // WARNING: Dev tool, remove zoomInfo on release
-    property bool following: true
-    property bool night
-    property color bgColor: night? "black" : "lightgrey"
-
     Text {
         id: zoomInfo
         anchors.left: parent.left
@@ -37,14 +31,27 @@ ApplicationWindow {
         z: 1
     }
 
-    MainMapPage {
-        id: mainMapPage
-        anchors.fill: parent
-        z: 0
+    property bool following: true
+    property bool night
+    property color bgColor: night? "black" : "lightgrey"
 
-        following: root.following
-        night: root.night
-        // WARNING bgColor is deprecated
-        bgColor: root.bgColor
+     MainMapPage {
+        id: mainMapPage
+
+        following: applicationWindow.following
+        night: applicationWindow.night
+        bgColor: applicationWindow.bgColor
+    }
+
+    StackView {
+        id: stackView
+        anchors.fill: parent
+    // WARNING: rotate stackview -90 for mobile production, remove anchors.fill
+    //        anchors.centerIn: parent
+    //        width: parent.height
+    //        height: parent.width
+    //        rotation: -90
+
+        initialItem: mainMapPage
     }
 }
