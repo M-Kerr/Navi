@@ -24,6 +24,12 @@ Item {
     ActivateSearchBarAnimation { id: activateAnim }
     DeactivateSearchBarAnimation { id: deactivateAnim }
 
+    Behavior on opacity { NumberAnimation {} }
+    onEnabledChanged: {
+        if (enabled) opacity = 1;
+        else opacity = 0;
+    }
+
     Rectangle {
         id: backRect
         anchors.left: parent.left
@@ -48,7 +54,7 @@ Item {
             id: backRectMouseArea
             anchors.fill: parent
             onClicked: {
-                mainMapPage.previousState();
+                mainMapPage.state = ""
             }
         }
     }
@@ -119,7 +125,9 @@ Item {
             onAccepted: {
                 if (text)
                 {
-                    mainMapPage.previousState()
+                    //TODO center-fit map on all markers
+                    map.fitViewportToMapItems()
+                    mainMapPage.state = ""
                 }
             }
         }
@@ -150,6 +158,7 @@ Item {
                 text: "X"
                 font.pixelSize: parent.height / 2
                 font.family: "Arial"
+                font.bold: true
             }
 
             MouseArea {

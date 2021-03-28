@@ -4,6 +4,7 @@ import QtLocation 5.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import com.mkerr.navi 1.0
+import EsriSearchModel 1.0
 import "map"
 import "components"
 
@@ -52,6 +53,22 @@ ApplicationWindow {
         //        height: parent.width
         //        rotation: -90
 
+        function unwind() {
+            mainMapPage.state = ""
+            mainMapPage.previousState = ""
+            pop(null)
+        }
+
         initialItem: mainMapPage
+        //        pushEnter: {}
+        pushExit: Transition {}
+
+        Connections {
+            target: EsriSearchModel
+            function onPlaceSelected(modelItem) {
+                // WARNING: replace with qrc: for production
+                stackView.push("map/PlaceInfoPage.qml")
+            }
+        }
     }
 }

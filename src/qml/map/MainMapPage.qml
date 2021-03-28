@@ -1,6 +1,7 @@
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtLocation 5.15
 import QtPositioning 5.15
-import QtQuick 2.15
 import com.mkerr.navi 1.0
 import MapboxPlugin 1.0
 import EsriSearchModel 1.0
@@ -16,26 +17,19 @@ Item {
 
     // NOTE Allows zoom level dev tool to read map. delete for release
     property alias map: map
+    property string previousState: ""
 
     MainMapPageStates{id: mainMapPageStates}
     states: mainMapPageStates.states
     transitions: mainMapPageStates.transitions
     state: ""
 
-    property var stateStack: [""]
-
-    function previousState() {
-        if (stateStack.length > 1) {
-            stateStack.pop();
-            state = stateStack[stateStack.length - 1];
-        }
+    StackView.visible: true
+    StackView.onActivating: {
+        state = previousState
+        searchBar.enabled = true
     }
-
-    onStateChanged: {
-        if (state !== stateStack[stateStack.length - 1])
-            stateStack.push(state);
-    }
-
+    StackView.onDeactivating: searchBar.enabled = false
     SearchBar {
         id: searchBar
         z: 2
@@ -155,8 +149,11 @@ src/qml/resources/output.nmea.txt"
 
             Connections {
                 target: EsriSearchModel
+
                 function onPlaceSelected(modelItem) {
                     map.centerView(modelItem.place.location.coordinate)
+                    previousState = state
+                    state = ""
                 }
             }
 
@@ -323,19 +320,6 @@ src/qml/resources/output.nmea.txt"
             //        PlacesMapView {
             //            id: placesMap
             //        }
-
-
-        }
-
-        PullPane {
-            id: placeInfoPane
-
-            Connections {
-                target: EsriSearchModel
-                function onPlaceSelected(modelItem) {
-                    placeInfoPane.modelItem = modelItem
-                }
-            }
         }
 
         //        RouteModel {

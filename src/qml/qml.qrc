@@ -14,5 +14,6 @@
         <file>singletons/EsriSearchModel.qml</file>
         <file>map/MainMapPage.qml</file>
         <file>components/PlacesMapView.qml</file>
+        <file>map/PlaceInfoPage.qml</file>
     </qresource>
 </RCC>
