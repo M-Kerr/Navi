@@ -12,6 +12,7 @@ PlaceSearchModel {
                                                         searchRadius)
 
     signal placeSelected (var modelItem);
+    property variant selection: null
 
     plugin: EsriPlugin
     searchArea: _searchRegion
@@ -35,6 +36,8 @@ PlaceSearchModel {
                                            errorString()); break;
         }
     }
+
+    onPlaceSelected: selection = modelItem
 }
 
 //    // TODO

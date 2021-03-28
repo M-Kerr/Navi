@@ -4,13 +4,13 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import QtQuick.Layouts 1.15
 import QtPositioning 5.15
+import EsriSearchModel 1.0
 
 Rectangle {
     id: root
     anchors.bottom: parent.bottom
     anchors.left: parent.left
     anchors.right: parent.right
-    visible: modelItem
 
     color: "lightsteelblue"
 
@@ -18,7 +18,7 @@ Rectangle {
     property int maxHeight: parent.height * 0.75
     height: minHeight
 
-    property var modelItem: null
+    property var modelItem: EsriSearchModel.selection
 
     MouseArea {
         id: mouseArea
