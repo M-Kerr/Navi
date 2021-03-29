@@ -17,5 +17,6 @@
         <file>pages/map/MainMapPage.qml</file>
         <file>pages/map/MainMapPageStates.qml</file>
         <file>pages/map/MainMapStates.qml</file>
+        <file>singletons/EsriRouteModel.qml</file>
     </qresource>
 </RCC>
