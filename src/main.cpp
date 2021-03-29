@@ -34,6 +34,8 @@ int main(int argc, char *argv[])
                             "EsriPlugin", 1, 0, "EsriPlugin");
     qmlRegisterSingletonType(QUrl("qrc://singletons/EsriSearchModel.qml"),
                              "EsriSearchModel", 1, 0, "EsriSearchModel");
+    qmlRegisterSingletonType(QUrl("qrc://singletons/EsriRouteModel.qml"),
+                             "EsriRouteModel", 1, 0, "EsriRouteModel");
 
     QUrl url(QStringLiteral("qrc:///main.qml"));
  *******************************/
@@ -52,9 +54,12 @@ int main(int argc, char *argv[])
     QUrl esriPlugin("file:" + qgetenv("SINGLETONS_QML") + "EsriPlugin.qml");
     qmlRegisterSingletonType( esriPlugin, "EsriPlugin", 1, 0, "EsriPlugin" );
 
-    QUrl mapboxSearchModel("file:" + qgetenv("SINGLETONS_QML") + "EsriSearchModel.qml");
-    qmlRegisterSingletonType(mapboxSearchModel,
+    QUrl EsriSearchModel("file:" + qgetenv("SINGLETONS_QML") + "EsriSearchModel.qml");
+    qmlRegisterSingletonType(EsriSearchModel,
                              "EsriSearchModel", 1, 0, "EsriSearchModel");
+    QUrl EsriRouteModel("file:" + qgetenv("SINGLETONS_QML") + "EsriRouteModel.qml");
+    qmlRegisterSingletonType(EsriRouteModel,
+                             "EsriRouteModel", 1, 0, "EsriRouteModel");
 
 
     QUrl url(qgetenv("MAIN_QML"));
