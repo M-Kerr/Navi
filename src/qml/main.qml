@@ -41,6 +41,14 @@ ApplicationWindow {
         following: applicationWindow.following
         night: applicationWindow.night
         bgColor: applicationWindow.bgColor
+
+        Connections {
+            target: stackView
+
+            function onFitViewportToMapItems() {
+                mainMapPage.map.fitViewportToMapItems()
+            }
+        }
     }
 
     StackView {
@@ -51,6 +59,8 @@ ApplicationWindow {
         //        width: parent.height
         //        height: parent.width
         //        rotation: -90
+
+        signal fitViewportToMapItems()
 
         function unwind() {
             mainMapPage.state = ""

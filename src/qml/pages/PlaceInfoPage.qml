@@ -12,6 +12,10 @@ Page {
     // TODO Refactor PullPane's footer into placeInfoPage's footer
     BackButton {
         id: backButton
+        onClicked: {
+            placeInfoPage.StackView.view.fitViewportToMapItems()
+            placeInfoPage.StackView.view.pop()
+        }
     }
 
     Rectangle {
@@ -31,8 +35,8 @@ Page {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                mainMapPage.map.fitViewportToMapItems()
-                stackView.unwind()
+                placeInfoPage.StackView.view.fitViewportToMapItems()
+                placeInfoPage.StackView.view.unwind()
             }
         }
     }

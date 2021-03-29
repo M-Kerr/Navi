@@ -10,6 +10,9 @@ Item {
     anchors.left: parent.left
     anchors.margins: 60
 
+    signal clicked()
+    property alias mouseArea: mouseArea
+
     Rectangle {
         id: backButton
         anchors.fill: parent
@@ -19,13 +22,12 @@ Item {
         radius: parent.width
 
         MouseArea {
+            id: mouseArea
             anchors.fill: parent
-            onClicked: {
-                mainMapPage.map.fitViewportToMapItems()
-                stackView.pop()
-            }
+            onClicked: root.clicked()
         }
     }
+
     Label {
         anchors.centerIn: backButton
         text: "≺"
