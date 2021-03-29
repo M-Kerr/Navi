@@ -64,7 +64,8 @@ ApplicationWindow {
 
         Connections {
             target: EsriSearchModel
-            function onPlaceSelected(modelItem) {
+
+            function onSelectPlace() {
                 // WARNING: replace with qrc: for production
                 stackView.push("pages/PlaceInfoPage.qml")
             }

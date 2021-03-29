@@ -181,7 +181,7 @@ MapQuickItem {
                 if (!focus) closeAnimation.start();
             }
             onClicked: {
-                EsriSearchModel.placeSelected(model)
+                EsriSearchModel.selectPlace(model)
                 closeAnimation.start()
             }
 

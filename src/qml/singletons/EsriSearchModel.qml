@@ -7,16 +7,23 @@ import QtPositioning 5.15
 PlaceSearchModel {
     id: searchModel
 
+    plugin: EsriPlugin
+    searchArea: _searchRegion
+
     property variant searchLocation: QtPositioning.coordinate(0, 0)
     property real searchRadius: 5000
     property variant _searchRegion: QtPositioning.circle(searchLocation,
                                                         searchRadius)
-
-    signal placeSelected (var modelItem);
-    property variant selection: null
-
-    plugin: EsriPlugin
-    searchArea: _searchRegion
+    property Place selectedPlace
+    property real selectedPlaceDistance
+    // We cannot use onSelectedPlaceChanged because selectedPlace will change
+    // whenever the model clears results. Therefore, use selectPlace signal
+    // to signal explicit user selection of a place.
+    signal selectPlace (var modelItem )
+    onSelectPlace: {
+        selectedPlaceDistance = modelItem.distance
+        selectedPlace = modelItem.place
+    }
 
     onSearchTermChanged: {
         //TODO: add logic to force update() the model if search input has
@@ -37,8 +44,6 @@ PlaceSearchModel {
                                            errorString()); break;
         }
     }
-
-    onPlaceSelected: selection = modelItem
 }
 
 //    // TODO

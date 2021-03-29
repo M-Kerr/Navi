@@ -18,7 +18,8 @@ Rectangle {
     property int maxHeight: parent.height * 0.75
     height: minHeight
 
-    property var modelItem: EsriSearchModel.selection
+    property Place place: EsriSearchModel.selectedPlace
+    property real placeDistance: EsriSearchModel.selectedPlaceDistance
 
     MouseArea {
         id: mouseArea
@@ -44,8 +45,6 @@ Rectangle {
         onReleased: dragging = false
     }
 
-    //TODO place.imageModel
-
     Rectangle {
         id: imageRect
         height: 30
@@ -55,10 +54,8 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
 
         Image {
-            //TODO place.icon
             id: markerImage
             anchors.centerIn: parent
-            // TODO: source should be the place's icon
             //            source: "qrc://marker.png"
             source: "../resources/marker.png"
             scale: 0.4
@@ -105,11 +102,11 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
 
                 text:{
-                    if (modelItem)
+                    if (place)
                     {
-                        let i = modelItem.place.name.indexOf(",")
-                        if (i !== -1) modelItem.place.name.slice(0, i);
-                        else modelItem.place.name
+                        let i = place.name.indexOf(",")
+                        if (i !== -1) place.name.slice(0, i);
+                        else place.name
                     }
                     else ""
                 }
@@ -128,17 +125,17 @@ Rectangle {
                 text: {
                     let t = ""
 
-                    if (modelItem) {
-                        if (modelItem.place.location.address.street
-                                && modelItem.place.location.address.city)
+                    if (place) {
+                        if (place.location.address.street
+                                && place.location.address.city)
                         {
-                            t += modelItem.place.location.address.street + ", "
-                            t += modelItem.place.location.address.city
+                            t += place.location.address.street + ", "
+                            t += place.location.address.city
                         }
-                        else if (modelItem.place.location.address.street)
-                            t += modelItem.place.location.address.street;
-                        else if (modelItem.place.location.address.city)
-                            t += modelItem.place.location.address.city;
+                        else if (place.location.address.street)
+                            t += place.location.address.street;
+                        else if (place.location.address.city)
+                            t += place.location.address.city;
                     }
 
                     return t
@@ -149,7 +146,7 @@ Rectangle {
                 id: contactPhone
                 Layout.alignment: Qt.AlignHCenter
                 text: {
-                    if (modelItem) "Phone: " + modelItem.place.primaryPhone;
+                    if (place) "Phone: " + place.primaryPhone;
                     else "";
                 }
 
@@ -161,7 +158,7 @@ Rectangle {
                 id: distance
                 width: parent.width
                 Layout.alignment: Qt.AlignHCenter
-                text: modelItem? Math.round(modelItem.distance)
+                text: place? Math.round(placeDistance)
                                  + " meters away" : ""
                 font {
                     family: "Arial"
@@ -170,19 +167,8 @@ Rectangle {
             }
         }
 
-        //TODO place.extendedAttributes
-        //TODO place.editorialModel
-
-        //TODO place.reviewModel
-        //TODO rest of data etc
-//        ColumnLayout {
-//            id:
-//            Layout.alignment: Qt.AlignHCenter
-//        }
-
         Item {id: filler; Layout.fillHeight: true }
     }
-
 
     /****************************************
   Footer

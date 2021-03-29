@@ -100,7 +100,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    EsriSearchModel.placeSelected(model)
+                    EsriSearchModel.selectPlace(model)
                 }
             }
 

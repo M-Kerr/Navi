@@ -151,8 +151,8 @@ src/qml/resources/output.nmea.txt"
             Connections {
                 target: EsriSearchModel
 
-                function onPlaceSelected(modelItem) {
-                    map.centerView(modelItem.place.location.coordinate)
+                function onSelectPlace() {
+                    map.centerView(EsriSearchModel.selectedPlace.location.coordinate)
                     previousState = state
                     state = ""
                 }
