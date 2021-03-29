@@ -7,32 +7,11 @@ Page {
 
     background: Item {}
 
-    Rectangle {
+    // TODO refactor buttons into components, refactor PullPane into a component
+    // and implement its details within PlaceInfoPage.
+    // TODO Refactor PullPane's footer into placeInfoPage's footer
+    BackButton {
         id: backButton
-
-        height: 40; width: 40
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.margins: 60
-
-        opacity: 0.50
-        color: "black"
-        radius: width
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                mainMapPage.map.fitViewportToMapItems()
-                stackView.pop()
-            }
-        }
-    }
-    // Outside close button to not inherit opacity
-    Label {
-        anchors.centerIn: backButton
-        text: "≺"
-        font.family: "Arial"
-        font.bold: true
     }
 
     Rectangle {
