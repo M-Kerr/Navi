@@ -6,6 +6,7 @@ import QtLocation 5.15
 Plugin {
     id: esriPlugin
     name: "esri"
+    locales: "en_US"
 
     property string token: "AAPK5a729938a3c643eeb6984520e4ecbc49ZG7051qjj5QXeqVIs2dyho8ClWXlW3dzMieuYi6v3eavSC8aY3qyYMyBEItKRH6w"
 

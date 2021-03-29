@@ -150,8 +150,14 @@ Page {
                     id: distance
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
-                    text: pullPane.place? Math.round(pullPane.placeDistance)
-                                          + " meters away" : ""
+                    text: {
+                       if ( pullPane.place ) {
+                            Math.round(
+                                (pullPane.placeDistance / 1760) * 100
+                                ) / 100 + " miles away" ;
+                       }
+                       else "";
+                    }
                     font {
                         family: "Arial"
                         weight: Font.Thin

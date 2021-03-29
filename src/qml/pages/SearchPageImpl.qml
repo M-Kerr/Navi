@@ -166,14 +166,14 @@ Item {
 
                 Label {
                     Layout.alignment: Qt.AlignHCenter
-                    text: Math.round(distance)
+                    text: Math.round((distance / 1760) * 100) / 100
                     font.bold: true
                     font.family: "Arial"
                     verticalAlignment: Text.AlignBottom
                 }
                 Label {
                     Layout.alignment: Qt.AlignHCenter
-                    text: "meters"
+                    text: "miles"
                     font.weight: Font.Thin
                     font.family: "Arial"
                     verticalAlignment: Text.AlignTop
