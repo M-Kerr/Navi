@@ -7,7 +7,7 @@ Item {
 
     height: 40; width: 40
     anchors.top: parent.top
-    anchors.left: parent.left
+    anchors.right: parent.right
     anchors.margins: 60
 
     signal clicked()
@@ -15,7 +15,7 @@ Item {
     property alias text: label.text
 
     Rectangle {
-        id: backButton
+        id: closeButton
         anchors.fill: parent
 
         opacity: 0.50
@@ -31,8 +31,8 @@ Item {
 
     Label {
         id: label
-        anchors.centerIn: backButton
-        text: "≺"
+        anchors.centerIn: closeButton
+        text: "X"
         font.family: "Arial"
         font.bold: true
     }
