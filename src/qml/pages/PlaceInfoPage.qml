@@ -5,7 +5,6 @@ import "../components"
 Page {
     id: placeInfoPage
 
-    Component.onCompleted: print("PlaceInfoPage.qml created")
     background: Item {}
 
     Rectangle {

@@ -5,7 +5,8 @@ import QtPositioning 5.15
 import com.mkerr.navi 1.0
 import MapboxPlugin 1.0
 import EsriSearchModel 1.0
-import "../components"
+import "../../components"
+import ".."
 
 Item {
     id: mainMapPage
@@ -95,7 +96,7 @@ src/qml/resources/output.nmea.txt"
             z: 2
 
             //        source: "qrc:edge-gradient.png"
-            source: "../resources/edge-gradient.png"
+            source: "../../resources/edge-gradient.png"
             opacity: 0.7
             visible: mainMapPage.following
         }
@@ -112,31 +113,31 @@ src/qml/resources/output.nmea.txt"
         //    }
 
 
-        Image {
-            height: 80
-            width: 80
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            anchors.margins: 20
-            z: 3
-            visible: !mainMapPage.following
-            //        source: "qrc:car-focus.png"
-            source: "../resources/car-focus.png"
+//        Image {
+//            height: 80
+//            width: 80
+//            anchors.left: parent.left
+//            anchors.bottom: parent.bottom
+//            anchors.margins: 20
+//            z: 3
+//            visible: !mainMapPage.following
+//            //        source: "qrc:car-focus.png"
+//            source: "../../resources/car-focus.png"
 
-            MouseArea {
-                id: area
-                anchors.fill: parent
-                onClicked: {
-                    mainMapPage.following = true
-                }
-            }
+//            MouseArea {
+//                id: area
+//                anchors.fill: parent
+//                onClicked: {
+//                    mainMapPage.following = true
+//                }
+//            }
 
-            scale: area.pressed ? 0.85 : 1.0
+//            scale: area.pressed ? 0.85 : 1.0
 
-            Behavior on scale {
-                NumberAnimation {}
-            }
-        }
+//            Behavior on scale {
+//                NumberAnimation {}
+//            }
+//        }
 
         Map {
             id: map
@@ -276,7 +277,7 @@ src/qml/resources/output.nmea.txt"
                 sourceItem: Image {
                     id: carMarker
                     //                source: "qrc:///current-location.png"
-                    source: "../resources/current-location.png"
+                    source: "../../resources/current-location.png"
                 }
 
                 zoomLevel: map.zoomLevel
@@ -297,10 +298,9 @@ src/qml/resources/output.nmea.txt"
 
                 placesMap = null
                 $QmlEngine.clearCache();
-                var comp = Qt.createComponent("../components/PlacesMapView.qml")
+                var comp = Qt.createComponent("PlacesMapView.qml")
                 placesMap = comp.createObject(map, {})
                 map.addMapItemView(placesMap)
-                print("PlacesMapView component updated")
             }
 
             Component.onCompleted: {

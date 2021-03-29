@@ -5,8 +5,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
-import "map"
-import "components"
+import "pages/map"
 
 ApplicationWindow {
     id: applicationWindow
@@ -67,7 +66,7 @@ ApplicationWindow {
             target: EsriSearchModel
             function onPlaceSelected(modelItem) {
                 // WARNING: replace with qrc: for production
-                stackView.push("map/PlaceInfoPage.qml")
+                stackView.push("pages/PlaceInfoPage.qml")
             }
         }
     }

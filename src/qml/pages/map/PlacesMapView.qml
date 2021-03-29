@@ -35,7 +35,7 @@ MapItemView {
                         map.centerView(place.location.coordinate)
 
                         if (!markerInfoBox) {
-                            var comp = Qt.createComponent("../components/MarkerDialog.qml")
+                            var comp = Qt.createComponent("../../components/MarkerDialog.qml")
                             if (comp.status !== Component.Ready) print(comp.errorString())
                             markerInfoBox = comp.createObject(map, {})
                             map.addMapItem(markerInfoBox)
@@ -60,7 +60,7 @@ MapItemView {
                         Image {
                             id: markerImage;
                             anchors.fill: parent
-                            source: "../resources/marker2.png"
+                            source: "../../resources/marker2.png"
                         }
                     }
 

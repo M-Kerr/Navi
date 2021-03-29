@@ -18,6 +18,6 @@ Pane {
     HotReloader {
         property var bgColor: root.bgColor
         property bool night: root.night
-        source: "components/SearchPageImpl.qml"
+        source: "pages/SearchPageImpl.qml"
     }
 }
