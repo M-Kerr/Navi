@@ -186,7 +186,7 @@ Page {
             text: "Directions"
 
             onClicked: {
-                Logic.addWaypointandNavigate(root.place.location.coordinate)
+//                Logic.addWaypointandGetRoutes(root.place.location.coordinate)
             }
 
 //            onDownChanged: {
