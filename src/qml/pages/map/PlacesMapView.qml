@@ -4,7 +4,7 @@ import QtLocation 5.15
 import EsriSearchModel 1.0
 
 MapItemView {
-    id: mapItemView
+    id: root
     model: EsriSearchModel
 
     delegate: MapQuickItem {

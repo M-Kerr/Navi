@@ -4,7 +4,7 @@ import QtQuick 2.15
 import QtLocation 5.15
 
 RouteModel {
-    id: routeModel
+    id: root
 
     plugin: EsriPlugin
     autoUpdate: false

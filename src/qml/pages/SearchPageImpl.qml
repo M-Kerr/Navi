@@ -7,7 +7,7 @@ import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 
 Item {
-    id: searchPage
+    id: root
     anchors.fill: parent
 
     property bool night

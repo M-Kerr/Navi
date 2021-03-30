@@ -5,7 +5,7 @@ import QtLocation 5.15
 import QtPositioning 5.15
 
 PlaceSearchModel {
-    id: searchModel
+    id: root
 
     plugin: EsriPlugin
     searchArea: _searchRegion

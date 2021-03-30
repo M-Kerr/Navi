@@ -5,10 +5,12 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import QtPositioning 5.15
 import EsriSearchModel 1.0
+import EsriRouteModel 1.0
+import Logic 1.0
 import "../components"
 
 Page {
-    id: placeInfoPage
+    id: root
 
     background: Item {}
 
@@ -18,16 +20,16 @@ Page {
     BackButton {
         id: backButton
         onClicked: {
-            placeInfoPage.StackView.view.fitViewportToMapItems()
-            placeInfoPage.StackView.view.pop()
+            root.StackView.view.fitViewportToMapItems()
+            root.StackView.view.pop()
         }
     }
 
     CloseButton {
         id: closeButton
         onClicked: {
-            placeInfoPage.StackView.view.fitViewportToMapItems()
-            placeInfoPage.StackView.view.unwind()
+            root.StackView.view.fitViewportToMapItems()
+            root.StackView.view.unwind()
         }
     }
 
@@ -182,6 +184,10 @@ Page {
             anchors.centerIn: parent
 
             text: "Navigate"
+
+            onClicked: {
+                Logic.addWaypointandNavigate(pullPane.place.location.coordinate)
+            }
 
 //            onDownChanged: {
 //                if (down) footerShadow.visible = false;

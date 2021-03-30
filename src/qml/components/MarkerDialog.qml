@@ -7,7 +7,7 @@ import EsriSearchModel 1.0
 import "../animations"
 
 MapQuickItem {
-    id: mapQuickItem
+    id: root
 
     coordinate: place.location.coordinate
     anchorPoint.x: scope.width / 2
