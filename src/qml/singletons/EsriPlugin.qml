@@ -4,7 +4,7 @@ import QtQuick 2.0
 import QtLocation 5.15
 
 Plugin {
-    id: esriPlugin
+    id: root
     name: "esri"
     locales: "en_US"
 
@@ -12,6 +12,6 @@ Plugin {
 
     PluginParameter {
         name: "esri.token"
-        value: esriPlugin.token
+        value: root.token
     }
 }
