@@ -2,10 +2,19 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtLocation 5.15
 import EsriSearchModel 1.0
+import Logic 1.0
 
 MapItemView {
     id: root
     model: EsriSearchModel
+
+    Connections {
+        target: Logic
+
+        function onFitViewportToPlacesMapView() {
+            Logic.fitViewportToMapItems ( mapItems )
+        }
+    }
 
     delegate: MapQuickItem {
         id: mapQuickItem

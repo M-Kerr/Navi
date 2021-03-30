@@ -9,6 +9,8 @@ Item {
     signal addWaypoint ( var coord )
     signal buildRouteQuery ()
     signal getRoutes ( RouteQuery query )
+    signal fitViewportToMapItems( var items )
+    signal fitViewportToPlacesMapView()
 
     Component {
         id: routeQuery

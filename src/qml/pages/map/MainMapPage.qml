@@ -5,6 +5,7 @@ import QtPositioning 5.15
 import com.mkerr.navi 1.0
 import MapboxPlugin 1.0
 import EsriSearchModel 1.0
+import Logic 1.0
 import "../../components"
 import ".."
 
@@ -15,15 +16,10 @@ Item {
     property bool traffic
     property bool night
     property color bgColor
-
-    // NOTE Allows zoom level dev tool to read map. delete for release
-    property alias map: map
     property string previousState: ""
 
-    MainMapPageStates{id: mainMapPageStates}
-    states: mainMapPageStates.states
-    transitions: mainMapPageStates.transitions
-    state: ""
+    // WARNING map alias allows zoom level dev tool to read map. delete for release
+    property alias map: map
 
     StackView.visible: true
     StackView.onActivating: {
@@ -31,14 +27,22 @@ Item {
         searchBar.enabled = true
     }
     StackView.onDeactivating: searchBar.enabled = false
+
+    MainMapPageStates{id: mainMapPageStates}
+    states: mainMapPageStates.states
+    transitions: mainMapPageStates.transitions
+    state: ""
+
     SearchBar {
         id: searchBar
         z: 2
 
-        anchors.top: parent.top
-        anchors.topMargin: 40
-        anchors.horizontalCenter: parent.horizontalCenter
         width: parent.width * 0.75
+        anchors {
+            top: parent.top
+            topMargin: 40
+            horizontalCenter: parent.horizontalCenter
+        }
 
         bgColor: parent.bgColor
 
@@ -52,12 +56,14 @@ Item {
     SearchPage {
         id: searchPage
         visible: false
-        z: 1
 
-        anchors.bottom: parent.top
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        z: 1
+        anchors {
+            bottom: parent.top
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
 
         bgColor: parent.bgColor
         night: parent.night
@@ -65,30 +71,20 @@ Item {
 
     Item {
         id: mapWindow
-        anchors.fill: parent
 
         property var currentCoordinate: nmeaLog.coordinate
 
-        Binding {
-            target: EsriSearchModel
-            property: "searchLocation"
-            value: mapWindow.currentCoordinate
-        }
+        anchors.fill: parent
 
         MainMapStates { id: mainMapStates }
         states: mainMapStates.states
         transitions: mainMapStates.transitions
         state: mainMapPage.following ? "following" : ""
 
-        NmeaLog {
-            id: nmeaLog
-            //        logFile: "://output.nmea.txt"
-            logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-src/qml/resources/output.nmea.txt"
-
-            Component.onCompleted: {
-                startUpdates()
-            }
+        Binding {
+            target: EsriSearchModel
+            property: "searchLocation"
+            value: mapWindow.currentCoordinate
         }
 
         Image {
@@ -143,11 +139,6 @@ src/qml/resources/output.nmea.txt"
             id: map
             anchors.fill: parent
 
-            function centerView(itemCoordinate) {
-                map.center = itemCoordinate
-                map.zoomLevel = 18.5
-            }
-
             Connections {
                 target: EsriSearchModel
 
@@ -155,6 +146,14 @@ src/qml/resources/output.nmea.txt"
                     map.centerView(EsriSearchModel.selectedPlace.location.coordinate)
                     previousState = state
                     state = ""
+                }
+            }
+
+            Connections {
+                target: Logic
+
+                function onFitViewportToMapItems( items ) {
+                    map.fitViewportToMapItems( items )
                 }
             }
 
@@ -225,54 +224,6 @@ src/qml/resources/output.nmea.txt"
                 previousLocation.coordinate = center;
             }
 
-            //        function updateRoute() {
-            //            routeQuery.clearWaypoints();
-            //            routeQuery.addWaypoint(startMarker.coordinate);
-            //            routeQuery.addWaypoint(endMarker.coordinate);
-            //        }
-
-            //        MapQuickItem {
-            //            id: endMarker
-
-            //            sourceItem: Image {
-            //                id: redMarker
-            //                source: "qrc:///marker-red.png"
-            //            }
-
-            //            coordinate : QtPositioning.coordinate(37.326323, -121.8923447)
-            //            anchorPoint.x: redMarker.width / 2
-            //            anchorPoint.y: redMarker.height / 2
-
-            //            MouseArea  {
-            //                drag.target: parent
-            //                anchors.fill: parent
-
-            //                onReleased: {
-            //                    map.updateRoute();
-            //                }
-            //            }
-            //        }
-
-            //            MapItemView {
-            //                model: routeModel
-
-            //                delegate: MapRoute {
-            //                    route: routeData
-            //                    line.color: "#ec0f73"
-            //                    line.width: map.zoomLevel - 5
-            //                    opacity: (index == 0) ? 1.0 : 0.3
-
-            //                    //onRouteChanged: {
-            //                    //ruler.path = routeData.path;
-            //                    //ruler.currentDistance = 0;
-
-            //                    //currentDistanceAnimation.stop();
-            //                    //currentDistanceAnimation.to = ruler.distance;
-            //                    //currentDistanceAnimation.start();
-            //                    //}
-            //                }
-            //            }
-
             MapQuickItem {
                 sourceItem: Image {
                     id: carMarker
@@ -286,27 +237,6 @@ src/qml/resources/output.nmea.txt"
                 anchorPoint.y: carMarker.height / 2
             }
 
-            // WARNING: dev tool, delete and replace with PlacesMapView
-            property var placesMap: null
-            // Dynamically insert a PlacesMapView into the Map
-            function createPlacesMapView () {
-                // remove the current placesmap
-                if (placesMap) {
-                    map.removeMapItemView(placesMap)
-                    placesMap.destroy()
-                }
-
-                placesMap = null
-                $QmlEngine.clearCache();
-                var comp = Qt.createComponent("PlacesMapView.qml")
-                placesMap = comp.createObject(map, {})
-                map.addMapItemView(placesMap)
-            }
-
-            Component.onCompleted: {
-                createPlacesMapView()
-            }
-
             Shortcut {
                 id: placesMapReloader
                 sequence: "F5"
@@ -317,36 +247,43 @@ src/qml/resources/output.nmea.txt"
                 }
                 onActivatedAmbiguously: activated();
             }
+
+            function centerView(itemCoordinate) {
+                map.center = itemCoordinate
+                map.zoomLevel = 18.5
+            }
+
             //        PlacesMapView {
             //            id: placesMap
             //        }
+            // WARNING: dev tool, delete and replace with PlacesMapView
+            property var placesMap: null
+            function createPlacesMapView () {
+                if (placesMap) {
+                    map.removeMapItemView(placesMap)
+                    placesMap.destroy()
+                }
+                placesMap = null
+                $QmlEngine.clearCache();
+                var comp = Qt.createComponent("PlacesMapView.qml")
+                placesMap = comp.createObject(map, {})
+                map.addMapItemView(placesMap)
+            }
+
+            Component.onCompleted: {
+                createPlacesMapView()
+            }
         }
 
-        //        RouteModel {
-        //            id: routeModel
+        NmeaLog {
+            id: nmeaLog
+            //        logFile: "://output.nmea.txt"
+            logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
+src/qml/resources/output.nmea.txt"
 
-        //            autoUpdate: true
-        //            query: routeQuery
-        //            plugin: plugin
-        //        plugin: Plugin {
-        //            name: "mapbox"
-
-        //            PluginParameter {
-        //                name: "mapbox.access_token"
-        //                //     WARNING: Dev environment only, not meant for production
-        //                value: "sk.eyJ1IjoibS1rZXJyIiwiYSI6ImNrbGgxanhxaDEzcWUybnFwMTBkcW8xMGkifQ.dw1csFMpo1bOvxNAvLxrmg"
-        //            }
-        //        }
-
-        //        Component.onCompleted: {
-        //            if (map) {
-        //                map.updateRoute();
-        //            }
-        //        }
-        //        }
-        //        RouteQuery {
-        //            id: routeQuery
-        //        }
-
+            Component.onCompleted: {
+                startUpdates()
+            }
+        }
     }
 }

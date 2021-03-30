@@ -23,7 +23,7 @@ Page {
     BackButton {
         id: backButton
         onClicked: {
-            root.StackView.view.fitViewportToMapItems()
+            Logic.fitViewportToPlacesMapView()
             root.StackView.view.pop()
         }
     }
@@ -31,7 +31,7 @@ Page {
     CloseButton {
         id: closeButton
         onClicked: {
-            root.StackView.view.fitViewportToMapItems()
+            Logic.fitViewportToPlacesMapView()
             root.StackView.view.unwind()
         }
     }
