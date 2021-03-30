@@ -12,6 +12,9 @@ import "../components"
 Page {
     id: root
 
+    property Place place: EsriSearchModel.selectedPlace
+    property real placeDistance: EsriSearchModel.selectedPlaceDistance
+
     background: Item {}
 
     // TODO refactor PullPane into a component
@@ -35,9 +38,6 @@ Page {
 
     PullPane {
         id: pullPane
-
-        property Place place: EsriSearchModel.selectedPlace
-        property real placeDistance: EsriSearchModel.selectedPlaceDistance
 
         Rectangle {
             id: imageRect
@@ -96,11 +96,11 @@ Page {
                     Layout.alignment: Qt.AlignHCenter
 
                     text:{
-                        if (pullPane.place)
+                        if (root.place)
                         {
-                            let i = pullPane.place.name.indexOf(",")
-                            if (i !== -1) pullPane.place.name.slice(0, i);
-                            else pullPane.place.name
+                            let i = root.place.name.indexOf(",")
+                            if (i !== -1) root.place.name.slice(0, i);
+                            else root.place.name
                         }
                         else ""
                     }
@@ -119,17 +119,17 @@ Page {
                     text: {
                         let t = ""
 
-                        if (pullPane.place) {
-                            if (pullPane.place.location.address.street
-                                    && pullPane.place.location.address.city)
+                        if (root.place) {
+                            if (root.place.location.address.street
+                                    && root.place.location.address.city)
                             {
-                                t += pullPane.place.location.address.street + ", "
-                                t += pullPane.place.location.address.city
+                                t += root.place.location.address.street + ", "
+                                t += root.place.location.address.city
                             }
-                            else if (pullPane.place.location.address.street)
-                                t += pullPane.place.location.address.street;
-                            else if (pullPane.place.location.address.city)
-                                t += pullPane.place.location.address.city;
+                            else if (root.place.location.address.street)
+                                t += root.place.location.address.street;
+                            else if (root.place.location.address.city)
+                                t += root.place.location.address.city;
                         }
 
                         return t
@@ -140,7 +140,7 @@ Page {
                     id: contactPhone
                     Layout.alignment: Qt.AlignHCenter
                     text: {
-                        if (pullPane.place) "Phone: " + pullPane.place.primaryPhone;
+                        if (root.place) "Phone: " + root.place.primaryPhone;
                         else "";
                     }
 
@@ -153,9 +153,9 @@ Page {
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
                     text: {
-                       if ( pullPane.place ) {
+                       if ( root.place ) {
                             Math.round(
-                                (pullPane.placeDistance / 1760) * 100
+                                (root.placeDistance / 1760) * 100
                                 ) / 100 + " miles away" ;
                        }
                        else "";
@@ -186,7 +186,7 @@ Page {
             text: "Navigate"
 
             onClicked: {
-                Logic.addWaypointandNavigate(pullPane.place.location.coordinate)
+                Logic.addWaypointandNavigate(root.place.location.coordinate)
             }
 
 //            onDownChanged: {
