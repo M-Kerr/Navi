@@ -183,7 +183,7 @@ Page {
             width: parent.width; height: parent.height
             anchors.centerIn: parent
 
-            text: "Navigate"
+            text: "Directions"
 
             onClicked: {
                 Logic.addWaypointandNavigate(root.place.location.coordinate)
