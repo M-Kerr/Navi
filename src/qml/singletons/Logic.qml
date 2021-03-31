@@ -6,14 +6,20 @@ import QtLocation 5.15
 Item {
     id: root
 
-    signal addWaypoint ( var coord )
+    // Route
+    signal addWaypoint ( var coordinate )
     signal buildRouteQuery ()
     signal getRoutes ( RouteQuery query )
-    signal fitViewportToPlacesMapView()
-    signal fitViewportToMapItems( var items )
+
+    // Map
+    signal fitViewportToPlacesMapView ()
+    signal fitViewportToMapItems ( var items )
+
+    // StackView
     signal pushStackView ( string page, var properties )
     signal popStackView ()
     signal unwindStackView ()
+
     signal selectPlace ( var modelItem )
     onSelectPlace: {
         // WARNING: replace with qrc: for production
@@ -21,9 +27,10 @@ Item {
                       {
                           "place": modelItem.place,
                           "placeDistance": modelItem.distance
-                      }
-        )
+                      })
     }
+
+
 
     Component {
         id: routeQuery

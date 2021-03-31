@@ -2,6 +2,7 @@ pragma Singleton
 
 import QtQuick 2.15
 import QtLocation 5.15
+import Logic 1.0
 
 RouteModel {
     id: root
@@ -33,46 +34,82 @@ RouteModel {
 
     query: RouteQuery {
         id: routeQuery
-
         numberAlternativeRoutes: 3
-
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#routeOptimizations-prop
         routeOptimizations : RouteQuery.FastestRoute // default
-
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#travelModes-prop
         travelModes : routeQuery.CarTravel // default
 
+        Connections {
+            target: Logic
+
+            function onAddWaypoint ( waypoint ) {
+            }
+
+            function onGetDirections () {
+                let currentWaypoints = routeQuery.waypointObjects()
+                if (currentWaypoints.length === 0) {
+                    print("Error, no destination")
+                }
+                else {
+                    // add current coordinate as waypoint
+                    routeQuery.waypoints.unshift()
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#waypoints-prop
         //        waypoints : list<coordinate>
-//        void addWaypoint(coordinate)
-//        void clearWaypoints()
-//        void removeWaypoint(coordinate)
-// This differs as it holds the waypoints represented as Waypoint objects, instead of coordinates. Read-only
-//        list<Waypoint> waypointObjects()
+        //        void addWaypoint(coordinate)
+        //        void clearWaypoints()
+        //        void removeWaypoint(coordinate)
+        // This differs as it holds the waypoints represented as Waypoint objects, instead of coordinates. Read-only
+        //        list<Waypoint> waypointObjects()
 
 
         // For future departure times. the T is literal, ss.zzz can be omitted,
         // The Z is a time-zone offset (e.g., -5), zzz is milliseconds
-//        departureTime : "YYYY-MM-DDThh:mm:ss.zzzZ"
+        //        departureTime : "YYYY-MM-DDThh:mm:ss.zzzZ"
 
         // Areas the route must not cross
-//        excludedAreas : list<georectangle>
+        //        excludedAreas : list<georectangle>
 
         // Read-only, these can be set using MapParameter {}
-//        extraParameters : VariantMap
+        //        extraParameters : VariantMap
 
         // List of features that will be considered when planning the route
         // Traffic, tolls, highways, etc.
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#featureTypes-prop
-//        featureTypes : QList<FeatureType>
+        //        featureTypes : QList<FeatureType>
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#setFeatureWeight-method
-//        void setFeatureWeight(FeatureType feature, FeatureWeight weight)
-//        void resetFeatureWeights()
+        //        void setFeatureWeight(FeatureType feature, FeatureWeight weight)
+        //        void resetFeatureWeights()
 
 
 
-//        Some plugins might allow or require specific parameters to operate.
-//        In order to specify these plugin-specific parameters, MapParameter
-//        elements can be nested inside a RouteQuery.
+        //        Some plugins might allow or require specific parameters to operate.
+        //        In order to specify these plugin-specific parameters, MapParameter
+        //        elements can be nested inside a RouteQuery.
     }
 }
