@@ -8,8 +8,7 @@ Item {
 
     // Route
     signal addWaypoint ( var coordinate )
-    signal buildRouteQuery ()
-    signal getRoutes ( RouteQuery query )
+    signal getDirections ()
 
     // Map
     signal fitViewportToPlacesMapView ()

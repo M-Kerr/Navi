@@ -3,6 +3,7 @@ pragma Singleton
 import QtQuick 2.15
 import QtLocation 5.15
 import Logic 1.0
+import GPS 1.0
 
 RouteModel {
     id: root
@@ -32,13 +33,26 @@ RouteModel {
         print("errorString:", errorString);
     }
 
+    onStatusChanged: {
+        switch (status) {
+            case RouteModel.Null: print(" No route requests have been issued "
+                                        +"or reset has been called."); break;
+            case RouteModel.Ready: print(" Route request(s) have finished "
+                                         +"successfully."); break;
+            case RouteModel.Loading: print("Route request has been issued but "
+                                           +"not yet finished"); break;
+            case RouteModel.Error: print("Routing error has occurred, details "
+                                         +" are in error and errorString"); break;
+        }
+    }
+
     query: RouteQuery {
         id: routeQuery
         numberAlternativeRoutes: 3
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#routeOptimizations-prop
         routeOptimizations : RouteQuery.FastestRoute // default
         // https://doc.qt.io/qt-5/qml-qtlocation-routequery.html#travelModes-prop
-        travelModes : routeQuery.CarTravel // default
+        travelModes : RouteQuery.CarTravel // default
 
         Connections {
             target: Logic
@@ -47,14 +61,20 @@ RouteModel {
             }
 
             function onGetDirections () {
-                let currentWaypoints = routeQuery.waypointObjects()
-                if (currentWaypoints.length === 0) {
-                    print("Error, no destination")
+
+// WARNING DELETE THIS TEST****************************************************
+                EsriRouteModel.query.addWaypoint(GPS.coordinate.atDistanceAndAzimuth(2000, 45))
+// **************TODO delete test above*************************************************
+
+                // Push current coordinate to the front of the waypoints list
+                let wpts = routeQuery.waypoints
+                routeQuery.clearWaypoints()
+                routeQuery.addWaypoint(GPS.coordinate)
+                for (let i=0; i < wpts.length; i++) {
+                    routeQuery.addWaypoint(wpts[i])
                 }
-                else {
-                    // add current coordinate as waypoint
-                    routeQuery.waypoints.unshift()
-                }
+
+                root.update()
             }
         }
 
