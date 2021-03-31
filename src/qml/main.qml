@@ -53,22 +53,23 @@ ApplicationWindow {
         //        height: parent.width
         //        rotation: -90
 
-        function unwind() {
-            mainMapPage.state = ""
-            mainMapPage.previousState = ""
-            pop(null)
-        }
-
         initialItem: mainMapPage
         //        pushEnter: {}
         pushExit: Transition {}
 
         Connections {
-            target: EsriSearchModel
+            target: Logic
 
-            function onSelectPlace() {
-                // WARNING: replace with qrc: for production
-                stackView.push("pages/PlaceInfoPage.qml")
+            function onPushStackView ( page, properties ) {
+                stackView.push(page, properties)
+            }
+
+            function onPopStackView () {
+                stackView.pop()
+            }
+
+            function onUnwindStackView () {
+                stackView.pop(null)
             }
         }
     }

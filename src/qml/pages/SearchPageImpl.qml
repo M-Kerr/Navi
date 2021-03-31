@@ -5,6 +5,7 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
+import Logic 1.0
 
 Item {
     id: root
@@ -100,7 +101,7 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    EsriSearchModel.selectPlace(model)
+                    Logic.selectPlace(model)
                 }
             }
 

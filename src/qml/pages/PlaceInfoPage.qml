@@ -12,19 +12,15 @@ import "../components"
 Page {
     id: root
 
-    property Place place: EsriSearchModel.selectedPlace
-    property real placeDistance: EsriSearchModel.selectedPlaceDistance
+    property Place place
+    property real placeDistance
 
     background: Item {}
 
-    // TODO refactor PullPane into a component
-    // and implement its details within PlaceInfoPage.
-    // TODO Refactor PullPane's footer into placeInfoPage's footer
     BackButton {
         id: backButton
         onClicked: {
-            Logic.fitViewportToPlacesMapView()
-            root.StackView.view.pop()
+            Logic.backToPlacesMap()
         }
     }
 
@@ -32,7 +28,7 @@ Page {
         id: closeButton
         onClicked: {
             Logic.fitViewportToPlacesMapView()
-            root.StackView.view.unwind()
+            Logic.unwindStackView()
         }
     }
 
@@ -188,11 +184,6 @@ Page {
             onClicked: {
 //                Logic.addWaypointandGetRoutes(root.place.location.coordinate)
             }
-
-//            onDownChanged: {
-//                if (down) footerShadow.visible = false;
-//                else footerShadow.visible = true
-//            }
         }
 
         DropShadow {
@@ -201,7 +192,6 @@ Page {
             source: navigateButton
             radius: 8
             samples: 32
-//            verticalOffset: 0.15
             spread: 0
         }
     }

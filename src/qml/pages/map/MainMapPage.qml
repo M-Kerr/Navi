@@ -33,6 +33,20 @@ Item {
     transitions: mainMapPageStates.transitions
     state: ""
 
+    Connections {
+        target: Logic
+
+        function onUnwindStackView() {
+            mainMapPage.state = ""
+            mainMapPage.previousState = ""
+        }
+
+        function onSelectPlace ( modelItem ) {
+            mainMapPage.previousState = mainMapPage.state
+            mainMapPage.state = ""
+        }
+    }
+
     SearchBar {
         id: searchBar
         z: 2
@@ -142,11 +156,6 @@ Item {
             Connections {
                 target: EsriSearchModel
 
-                function onSelectPlace() {
-                    map.centerView(EsriSearchModel.selectedPlace.location.coordinate)
-                    previousState = state
-                    state = ""
-                }
             }
 
             Connections {
@@ -154,6 +163,10 @@ Item {
 
                 function onFitViewportToMapItems( items ) {
                     map.fitViewportToMapItems( items )
+                }
+
+                function onSelectPlace( modelItem ) {
+                    map.centerView(modelItem.place.location.coordinate)
                 }
             }
 

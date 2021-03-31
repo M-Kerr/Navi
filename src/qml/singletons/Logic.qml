@@ -9,12 +9,30 @@ Item {
     signal addWaypoint ( var coord )
     signal buildRouteQuery ()
     signal getRoutes ( RouteQuery query )
-    signal fitViewportToMapItems( var items )
     signal fitViewportToPlacesMapView()
+    signal fitViewportToMapItems( var items )
+    signal pushStackView ( string page, var properties )
+    signal popStackView ()
+    signal unwindStackView ()
+    signal selectPlace ( var modelItem )
+    onSelectPlace: {
+        // WARNING: replace with qrc: for production
+        pushStackView("pages/PlaceInfoPage.qml",
+                      {
+                          "place": modelItem.place,
+                          "placeDistance": modelItem.distance
+                      }
+        )
+    }
 
     Component {
         id: routeQuery
         RouteQuery {}
+    }
+
+    function backToPlacesMap () {
+        fitViewportToPlacesMapView()
+        popStackView()
     }
 
     function createWaypoint ( coord: coordinate ) {

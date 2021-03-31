@@ -5,6 +5,7 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import EsriSearchModel 1.0
 import "../animations"
+import Logic 1.0
 
 MapQuickItem {
     id: root
@@ -181,7 +182,7 @@ MapQuickItem {
                 if (!focus) closeAnimation.start();
             }
             onClicked: {
-                EsriSearchModel.selectPlace(model)
+                Logic.selectPlace(model)
                 closeAnimation.start()
             }
 
