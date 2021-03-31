@@ -9,6 +9,10 @@ Item {
     // Route
     signal addWaypoint ( var coordinate )
     signal getDirections ()
+    function addWaypointAndGetDirections ( coordinate ) {
+        addWaypoint ( coordinate )
+        getDirections ()
+    }
 
     // Map
     signal fitViewportToPlacesMapView ()
@@ -29,26 +33,8 @@ Item {
                       })
     }
 
-
-
-    Component {
-        id: routeQuery
-        RouteQuery {}
-    }
-
     function backToPlacesMap () {
         fitViewportToPlacesMapView()
         popStackView()
-    }
-
-    function createWaypoint ( coord: coordinate ) {
-        // TODO: Ensure waypoint is not within a barrier
-        addWaypoint(coord)
-    }
-
-    function addWaypointAndGetRoutes( coord: coordinate ) {
-        createWaypoint ( coord )
-        buildRouteQuery ()
-        getRoutes ( query )
     }
 }

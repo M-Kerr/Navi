@@ -180,7 +180,7 @@ Page {
             text: "Directions"
 
             onClicked: {
-//                Logic.addWaypointandGetRoutes(root.place.location.coordinate)
+                Logic.addWaypointAndGetDirections ( place.location.coordinate )
             }
         }
 
