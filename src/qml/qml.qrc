@@ -19,5 +19,6 @@
         <file>pages/map/MainMapStates.qml</file>
         <file>singletons/EsriRouteModel.qml</file>
         <file>singletons/Logic.qml</file>
+        <file>singletons/GPS.qml</file>
     </qresource>
 </RCC>

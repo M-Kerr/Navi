@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
                              "EsriRouteModel", 1, 0, "EsriRouteModel");
     qmlRegisterSingletonType(QUrl("qrc://singletons/Logic.qml"),
                              "Logic", 1, 0, "Logic");
+    qmlRegisterSingletonType(QUrl("qrc://singletons/GPS.qml"),
+                             "GPS", 1, 0, "GPS");
 
     QUrl url(QStringLiteral("qrc:///main.qml"));
  *******************************/
@@ -67,6 +69,8 @@ int main(int argc, char *argv[])
     QUrl Logic("file:" + qgetenv("SINGLETONS_QML") + "Logic.qml");
     qmlRegisterSingletonType(Logic, "Logic", 1, 0, "Logic");
 
+    QUrl GPS("file:" + qgetenv("SINGLETONS_QML") + "GPS.qml");
+    qmlRegisterSingletonType(GPS, "GPS", 1, 0, "GPS");
 
     QUrl url(qgetenv("MAIN_QML"));
 /*******************************

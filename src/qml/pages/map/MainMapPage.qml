@@ -2,10 +2,10 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtLocation 5.15
 import QtPositioning 5.15
-import com.mkerr.navi 1.0
 import MapboxPlugin 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
+import GPS 1.0
 import "../../components"
 import ".."
 
@@ -86,7 +86,7 @@ Item {
     Item {
         id: mapWindow
 
-        property var currentCoordinate: nmeaLog.coordinate
+        property var currentCoordinate: GPS.coordinate
 
         anchors.fill: parent
 
@@ -94,12 +94,6 @@ Item {
         states: mainMapStates.states
         transitions: mainMapStates.transitions
         state: mainMapPage.following ? "following" : ""
-
-        Binding {
-            target: EsriSearchModel
-            property: "searchLocation"
-            value: mapWindow.currentCoordinate
-        }
 
         Image {
             anchors.fill: parent
@@ -285,17 +279,6 @@ Item {
 
             Component.onCompleted: {
                 createPlacesMapView()
-            }
-        }
-
-        NmeaLog {
-            id: nmeaLog
-            //        logFile: "://output.nmea.txt"
-            logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-src/qml/resources/output.nmea.txt"
-
-            Component.onCompleted: {
-                startUpdates()
             }
         }
     }
