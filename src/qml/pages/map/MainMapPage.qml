@@ -83,6 +83,11 @@ Item {
         night: parent.night
     }
 
+    DirectionsView {
+        id: directionsView
+        z: 2
+    }
+
     Item {
         id: mapWindow
 
