@@ -57,15 +57,11 @@ RouteModel {
         Connections {
             target: Logic
 
-            function onAddWaypoint ( waypoint ) {
+            function onAddWaypoint ( coordinate ) {
+                routeQuery.addWaypoint ( coordinate )
             }
 
             function onGetDirections () {
-
-// WARNING DELETE THIS TEST****************************************************
-                EsriRouteModel.query.addWaypoint(GPS.coordinate.atDistanceAndAzimuth(2000, 45))
-// **************TODO delete test above*************************************************
-
                 // Push current coordinate to the front of the waypoints list
                 let wpts = routeQuery.waypoints
                 routeQuery.clearWaypoints()
