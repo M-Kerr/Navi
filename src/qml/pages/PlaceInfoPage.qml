@@ -4,8 +4,6 @@ import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import QtPositioning 5.15
-import EsriSearchModel 1.0
-import EsriRouteModel 1.0
 import Logic 1.0
 import "../components"
 
