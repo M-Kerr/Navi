@@ -116,32 +116,31 @@ Item {
         //        font.pixelSize: 38
         //    }
 
+        Image {
+            height: 80
+            width: 80
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            anchors.margins: 20
+            z: 3
+            visible: !mainMapPage.following
+            //        source: "qrc:car-focus.png"
+            source: "../../resources/car-focus.png"
 
-//        Image {
-//            height: 80
-//            width: 80
-//            anchors.left: parent.left
-//            anchors.bottom: parent.bottom
-//            anchors.margins: 20
-//            z: 3
-//            visible: !mainMapPage.following
-//            //        source: "qrc:car-focus.png"
-//            source: "../../resources/car-focus.png"
+            MouseArea {
+                id: area
+                anchors.fill: parent
+                onClicked: {
+                    mainMapPage.following = true
+                }
+            }
 
-//            MouseArea {
-//                id: area
-//                anchors.fill: parent
-//                onClicked: {
-//                    mainMapPage.following = true
-//                }
-//            }
+            scale: area.pressed ? 0.85 : 1.0
 
-//            scale: area.pressed ? 0.85 : 1.0
-
-//            Behavior on scale {
-//                NumberAnimation {}
-//            }
-//        }
+            Behavior on scale {
+                NumberAnimation {}
+            }
+        }
 
         Map {
             id: map
