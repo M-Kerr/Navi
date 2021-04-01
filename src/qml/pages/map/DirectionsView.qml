@@ -4,14 +4,22 @@ import QtLocation 5.15
 import EsriRouteModel 1.0
 
 ListView {
-    id: listview
-    anchors.fill: parent
+    id: listView
+    height: parent.height / 4
+    anchors {
+        top: parent.top
+        left: parent.left
+        right: parent.right
+    }
+
+    // TODO: delete interactive line
+    interactive: false
     spacing: 10
     model: EsriRouteModel.status === RouteModel.Ready ?
                EsriRouteModel.get(0).segments : null
     visible: model ? true : false
     delegate: Row {
-        width: parent.width
+        width: listView.width
         spacing: 10
         property bool hasManeuver : modelData.maneuver && modelData.maneuver.valid
         visible: hasManeuver
