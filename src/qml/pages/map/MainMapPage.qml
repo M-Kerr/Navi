@@ -235,6 +235,10 @@ Item {
                 previousLocation.coordinate = center;
             }
 
+            RouteView {
+                id: routeView
+            }
+
             MapQuickItem {
                 sourceItem: Image {
                     id: carMarker
