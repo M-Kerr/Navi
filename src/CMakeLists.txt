@@ -9,7 +9,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -30,7 +30,11 @@ find_package(Qt${QT_VERSION_MAJOR}
     COMPONENTS Core Quick QuickControls2 LinguistTools Positioning Location REQUIRED)
 
 set(TS_FILES Navi_en_US.ts)
-set(SRC_FILES main.cpp )
+set(SRC_FILES main.cpp third_party/qmapboxglapp/src/qcheapruler.cpp)
+# qt_wrap_cpp tells MOC to find the listed QObject header files in the target's
+# INCLUDE_DIRECTORIES, and add them to the SRC_FILES variable.
+qt_wrap_cpp(SRC_FILES third_party/qmapboxglapp/include/mapbox/qcheapruler.hpp
+    TARGET Navi)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/qml)
 
 add_library(NmeaLog nmealog/nmealog.cpp)
@@ -62,6 +66,8 @@ endif()
 
 target_compile_definitions(Navi
   PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_include_directories(Navi PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/qmapboxglapp/include)
 target_link_libraries(Navi
   PRIVATE
   Qt${QT_VERSION_MAJOR}::Core

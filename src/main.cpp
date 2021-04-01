@@ -6,9 +6,10 @@
 #include "nmealog/nmealog.h"
 #include "hotreload/hotreloadqmlapplicationengine.h"
 
+#include "mapbox/qcheapruler.hpp"
+
 int main(int argc, char *argv[])
 {
-
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication::setApplicationName(CMAKE_PROJECT_NAME);
     QGuiApplication::setOrganizationName("MKerr");
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     HotReloadQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("$QmlEngine", &engine);
     qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
+    qmlRegisterType<QCheapRuler>("com.mapbox.cheap_ruler", 1, 0, "CheapRuler");
 
 /*******************************
     Production objects, uncomment for production
