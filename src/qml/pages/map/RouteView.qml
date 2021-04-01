@@ -27,7 +27,7 @@ MapRoute {
 }
 //}
 
-// Commented code below is the MapboxGL example using their cheapruler QML object
+// Commented code below is the MapboxGL example using their CheapRuler QML object
 //
 //        MapItemView {
 //            model: routeModel
@@ -49,38 +49,103 @@ MapRoute {
 //            }
 //        }
 
-//        MapQuickItem {
-//            zoomLevel: map.zoomLevel
-
-//            sourceItem: Image {
-//                id: carMarker
-//                source: "qrc:///car-marker.png"
-//            }
-
+        // Set the CheapRuler's currentPosition to GPS position
 //            coordinate: ruler.currentPosition
-//            anchorPoint.x: carMarker.width / 2
-//            anchorPoint.y: carMarker.height / 2
 //        }
 
 //        CheapRuler {
 //            id: ruler
 
-//            PropertyAnimation on currentDistance {
-//                id: currentDistanceAnimation
-
-//                duration: ruler.distance / mapWindow.carSpeed * 60 * 60 * 1000
-//                alwaysRunToEnd: false
-//            }
-
 //            onCurrentDistanceChanged: {
 //                var total = 0;
 //                var i = 0;
 
-//                // XXX: Use car speed in meters to pre-warn the turn instruction
-//                while (total - mapWindow.carSpeed < ruler.currentDistance * 1000 && i < routeModel.get(0).segments.length)
-//                    total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
+/***************
 
-//                turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
+ // XXX: Use car speed in meters to pre-warn the turn instruction
+
+ while (
+ // while the accumulated total - vehicle's speed is < Distance traveled
+            total - mapWindow.carSpeed < ruler.currentDistance * 1000
+
+                    // while i < the number of segments in the route
+            && i < routeModel.get(0).segments.length)
+
+            // total == the distance to the next instruction after each maneuver
+     total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
+
+ turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
+
+ *************/
 //            }
 //        }
 //    }
+
+
+
+
+/****************
+  Figure out how CheapRuler.currentDistance works
+
+  Figure out how the Pre-warn loop inside onCurrentDistanceChanged works.
+    - The instructions for the next segment's maneuver is loaded according to
+      some ratio between the vehicles speed and distance to next segment.
+
+****************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
