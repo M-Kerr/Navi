@@ -83,10 +83,10 @@ Item {
         night: parent.night
     }
 
-    DirectionsView {
-        id: directionsView
-        z: 2
-    }
+//    DirectionsView {
+//        id: directionsView
+//        z: 2
+//    }
 
     Item {
         id: mapWindow
@@ -235,10 +235,6 @@ Item {
                 previousLocation.coordinate = center;
             }
 
-            RouteView {
-                id: routeView
-            }
-
             MapQuickItem {
                 sourceItem: Image {
                     id: carMarker
@@ -253,12 +249,12 @@ Item {
             }
 
             Shortcut {
-                id: placesMapReloader
+                id: mapViewsReloader
                 sequence: "F5"
                 context: Qt.ApplicationShortcut
                 onActivated: {
-                    print("PlacesMapView reload activated")
-                    map.createPlacesMapView()
+                    print("MapViews reload activated")
+                    map.createViews()
                 }
                 onActivatedAmbiguously: activated();
             }
@@ -271,22 +267,51 @@ Item {
             //        PlacesMapView {
             //            id: placesMap
             //        }
-            // WARNING: dev tool, delete and replace with PlacesMapView
-            property var placesMap: null
-            function createPlacesMapView () {
-                if (placesMap) {
-                    map.removeMapItemView(placesMap)
-                    placesMap.destroy()
+
+//            RouteView {
+//                id: routeView
+//            }
+            // WARNING: dev tool, delete and replace with View components
+            // NOTE: directionsView is not a map view, resides outside of mapWindow
+            property var placesMapView: null
+            property var routeView: null
+            property var directionsView: null
+
+            function createViews () {
+                if (placesMapView) {
+                    map.removeMapItemView(placesMapView)
+                    placesMapView.destroy()
                 }
-                placesMap = null
+                if (routeView) {
+//                    map.removeMapItemView(routeView)
+                    map.removeMapItem(routeView)
+                    routeView.destroy()
+                }
+                if (directionsView) {
+                    directionsView.destroy()
+                }
+
+                placesMapView = null
+                routeView = null
+                directionsView = null
+
                 $QmlEngine.clearCache();
+
                 var comp = Qt.createComponent("PlacesMapView.qml")
-                placesMap = comp.createObject(map, {})
-                map.addMapItemView(placesMap)
+                placesMapView = comp.createObject(map, {})
+                map.addMapItemView(placesMapView)
+
+                comp = Qt.createComponent("RouteView.qml")
+                routeView = comp.createObject(map, {})
+//                map.addMapItemView(routeView)
+                map.addMapItem(routeView)
+
+                comp = Qt.createComponent("DirectionsView.qml")
+                directionsView = comp.createObject(mainMapPage, {})
             }
 
             Component.onCompleted: {
-                createPlacesMapView()
+                map.createViews()
             }
         }
     }
