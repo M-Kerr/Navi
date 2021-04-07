@@ -1,0 +1,3 @@
+[submodule "src/third_party/SortFilterProxyModel"]
+	path = src/third_party/SortFilterProxyModel
+	url = /Users/milokerr/Development/Projects/Navi/src/third_party/SortFilterProxyModel

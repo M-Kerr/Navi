@@ -30,7 +30,8 @@ find_package(Qt${QT_VERSION_MAJOR}
     COMPONENTS Core Quick QuickControls2 LinguistTools Positioning Location REQUIRED)
 
 set(TS_FILES Navi_en_US.ts)
-set(SRC_FILES main.cpp third_party/qmapboxglapp/src/qcheapruler.cpp)
+set(SRC_FILES main.cpp 
+    third_party/qmapboxglapp/src/qcheapruler.cpp)
 # qt_wrap_cpp tells MOC to find the listed QObject header files in the target's
 # INCLUDE_DIRECTORIES, and add them to the SRC_FILES variable.
 qt_wrap_cpp(SRC_FILES third_party/qmapboxglapp/include/mapbox/qcheapruler.hpp
