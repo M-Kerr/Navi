@@ -172,6 +172,8 @@ Item {
             right:parent.right
         }
 
+        interactive: false
+
         model: ListModel {
             id: directionsListModel
             //            ListElement {prop: "Static element"}
@@ -185,10 +187,12 @@ Item {
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});
                 }
+                interactive = true
             } else {
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
+                interactive = false
             }
         }
 
