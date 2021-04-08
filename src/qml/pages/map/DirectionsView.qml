@@ -32,8 +32,6 @@ Item {
 
     anchors.fill: parent
 
-    visible: false
-
     Connections {
         id: rootConnections
 
@@ -49,13 +47,8 @@ Item {
         target: Logic
 
         function onNavigate () {
-            root.visible = true
              headerRectLabel.updateText()
              nextInstructionRectLabel.updateText()
-        }
-
-        function onEndNavigation () {
-            visible = false
         }
     }
 
@@ -164,13 +157,17 @@ Item {
         id: listView
 
         property bool open: false
+        property real _adjustedHeight
 
         anchors {
             top: headerRect.bottom
-            bottom: parent.bottom
             left: parent.left
             right:parent.right
         }
+        // Delegates will increment/decrement listView height so we can still
+        // interact with the map
+        height: (_adjustedHeight < parent.height - headerRect.height) ?
+                    _adjustedHeight : parent.height - headerRect.height
 
         interactive: false
 
@@ -215,12 +212,17 @@ Item {
 
             property int staticIndex
             property bool hasManeuver: segment.maneuver && segment.maneuver.valid
+            property real _previousHeight
 
             width: listView.width
             height: visible? headerRect.height / 2 : 0
 
             color: staticIndex % 2 ? "steelblue" : "lightsteelblue"
             enabled: staticIndex > root.currentDirectionIndex
+
+            onHeightChanged: {
+                    listView._adjustedHeight += height - _previousHeight
+            }
 
             Label {
 
@@ -244,6 +246,11 @@ Item {
                 // changes upon removal, so visible cannot be a binding.
                 visible = (hasManeuver && 0 < staticIndex
                            && staticIndex < listView.count - 1)
+                listView._adjustedHeight += height
+            }
+
+            Component.onDestruction: {
+                listView._adjustedHeight -= height
             }
         }
     }

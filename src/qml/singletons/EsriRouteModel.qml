@@ -44,6 +44,10 @@ Item {
             routeModel.update()
             routeModelConnections.enabled = true
         }
+
+        function onEndNavigation () {
+            routeModel.reset()
+        }
     }
 
     RouteModel {
