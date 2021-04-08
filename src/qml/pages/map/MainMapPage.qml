@@ -264,13 +264,13 @@ Item {
         //            id: placesMap
         //        }
 
-        //            RouteView {
-        //                id: routeView
-        //            }
+                    RouteView {
+                        id: routeView
+                    }
         // WARNING: dev tool, delete and replace with View components
         // NOTE: directionsView is not a map view, resides outside of mapWindow
         property var placesMapView: null
-        property var routeView: null
+//        property var routeView: null
         //            property var directionsView: null
 
         function createViews () {
@@ -278,17 +278,17 @@ Item {
                 map.removeMapItemView(placesMapView)
                 placesMapView.destroy()
             }
-            if (routeView) {
-                //                    map.removeMapItemView(routeView)
-                map.removeMapItem(routeView)
-                routeView.destroy()
-            }
+//            if (routeView) {
+//                //                    map.removeMapItemView(routeView)
+//                map.removeMapItemView(routeView)
+//                routeView.destroy()
+//            }
             //                if (directionsView) {
             //                    directionsView.destroy()
             //                }
 
             placesMapView = null
-            routeView = null
+//            routeView = null
             //                directionsView = null
 
             $QmlEngine.clearCache();
@@ -297,10 +297,9 @@ Item {
             placesMapView = comp.createObject(map, {})
             map.addMapItemView(placesMapView)
 
-            comp = Qt.createComponent("RouteView.qml")
-            routeView = comp.createObject(map, {})
-            //                map.addMapItemView(routeView)
-            map.addMapItem(routeView)
+//            comp = Qt.createComponent("RouteView.qml")
+//            routeView = comp.createObject(map, {})
+//            map.addMapItemView(routeView)
 
             //                comp = Qt.createComponent("DirectionsView.qml")
             //                directionsView = comp.createObject(root, {})

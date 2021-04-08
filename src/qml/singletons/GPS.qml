@@ -32,26 +32,24 @@ Item {
             var i = 0;
             // XXX: Use car speed in meters to pre-warn the turn instruction
             // NOTE: use below as a hint for next turn instruction switch implementation
-//            while (total - mapWindow.carSpeed < ruler.currentDistance * 1000
-//                   && i < routeModel.get(0).segments.length)
-//            total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
+            //            while (total - mapWindow.carSpeed < ruler.currentDistance * 1000
+            //                   && i < routeModel.get(0).segments.length)
+            //            total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
 
-//            turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
+            //            turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
         }
     }
 
     Connections {
-        target: EsriRouteModel
+        target: Logic
 
-        function onStatusChanged () {
-            if (EsriRouteModel.status === RouteModel.Ready) {
-                ruler.path = EsriRouteModel.routeModel.get(0).path
-                ruler.currentDistance = 0;
+        function onNavigate () {
+            ruler.path = EsriRouteModel.routeModel.get(0).path
+            ruler.currentDistance = 0;
 
-                currentDistanceAnimation.stop();
-                currentDistanceAnimation.to = ruler.distance;
-                currentDistanceAnimation.start();
-            }
+            currentDistanceAnimation.stop();
+            currentDistanceAnimation.to = ruler.distance;
+            currentDistanceAnimation.start();
         }
     }
 
@@ -60,8 +58,8 @@ Item {
         logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
 src/qml/resources/output.nmea.txt"
 
-//        Component.onCompleted: {
-//            startUpdates()
-//        }
+        //        Component.onCompleted: {
+        //            startUpdates()
+        //        }
     }
 }

@@ -17,7 +17,7 @@ Item {
         enabled: false
 
         function onStatusChanged () {
-            // WARNING: In a future update Logic.navigate() should be triggered
+            // WARNING: In a future update, Logic.navigate() should only be triggered
             // when the user selects a route to travel, not on a status change.
             if (status === RouteModel.Ready)
                 Logic.navigate();
@@ -46,6 +46,7 @@ Item {
         }
 
         function onEndNavigation () {
+            routeQuery.clearWaypoints()
             routeModel.reset()
         }
     }
@@ -55,7 +56,6 @@ Item {
 
         plugin: EsriPlugin
         autoUpdate: false
-
 
         onErrorChanged: {
             print("RouteModel:")
