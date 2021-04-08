@@ -1,3 +1,6 @@
+// Transforms the visible search bar to receive key input. I.e.,
+// Animates out the search icon, animates in the back button. Doesn't affect
+// the search bar's enable or visible properties.
 import QtQuick 2.0
 
 SequentialAnimation {
