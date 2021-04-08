@@ -83,10 +83,10 @@ Item {
         night: parent.night
     }
 
-//    DirectionsView {
-//        id: directionsView
-//        z: 2
-//    }
+    DirectionsView {
+        id: directionsView
+        z: 2
+    }
 
     Item {
         id: mapWindow
@@ -275,7 +275,7 @@ Item {
             // NOTE: directionsView is not a map view, resides outside of mapWindow
             property var placesMapView: null
             property var routeView: null
-            property var directionsView: null
+//            property var directionsView: null
 
             function createViews () {
                 if (placesMapView) {
@@ -287,13 +287,13 @@ Item {
                     map.removeMapItem(routeView)
                     routeView.destroy()
                 }
-                if (directionsView) {
-                    directionsView.destroy()
-                }
+//                if (directionsView) {
+//                    directionsView.destroy()
+//                }
 
                 placesMapView = null
                 routeView = null
-                directionsView = null
+//                directionsView = null
 
                 $QmlEngine.clearCache();
 
@@ -306,8 +306,8 @@ Item {
 //                map.addMapItemView(routeView)
                 map.addMapItem(routeView)
 
-                comp = Qt.createComponent("DirectionsView.qml")
-                directionsView = comp.createObject(mainMapPage, {})
+//                comp = Qt.createComponent("DirectionsView.qml")
+//                directionsView = comp.createObject(mainMapPage, {})
             }
 
             Component.onCompleted: {

@@ -72,7 +72,7 @@ ApplicationWindow {
                 stackView.pop(null)
             }
 
-            function onGetDirections () {
+            function onNavigate () {
                 Logic.unwindStackView()
             }
         }

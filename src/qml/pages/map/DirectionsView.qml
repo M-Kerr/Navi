@@ -22,6 +22,7 @@ import QtQml 2.15
 import QtPositioning 5.15
 import QtLocation 5.15
 import EsriRouteModel 1.0
+import Logic 1.0
 import "../../components"
 
 Item {
@@ -30,16 +31,31 @@ Item {
     property int currentDirectionIndex: 1
 
     anchors.fill: parent
-    // TODO
-    // WARNING make visibile dependent on a currentlyNavigating bool or signal
-    visible: EsriRouteModel.status === RouteModel.Ready
+
+    visible: false
 
     Connections {
+        id: rootConnections
+
         target: root
 
         function onCurrentDirectionIndexChanged () {
             headerRectLabel.updateText();
             nextInstructionRectLabel.updateText();
+        }
+    }
+
+    Connections {
+        target: Logic
+
+        function onNavigate () {
+            root.visible = true
+             headerRectLabel.updateText()
+             nextInstructionRectLabel.updateText()
+        }
+
+        function onEndNavigation () {
+            visible = false
         }
     }
 
@@ -59,24 +75,16 @@ Item {
             id: headerRectLabel
             anchors.centerIn: parent
             color: "white"
+            text: ""
 
             font {
                 bold: true
                 family: "Arial"
             }
 
-            Binding {
-                target: headerRectLabel
-                property: "text"
-                // TODO
-                // WARNING make when: dependent on a currentlyNavigating bool or signal
-                when: EsriRouteModel.status === RouteModel.Ready
-                value: headerRectLabel.updateText()
-            }
-
             function updateText() {
                 let segment = root.currentDirectionIndex ?
-                        EsriRouteModel.get(0).segments[root.currentDirectionIndex]
+                        EsriRouteModel.routeModel.get(0).segments[root.currentDirectionIndex]
                       : null
                 if (segment) {
                     if (segment.maneuver.valid) {
@@ -117,26 +125,19 @@ Item {
 
         Label {
             id: nextInstructionRectLabel
+
             anchors.centerIn: parent
             color: "black"
+            text: ""
 
             font {
                 bold: true
                 family: "Arial"
             }
 
-            Binding {
-                target: nextInstructionRectLabel
-                property: "text"
-                // TODO
-                // WARNING make when: dependent on a currentlyNavigating bool or signal
-                when: EsriRouteModel.status === RouteModel.Ready
-                value: nextInstructionRectLabel.updateText()
-            }
-
             function updateText() {
                 let segment = root.currentDirectionIndex ?
-                        EsriRouteModel.get(0).segments[root.currentDirectionIndex + 1]
+                        EsriRouteModel.routeModel.get(0).segments[root.currentDirectionIndex + 1]
                       : null
                 if (segment) {
                     if (segment.maneuver.valid) {
@@ -179,7 +180,7 @@ Item {
 
         onOpenChanged: {
             if (open && EsriRouteModel.status === RouteModel.Ready) {
-                let segs = EsriRouteModel.get(0).segments
+                let segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});

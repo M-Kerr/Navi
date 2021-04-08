@@ -17,6 +17,8 @@ Item {
     // Map
     signal fitViewportToPlacesMapView ()
     signal fitViewportToMapItems ( var items )
+    signal navigate ()
+    signal endNavigation ()
 
     // StackView
     signal pushStackView ( string page, var properties )

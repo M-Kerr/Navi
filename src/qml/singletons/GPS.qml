@@ -45,7 +45,7 @@ Item {
 
         function onStatusChanged () {
             if (EsriRouteModel.status === RouteModel.Ready) {
-                ruler.path = EsriRouteModel.get(0).path
+                ruler.path = EsriRouteModel.routeModel.get(0).path
                 ruler.currentDistance = 0;
 
                 currentDistanceAnimation.stop();
