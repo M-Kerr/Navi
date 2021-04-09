@@ -204,7 +204,8 @@ Item {
         property bool open: false
         property real _maxHeight: parent.height - headerRect.height
 
-        height: contentHeight < _maxHeight ? contentHeight: _maxHeight
+        // TODO: delete
+//        height: contentHeight < _maxHeight ? contentHeight: _maxHeight
 
         anchors {
             top: headerRect.bottom
@@ -212,7 +213,6 @@ Item {
             right:parent.right
         }
 
-        clip: true
         boundsMovement: Flickable.StopAtBounds
 
         model: ListModel {
@@ -223,16 +223,22 @@ Item {
             if (open && EsriRouteModel.status === RouteModel.Ready) {
                 let segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
+
+                let newHeight = (segs.length - 2) * delegate.height
+                height = newHeight < _maxHeight ? newHeight : _maxHeight
+
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});
                 }
-                //                interactive = true
+
             } else {
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
-                //                interactive = false
             }
+        }
+        onCountChanged: {
+            if (count === 0) height = 0;
         }
 
         add: Transition {
