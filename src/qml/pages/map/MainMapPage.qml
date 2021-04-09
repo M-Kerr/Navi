@@ -80,7 +80,6 @@ Item {
         night: root.night
     }
 
-    // WARNING: delete this property when DirectionsView component is uncommented
     DirectionsView {
         id: directionsView
         z: 1
