@@ -210,13 +210,13 @@ Item {
         }
 
         boundsMovement: Flickable.StopAtBounds
-
         currentIndex: root.currentDirectionIndex
         highlightFollowsCurrentItem: true
         snapMode: ListView.SnapToItem
         spacing: 0
         interactive: false
         clip: true
+
         model: ListModel {
             id: directionsListModel
         }
@@ -340,10 +340,9 @@ Item {
             property alias columnLayout: columnLayout
 
             width: listView.width
-            height: !visible? 0 : ListView.view.delegateHeight
+            height: !visible? 0: ListView.view.delegateHeight
 
             color: staticIndex % 2 ? "steelblue" : "lightsteelblue"
-            //            z: staticIndex % 2 ? 0 : 1
             enabled: staticIndex > root.currentDirectionIndex
 
             Item {
@@ -378,7 +377,6 @@ Item {
                         id: instructionDistanceLabel
 
                         Layout.alignment: Qt.AlignHCenter
-                        visible: text
 
                         text: {
                             if (hasManeuver) {
@@ -388,17 +386,17 @@ Item {
                         }
                     }
                 }
+            }
 
-                Component.onCompleted: {
-                    // index = -1 occurs when the element's remove animation runs,
-                    // causing bugs. Assign staticIndex = index when component completes
-                    staticIndex = index
-                    // We want the element to be visible only if it has a maneuver and
-                    // isn't the first or last turn instruction. listView.count
-                    // changes upon removal, so visible cannot be a binding.
-                    visible = (hasManeuver && 0 < staticIndex
-                               && staticIndex < listView.count - 1)
-                }
+            Component.onCompleted: {
+                // index = -1 occurs when the element's remove animation runs,
+                // causing bugs. Assign staticIndex = index when component completes
+                staticIndex = index
+                // We want the element to be visible only if it has a maneuver and
+                // isn't the first or last turn instruction. listView.count
+                // changes upon removal, so visible cannot be a binding.
+                visible = (hasManeuver && 0 < staticIndex
+                           && staticIndex < listView.count - 1)
             }
         }
     }
