@@ -256,11 +256,10 @@ Item {
         //                    RouteView {
         //                        id: routeView
         //                    }
-        // WARNING: dev tool, delete and replace with View components
-        // NOTE: directionsView is not a map view, resides outside of mapWindow
+        // WARNING: dev tool, delete and replace with above View components
         property var placesMapView: null
         property var routeView: null
-        //                    property var directionsView: null
+        property var directionsViewImpl: null
 
         function createViews () {
             if (placesMapView) {
@@ -268,17 +267,16 @@ Item {
                 placesMapView.destroy()
             }
             if (routeView) {
-                //                    map.removeMapItemView(routeView)
                 map.removeMapItemView(routeView)
                 routeView.destroy()
             }
-            //                            if (directionsView) {
-            //                                directionsView.destroy()
-            //                            }
+            if (directionsViewImpl) {
+                directionsViewImpl.destroy()
+            }
 
             placesMapView = null
             routeView = null
-            //                            directionsView = null
+            directionsViewImpl = null
 
             $QmlEngine.clearCache();
 
@@ -290,8 +288,8 @@ Item {
             routeView = comp.createObject(map, {})
             map.addMapItemView(routeView)
 
-            //                            comp = Qt.createComponent("DirectionsView.qml")
-            //                            directionsView = comp.createObject(root, {})
+            comp = Qt.createComponent("DirectionsViewImpl.qml")
+            directionsViewImpl = comp.createObject(directionsView, {})
         }
 
         Component.onCompleted: {
