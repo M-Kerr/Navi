@@ -106,17 +106,6 @@ Item {
         }
     }
 
-    //    CustomLabel {
-    //        id: turnInstructions
-
-    //        anchors.top: root.top
-    //        anchors.horizontalCenter: root.horizontalCenter
-    //        anchors.margins: 20
-    //        z: 3
-
-    //        font.pixelSize: 38
-    //    }
-
     Image {
         height: 80
         width: 80
