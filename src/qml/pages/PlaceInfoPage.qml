@@ -180,6 +180,10 @@ Page {
             text: "Directions"
 
             onClicked: {
+                // NOTE: instead of calling endNavigation(), should check for
+                // navigating state and prompt user to end navigating to
+                // previous destination
+                Logic.endNavigation()
                 Logic.addWaypointAndGetDirections ( place.location.coordinate )
             }
         }
