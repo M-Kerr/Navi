@@ -235,22 +235,18 @@ Item {
             }
         }
 
-//        populate: Transition {
-//            NumberAnimation { property: "x"; duration: 1000 }
-//        }
-
         add: Transition {
-            NumberAnimation { property: "x"; duration: 1000 }
+            NumberAnimation { property: "y"; duration: 1000 }
         }
 
         remove: Transition {
             ParallelAnimation {
-                NumberAnimation { property: "x"; to: 0; duration: 1000 }
+                NumberAnimation { property: "y"; to: 0; duration: 1000 }
             }
         }
 
         removeDisplaced: Transition {
-            NumberAnimation { property: "x"; duration: 1000 }
+            NumberAnimation { property: "y"; duration: 1000 }
         }
 
         delegate: Rectangle {
