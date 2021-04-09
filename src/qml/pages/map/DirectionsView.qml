@@ -50,6 +50,11 @@ Item {
              headerRectLabel.updateText()
              nextInstructionRectLabel.updateText()
         }
+
+        function onEndNavigation () {
+            directionsListModel.clear()
+            listView.open = false
+        }
     }
 
     Rectangle {
@@ -114,7 +119,7 @@ Item {
         }
 
         color: "grey"
-        visible: !listView.open
+        visible: !listView.open && text !== ""
 
         Label {
             id: nextInstructionRectLabel
@@ -134,13 +139,10 @@ Item {
                       : null
                 if (segment) {
                     if (segment.maneuver.valid) {
-                        nextInstructionRect.visible = !listView.open
                         nextInstructionRectLabel.text = "In " + Math.round(segment.distance) + " meters, "
                                 + segment.maneuver.instructionText;
-                    } else {
-                        nextInstructionRect.visible = false
                     }
-                } else {nextInstructionRectLabel.text = "Segment Invalid";}
+                } else {nextInstructionRectLabel.text = "";}
             }
         }
 
@@ -157,39 +159,37 @@ Item {
         id: listView
 
         property bool open: false
-        property real _adjustedHeight
+        property real _maxHeight: parent.height - headerRect.height
+
+        height: contentHeight < _maxHeight ? contentHeight: _maxHeight
 
         anchors {
             top: headerRect.bottom
             left: parent.left
             right:parent.right
         }
-        // Delegates will increment/decrement listView height so we can still
-        // interact with the map
-        height: (_adjustedHeight < parent.height - headerRect.height) ?
-                    _adjustedHeight : parent.height - headerRect.height
 
-        interactive: false
+        clip: true
+        boundsMovement: Flickable.StopAtBounds
 
         model: ListModel {
             id: directionsListModel
-            //            ListElement {prop: "Static element"}
-            //            ListElement {prop: "Static element"}
         }
 
         onOpenChanged: {
             if (open && EsriRouteModel.status === RouteModel.Ready) {
                 let segs = EsriRouteModel.routeModel.get(0).segments
+                print("Number of route segments:", segs.length)
                 directionsListModel.clear()
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});
                 }
-                interactive = true
+//                interactive = true
             } else {
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
-                interactive = false
+//                interactive = false
             }
         }
 
@@ -212,17 +212,12 @@ Item {
 
             property int staticIndex
             property bool hasManeuver: segment.maneuver && segment.maneuver.valid
-            property real _previousHeight
 
             width: listView.width
-            height: visible? headerRect.height / 2 : 0
+            height: !visible? 0: headerRect.height / 2
 
             color: staticIndex % 2 ? "steelblue" : "lightsteelblue"
             enabled: staticIndex > root.currentDirectionIndex
-
-            onHeightChanged: {
-                    listView._adjustedHeight += height - _previousHeight
-            }
 
             Label {
 
@@ -246,11 +241,6 @@ Item {
                 // changes upon removal, so visible cannot be a binding.
                 visible = (hasManeuver && 0 < staticIndex
                            && staticIndex < listView.count - 1)
-                listView._adjustedHeight += height
-            }
-
-            Component.onDestruction: {
-                listView._adjustedHeight -= height
             }
         }
     }

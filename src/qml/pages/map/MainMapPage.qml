@@ -90,8 +90,9 @@ Item {
     Button {
         id: endNavigationButton
 
+        width: implicitWidth + 80
         anchors {
-            right: root.right
+            horizontalCenter: parent.horizontalCenter
             bottom: root.bottom
             margins: 40
         }
@@ -264,32 +265,32 @@ Item {
         //            id: placesMap
         //        }
 
-                    RouteView {
-                        id: routeView
-                    }
+        //                    RouteView {
+        //                        id: routeView
+        //                    }
         // WARNING: dev tool, delete and replace with View components
         // NOTE: directionsView is not a map view, resides outside of mapWindow
         property var placesMapView: null
-//        property var routeView: null
-        //            property var directionsView: null
+        property var routeView: null
+        //                    property var directionsView: null
 
         function createViews () {
             if (placesMapView) {
                 map.removeMapItemView(placesMapView)
                 placesMapView.destroy()
             }
-//            if (routeView) {
-//                //                    map.removeMapItemView(routeView)
-//                map.removeMapItemView(routeView)
-//                routeView.destroy()
-//            }
-            //                if (directionsView) {
-            //                    directionsView.destroy()
-            //                }
+            if (routeView) {
+                //                    map.removeMapItemView(routeView)
+                map.removeMapItemView(routeView)
+                routeView.destroy()
+            }
+            //                            if (directionsView) {
+            //                                directionsView.destroy()
+            //                            }
 
             placesMapView = null
-//            routeView = null
-            //                directionsView = null
+            routeView = null
+            //                            directionsView = null
 
             $QmlEngine.clearCache();
 
@@ -297,12 +298,12 @@ Item {
             placesMapView = comp.createObject(map, {})
             map.addMapItemView(placesMapView)
 
-//            comp = Qt.createComponent("RouteView.qml")
-//            routeView = comp.createObject(map, {})
-//            map.addMapItemView(routeView)
+            comp = Qt.createComponent("RouteView.qml")
+            routeView = comp.createObject(map, {})
+            map.addMapItemView(routeView)
 
-            //                comp = Qt.createComponent("DirectionsView.qml")
-            //                directionsView = comp.createObject(root, {})
+            //                            comp = Qt.createComponent("DirectionsView.qml")
+            //                            directionsView = comp.createObject(root, {})
         }
 
         Component.onCompleted: {
