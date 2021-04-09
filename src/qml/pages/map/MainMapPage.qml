@@ -92,8 +92,8 @@ Item {
         width: implicitWidth + 80
         anchors {
             horizontalCenter: parent.horizontalCenter
-            bottom: root.bottom
-            margins: 40
+            top: root.top
+            margins: 20
         }
 
         z: 2
