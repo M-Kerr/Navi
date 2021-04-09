@@ -33,8 +33,6 @@ Item {
     anchors.fill: parent
 
     Connections {
-        id: rootConnections
-
         target: root
 
         function onCurrentDirectionIndexChanged () {
@@ -202,10 +200,8 @@ Item {
         id: listView
 
         property bool open: false
+        property real delegateHeight: headerRect.height / 2
         property real _maxHeight: parent.height - headerRect.height
-
-        // TODO: delete
-//        height: contentHeight < _maxHeight ? contentHeight: _maxHeight
 
         anchors {
             top: headerRect.bottom
@@ -215,6 +211,12 @@ Item {
 
         boundsMovement: Flickable.StopAtBounds
 
+        currentIndex: root.currentDirectionIndex
+        highlightFollowsCurrentItem: true
+        snapMode: ListView.SnapToItem
+        spacing: 0
+        interactive: false
+        clip: true
         model: ListModel {
             id: directionsListModel
         }
@@ -224,35 +226,107 @@ Item {
                 let segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
 
-                let newHeight = (segs.length - 2) * delegate.height
+                let newHeight = (segs.length - 2) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
+                interactive = true
 
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});
                 }
 
             } else {
+                interactive = false
+                // Fixes remove transition bug when view isn't at beginning
+                positionViewAtBeginning()
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
             }
         }
-        onCountChanged: {
-            if (count === 0) height = 0;
-        }
 
         add: Transition {
-            NumberAnimation { property: "y"; duration: 1000 }
+            ParallelAnimation {
+                NumberAnimation {
+                    property: "y"
+                    duration: 250
+                    easing {
+                        type: Easing.InOutQuad
+                    }
+                }
+
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 50
+                    easing {
+                        type: Easing.InOutQuad
+                    }
+                }
+            }
         }
 
         remove: Transition {
             ParallelAnimation {
-                NumberAnimation { property: "y"; to: 0; duration: 1000 }
+                SequentialAnimation{
+
+                    ParallelAnimation {
+                        PropertyAction {
+                            property: "instructionLabel.text"
+                            value: "________________________________________"
+                        }
+
+                        PropertyAction {
+                            property: "instructionDistanceLabel.text"
+                            value: "____________________"
+                        }
+
+                        PropertyAction {
+                            property: "clipBox.width"
+                            value: "columnLayout.width"
+                        }
+                    }
+
+                    NumberAnimation {
+                        property: "clipBox.width"
+                        to: 0
+                        duration: 150
+                        easing {
+                            type: Easing.InOutQuad
+                        }
+                    }
+                }
+
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 100
+                    }
+
+                    ParallelAnimation {
+                        NumberAnimation {
+                            property: "height"
+                            to: 0
+                            duration: 250
+                            easing {
+                                type: Easing.InOutQuad
+                            }
+                        }
+
+                        NumberAnimation {
+                            property: "opacity"
+                            to: 0
+                            duration: 300
+                            easing {
+                                type: Easing.InOutQuad
+                            }
+                        }
+                    }
+                }
             }
         }
 
         removeDisplaced: Transition {
-            NumberAnimation { property: "y"; duration: 1000 }
+            NumberAnimation { property: "y"; duration: 250 }
         }
 
         delegate: Rectangle {
@@ -260,53 +334,71 @@ Item {
 
             property int staticIndex
             property bool hasManeuver: segment.maneuver && segment.maneuver.valid
+            property alias instructionLabel: instructionLabel
+            property alias instructionDistanceLabel: instructionDistanceLabel
+            property alias clipBox: clipBox
+            property alias columnLayout: columnLayout
 
             width: listView.width
-            height: !visible? 0: headerRect.height / 2
+            height: !visible? 0 : ListView.view.delegateHeight
 
             color: staticIndex % 2 ? "steelblue" : "lightsteelblue"
+            //            z: staticIndex % 2 ? 0 : 1
             enabled: staticIndex > root.currentDirectionIndex
 
-            ColumnLayout {
+            Item {
+                // Workaround to fix small gaps between delegates when clip
+                // enabled
+                id: clipBox
+
                 anchors.centerIn: parent
-                spacing: 8
+                width: parent.width
+                height: parent.height
+                clip: true
 
-                Label {
-                    id: instructionLabel
+                ColumnLayout {
+                    id: columnLayout
 
-                    Layout.alignment: Qt.AlignHCenter
-                    text: {
-                        if (hasManeuver) {
-                            segment.maneuver.instructionText
+                    anchors.centerIn: parent
+                    spacing: 8
+
+                    Label {
+                        id: instructionLabel
+
+                        Layout.alignment: Qt.AlignHCenter
+                        text: {
+                            if (hasManeuver) {
+                                segment.maneuver.instructionText
+                            }
+                            else "";
                         }
-                        else "";
+                    }
+
+                    Label {
+                        id: instructionDistanceLabel
+
+                        Layout.alignment: Qt.AlignHCenter
+                        visible: text
+
+                        text: {
+                            if (hasManeuver) {
+                                "Travel " + Math.round(segment.distance) + " meters"
+                            }
+                            else "";
+                        }
                     }
                 }
 
-                Label {
-                    id: instructionDistanceLabel
-
-                    Layout.alignment: Qt.AlignHCenter
-                    visible: text
-
-                    text: {
-                        if (hasManeuver) {
-                            "Travel " + Math.round(segment.distance) + " meters"
-                        }
-                        else "";
-                    }
+                Component.onCompleted: {
+                    // index = -1 occurs when the element's remove animation runs,
+                    // causing bugs. Assign staticIndex = index when component completes
+                    staticIndex = index
+                    // We want the element to be visible only if it has a maneuver and
+                    // isn't the first or last turn instruction. listView.count
+                    // changes upon removal, so visible cannot be a binding.
+                    visible = (hasManeuver && 0 < staticIndex
+                               && staticIndex < listView.count - 1)
                 }
-            }
-
-            Component.onCompleted: {
-                // index = -1 occurs when the element's remove animation runs,
-                // causing bugs. Assign staticIndex = index when component completes
-                staticIndex = index
-                // We want the element to be visible only if it has a maneuver and
-                // isn't the first or last turn instruction. listView.count
-                // changes upon removal, so visible cannot be a binding.
-                visible = (hasManeuver && 0 < staticIndex
-                           && staticIndex < listView.count - 1)
             }
         }
     }
