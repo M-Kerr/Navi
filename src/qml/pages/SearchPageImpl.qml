@@ -87,6 +87,10 @@ Item {
         anchors.bottom: parent.bottom
         model: EsriSearchModel
 
+        // TODO: This Frame is improperly implemented.? Provide it a RowLayout
+        // as its contentItem's child? Although, its current implementation
+        // already works for dynamic sizing, and should be slightly more
+        // performant because it doesn't use a RowLayout.
         delegate: Frame {
             width: listView.width
             height: 110
@@ -120,40 +124,47 @@ Item {
                 }
             }
 
-            Item {
+            ColumnLayout {
+                id: placeNameAddressColumn
+
                 height: parent.height * 0.5
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: markerRect.right
-                anchors.right: distanceColumn.left
-                anchors.leftMargin: 15
-                anchors.rightMargin: 15
+                anchors {
+                    verticalCenter: parent.verticalCenter
+                    left: markerRect.right
+                    right: distanceColumn.left
+                    leftMargin: 15
+                    rightMargin: 15
+                }
+
                 Layout.minimumWidth: 662
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
 
-                ColumnLayout {
-                    anchors.fill: parent
-                    spacing: 3
-                    clip: true
+                //                    anchors.fill: parent
+                spacing: 3
+                clip: true
 
-                    // TODO: if/else logic to determine place result type
-                    // and its visual representation
-                    Label {
-                        height: parent.height / 2
-                        text:{
-                            let i = place.name.indexOf(",")
-                            if (i !== -1) place.name.slice(0, i);
-                            else place.name
-                        }
-                        font.bold: true
-                        font.family: "Arial"
-                    }
+                // TODO: if/else logic to determine place result type
+                // and its visual representation
+                Label {
+                    id: placeNameLabel
 
-                    Label {
-                        height: parent.height / 2
-                        text: place.location.address.street
-                        font.family: "Arial"
+                    height: parent.height / 2
+                    text:{
+                        let i = place.name.indexOf(",")
+                        if (i !== -1) place.name.slice(0, i);
+                        else place.name
                     }
+                    font.bold: true
+                    font.family: "Arial"
+                }
+
+                Label {
+                    id: placeAddressLabel
+
+                    height: parent.height / 2
+                    text: place.location.address.street
+                    font.family: "Arial"
                 }
             }
 
@@ -166,6 +177,8 @@ Item {
                 spacing: 0
 
                 Label {
+                    id: milesValueLabel
+
                     Layout.alignment: Qt.AlignHCenter
                     text: Math.round((distance / 1760) * 100) / 100
                     font.bold: true
@@ -173,6 +186,7 @@ Item {
                     verticalAlignment: Text.AlignBottom
                 }
                 Label {
+                    id: milesTextLabel
                     Layout.alignment: Qt.AlignHCenter
                     text: "miles"
                     font.weight: Font.Thin
