@@ -12,11 +12,15 @@ Item {
     id: root
 
     readonly property var coordinate: ruler.currentPosition
+    property alias ruler: ruler
 
     CheapRuler {
         id: ruler
 
         property real carSpeed: 35
+        property int nextTurnInstructionIndex: 1
+        property var route
+        property int _sumSegmentsDistance
 
         path: [QtPositioning.coordinate(34.049988197958406, -118.31766833213446)]
 
@@ -27,16 +31,18 @@ Item {
             alwaysRunToEnd: false
         }
 
+        // WARNING: This is a simple algorithm to pre-warn turn instructions,
+        // for demonstration purposes only with the CheapRuler vehicle. Do not
+        // use in actual vehicle tracking.
         onCurrentDistanceChanged: {
-            var total = 0;
-            var i = 0;
-            // XXX: Use car speed in meters to pre-warn the turn instruction
-            // NOTE: use below as a hint for next turn instruction switch implementation
-            //            while (total - mapWindow.carSpeed < ruler.currentDistance * 1000
-            //                   && i < routeModel.get(0).segments.length)
-            //            total += routeModel.get(0).segments[i++].maneuver.distanceToNextInstruction;
-
-            //            turnInstructions.text = routeModel.get(0).segments[i - 1].maneuver.instructionText;
+            // when <= 100 feet from end of segment, present next instruction.
+            if (_sumSegmentsDistance - (currentDistance * 1000 * 3.28084) <= 100 &&
+                // Stop incrementing once we're at the final segment's instruction
+                nextTurnInstructionIndex < route.segments.length - 1) {
+                nextTurnInstructionIndex++;
+                // Add the next segment's distance to the sum
+                _sumSegmentsDistance += route.segments[nextTurnInstructionIndex].distance
+            }
         }
     }
 
@@ -44,6 +50,10 @@ Item {
         target: Logic
 
         function onNavigate () {
+            ruler.nextTurnInstructionIndex = 1
+            ruler.route = EsriRouteModel.routeModel.get(0)
+            ruler._sumSegmentsDistance = ruler.route.segments[ruler.nextTurnInstructionIndex].distance
+
             ruler.path = EsriRouteModel.routeModel.get(0).path
             ruler.currentDistance = 0;
 

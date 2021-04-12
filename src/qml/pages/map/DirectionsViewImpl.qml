@@ -23,12 +23,15 @@ import QtPositioning 5.15
 import QtLocation 5.15
 import EsriRouteModel 1.0
 import Logic 1.0
+import GPS 1.0
 import "../../components"
 
 Item {
     id: root
 
-    property int currentDirectionIndex: 1
+    // WARNING: Demo purposes only, don't use GPS.ruler.nextTurnInstructionIndex
+    // for actual vehicle tracking
+    property int currentDirectionIndex: GPS.ruler.nextTurnInstructionIndex
 
     anchors.fill: parent
 
@@ -113,9 +116,9 @@ Item {
                 if (segment.maneuver.valid) {
                     headerRectLabel.text = segment.maneuver.instructionText
                     headerRectDistanceLabel.text = "Travel "
-                            + Math.round(segment.distance) + " meters"
+                            + Math.round(segment.distance) + " feet"
                 } else {
-                    root.currentDirectionIndex++
+//                    root.currentDirectionIndex++
                     print("maneuver invalid, headerRect increased currentDirectionIndex. Index is now:", root.currentDirectionIndex)
                 }
             } else {
@@ -187,7 +190,7 @@ Item {
                 if (segment.maneuver.valid) {
                     nextInstructionRectLabel.text = segment.maneuver.instructionText
                     nextInstructionRectDistanceLabel.text = "Travel "
-                            + Math.round(segment.distance) + " meters"
+                            + Math.round(segment.distance) + " feet"
                 }
             } else {
                 nextInstructionRectLabel.text = ""
@@ -226,7 +229,7 @@ Item {
                 let segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
 
-                let newHeight = (segs.length - 2) * delegateHeight
+                let newHeight = (segs.length - 1) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
                 interactive = true
 
@@ -380,7 +383,7 @@ Item {
 
                         text: {
                             if (hasManeuver) {
-                                "Travel " + Math.round(segment.distance) + " meters"
+                                "Travel " + Math.round(segment.distance) + " feet"
                             }
                             else "";
                         }
@@ -395,8 +398,7 @@ Item {
                 // We want the element to be visible only if it has a maneuver and
                 // isn't the first or last turn instruction. listView.count
                 // changes upon removal, so visible cannot be a binding.
-                visible = (hasManeuver && 0 < staticIndex
-                           && staticIndex < listView.count - 1)
+                visible = (hasManeuver && 0 < staticIndex)
             }
         }
     }
