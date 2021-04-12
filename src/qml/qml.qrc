@@ -15,7 +15,6 @@
         <file>pages/SearchPageImpl.qml</file>
         <file>pages/map/PlacesMapView.qml</file>
         <file>pages/map/MainMapPage.qml</file>
-        <file>pages/map/MainMapPageStates.qml</file>
         <file>pages/map/MainMapStates.qml</file>
         <file>singletons/EsriRouteModel.qml</file>
         <file>singletons/Logic.qml</file>
