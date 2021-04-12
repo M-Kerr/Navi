@@ -140,7 +140,6 @@ Item {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter
 
-                //                    anchors.fill: parent
                 spacing: 3
                 clip: true
 
