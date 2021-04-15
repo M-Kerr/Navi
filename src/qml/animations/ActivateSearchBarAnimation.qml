@@ -4,7 +4,7 @@
 import QtQuick 2.0
 
 SequentialAnimation {
-    id: backRectShow
+    id: root
 
     ScriptAction {
         script: {
@@ -26,12 +26,12 @@ SequentialAnimation {
         NumberAnimation {
             target: backRect
             property: "width"
-            to: height
+            to: backRect.height
             duration: 100
         }
 
         NumberAnimation {
-            target: searchIcon
+            target: softCraterSearchBar.searchIcon
             property: "width"
             to: 0
             duration: 100
@@ -39,7 +39,7 @@ SequentialAnimation {
     }
 
     PropertyAction {
-        target: searchIcon
+        target: softCraterSearchBar.searchIcon
         property: "visible"
         value: false
     }

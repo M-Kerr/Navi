@@ -6,7 +6,9 @@ import MapboxPlugin 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
 import GPS 1.0
+import "../../components/SoftUI"
 import "../../components"
+import "../../animations"
 import ".."
 
 Item {
@@ -44,10 +46,14 @@ Item {
         visible: root.following
     }
 
-    SearchBar {
+    Item {
         id: searchBar
-        z: 2
 
+        property alias input: softCraterSearchBar.input
+        property string text: input.text
+
+        z: 2
+        height: 35
         width: root.width * 0.75
         anchors {
             top: root.top
@@ -55,13 +61,64 @@ Item {
             horizontalCenter: root.horizontalCenter
         }
 
-        bgColor: root.bgColor
-
         Binding {
             target: EsriSearchModel
             property: "searchTerm"
             value: searchBar.text
         }
+
+        onEnabledChanged: {
+            if (enabled) opacity = 1;
+            else opacity = 0;
+        }
+
+        Rectangle {
+            id: backRect
+            anchors.left: parent.left
+            anchors.bottom: parent.bottom
+            height: parent.height
+            width:  0
+            radius: width
+            color: root.bgColor
+            clip: true
+            enabled: false
+            opacity: 0.0
+
+            Label {
+                anchors.centerIn: parent
+                text: "≺"
+                font.bold: true
+                font.family: "Arial"
+                color: root.night? "grey" : "black"
+            }
+
+            MouseArea {
+                id: backRectMouseArea
+                anchors.fill: parent
+                onClicked: {
+                    mainMapPage.state = ""
+                }
+            }
+        }
+
+        SoftCraterSearchBar {
+            id: softCraterSearchBar
+
+            anchors.left: backRect.right
+            anchors.leftMargin: 15
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+
+//            color:
+        }
+
+        Behavior on opacity { NumberAnimation {} }
+        ActivateSearchBarAnimation { id: activateAnim }
+        DeactivateSearchBarAnimation { id: deactivateAnim }
+
+        function activate() { activateAnim.start() }
+        function deactivate() { deactivateAnim.start() }
     }
 
     SearchPage {
