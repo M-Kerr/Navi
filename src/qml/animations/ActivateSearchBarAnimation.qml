@@ -31,7 +31,7 @@ SequentialAnimation {
         }
 
         NumberAnimation {
-            target: softCraterSearchBar.searchIcon
+            target: softRecessedSearchBar.icon
             property: "width"
             to: 0
             duration: 100
@@ -39,7 +39,7 @@ SequentialAnimation {
     }
 
     PropertyAction {
-        target: softCraterSearchBar.searchIcon
+        target: softRecessedSearchBar.icon
         property: "visible"
         value: false
     }

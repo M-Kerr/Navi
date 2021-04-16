@@ -9,7 +9,7 @@ SequentialAnimation {
     ScriptAction {
         script: {
             activateAnim.stop()
-            softCraterSearchBar.searchIcon.visible = true
+            softRecessedSearchBar.icon.visible = true
         }
     }
 
@@ -31,9 +31,9 @@ SequentialAnimation {
         }
 
         NumberAnimation {
-            target: softCraterSearchBar.searchIcon
+            target: softRecessedSearchBar.icon
             property: "width"
-            to: softCraterSearchBar.searchIcon.height
+            to: softRecessedSearchBar.icon.height
             duration: 100
         }
     }
