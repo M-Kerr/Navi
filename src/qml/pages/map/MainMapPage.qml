@@ -49,7 +49,7 @@ Item {
     Item {
         id: searchBar
 
-        property alias input: softCraterSearchBar.input
+        property alias input: softRecessedSearchBar.input
         property string text: input.text
 
         z: 2
@@ -101,8 +101,8 @@ Item {
             }
         }
 
-        SoftCraterSearchBar {
-            id: softCraterSearchBar
+        SoftRecessedSearchBar {
+            id: softRecessedSearchBar
 
             anchors.left: backRect.right
             anchors.leftMargin: 15
@@ -111,6 +111,21 @@ Item {
             anchors.bottom: parent.bottom
 
 //            color:
+
+            onInputActiveFocusChanged: {
+                if (inputActiveFocus) {
+                    mainMapPage.state = "searchPage";
+                }
+            }
+
+            onAccepted: {
+                if (text)
+                {
+                    //TODO center-fit map on all markers
+                    map.fitViewportToMapItems()
+                    mainMapPage.state = ""
+                }
+            }
         }
 
         Behavior on opacity { NumberAnimation {} }
