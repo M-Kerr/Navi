@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>components/SearchBar.qml</file>
         <file>singletons/AppUtil.qml</file>
         <file>singletons/MapboxPlugin.qml</file>
         <file>components/MarkerDialog.qml</file>
