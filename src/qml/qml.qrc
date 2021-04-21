@@ -18,5 +18,6 @@
         <file>singletons/EsriRouteModel.qml</file>
         <file>singletons/Logic.qml</file>
         <file>singletons/GPS.qml</file>
+        <file>components/GlassPullPane.qml</file>
     </qresource>
 </RCC>
