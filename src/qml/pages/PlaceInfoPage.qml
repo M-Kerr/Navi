@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.15
 import QtPositioning 5.15
 import Logic 1.0
 import "../components"
+import "../components/SoftUI"
 
 Page {
     id: root
@@ -30,8 +31,17 @@ Page {
         }
     }
 
-    PullPane {
-        id: pullPane
+    GlassPullPane {
+        id: glassPullPane
+
+        source: mainMapPage
+        blurRadius: 40
+        color {
+            hsvHue: 0
+            hsvSaturation: 0
+            hsvValue: 0.90
+            a: 0.70
+        }
 
         Rectangle {
             id: imageRect
@@ -168,13 +178,15 @@ Page {
     footer: Rectangle {
         id: footerItem
 
-        height: navigateButton.implicitHeight
+        height: directionsButton.implicitHeight
         width: parent.width
+//        color: "transparent"
 
         Button {
-            id: navigateButton
+            id: directionsButton
 
-            width: parent.width; height: parent.height
+            implicitHeight: 40
+            width: parent.width
             anchors.centerIn: parent
 
             text: "Directions"
@@ -186,15 +198,38 @@ Page {
                 Logic.endNavigation()
                 Logic.addWaypointAndGetDirections ( place.location.coordinate )
             }
-        }
 
-        DropShadow {
-            id: footerShadow
-            anchors.fill: navigateButton
-            source: navigateButton
-            radius: 8
-            samples: 32
-            spread: 0
+            background: SoftGlassBox {
+                source: mainMapPage
+                blurRadius: glassPullPane.blurRadius * 2
+                glassOpacity: glassPullPane.glassOpacity * 2
+                radius: 0
+                width: directionsButton.width + 1
+                height: directionsButton.height + 1
+                border {
+                    width: 1
+                    color {
+                        hsvHue: 0.0
+                        hsvSaturation: 0.0
+                        hsvValue: 0.90
+                        a: 0.40
+                    }
+                }
+                shadow {
+                    visible: true
+                    horizontalOffset: 0
+                    verticalOffset: -0.3
+                    radius: 14
+                }
+            }
         }
+//        DropShadow {
+//            id: footerShadow
+//            anchors.fill: directionsButton
+//            source: directionsButton
+//            radius: 8
+//            samples: 32
+//            spread: 0
+//        }
     }
 }
