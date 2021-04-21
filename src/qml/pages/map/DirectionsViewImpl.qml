@@ -25,6 +25,7 @@ import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
 import "../../components"
+import "../../components/SoftUI"
 
 Item {
     id: root
@@ -118,7 +119,7 @@ Item {
                     headerRectDistanceLabel.text = "Travel "
                             + Math.round(segment.distance) + " feet"
                 } else {
-//                    root.currentDirectionIndex++
+                    //                    root.currentDirectionIndex++
                     print("maneuver invalid, headerRect increased currentDirectionIndex. Index is now:", root.currentDirectionIndex)
                 }
             } else {
@@ -199,6 +200,50 @@ Item {
         }
     }
 
+    SoftGlassBox {
+            id: softGlassBox
+
+            height: 0
+            anchors {
+                top: listView.top
+                left: listView.left
+                right: listView.right
+            }
+
+            source: map
+            radius: 0
+//            blurRadius: 90
+            blurRadius: 30
+            shadow {
+//                visible: height > 0 ? true: false
+                horizontalOffset: 0
+                verticalOffset: 0.5
+                radius: 8
+            }
+            color {
+                    hsvHue: 0
+                    hsvSaturation: 0
+                    hsvValue: 0.92
+                    a: 0.40
+            }
+            border {
+                width: 0
+            }
+
+            Behavior on height {
+                NumberAnimation { duration: 200 }
+            }
+
+            Timer {
+                id: glassBoxHeightTimer
+
+                interval: 300
+                onTriggered: {
+                    parent.height = 0
+                }
+            }
+    }
+
     ListView {
         id: listView
 
@@ -231,6 +276,8 @@ Item {
 
                 let newHeight = (segs.length - 1) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
+                softGlassBox.height = height
+
                 interactive = true
 
                 for (var i=0; i < segs.length; i++) {
@@ -244,6 +291,7 @@ Item {
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
+                glassBoxHeightTimer.start()
             }
         }
 
@@ -332,8 +380,10 @@ Item {
             NumberAnimation { property: "y"; duration: 250 }
         }
 
-        delegate: Rectangle {
-            id: delegateRect
+        // I need to figure out why softglassbox is hiding all of the delegate
+        //text
+                delegate: Item {
+                    id: delegateItem
 
             property int staticIndex
             property bool hasManeuver: segment.maneuver && segment.maneuver.valid
@@ -345,7 +395,6 @@ Item {
             width: listView.width
             height: !visible? 0: ListView.view.delegateHeight
 
-            color: staticIndex % 2 ? "steelblue" : "lightsteelblue"
             enabled: staticIndex > root.currentDirectionIndex
 
             Item {
