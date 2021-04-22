@@ -54,8 +54,26 @@ ApplicationWindow {
         //        rotation: -90
 
         initialItem: mainMapPage
-        //        pushEnter: {}
+        pushEnter: Transition {
+            OpacityAnimator { from: 0; to: 1; duration: 350 }
+        }
+
+        popExit: Transition {
+            OpacityAnimator { from: 1; to: 0; duration: 150 }
+            ScaleAnimator { from: 1; to: 10; duration: 250 }
+        }
+        // Empty transitions allow map to stay visible in the stack
         pushExit: Transition {}
+        popEnter: Transition {
+            OpacityAnimator { from: 0; to: 1; duration: 400 }
+//            ScaleAnimator { from: 0; to: 1; duration: 100 }
+//            YAnimator {
+//             from: (stackView.mirrored ? -1 : 1) * stackView.height
+//             to: 0
+//             duration: 600
+//             easing.type: Easing.OutCubic
+//            }
+        }
 
         Connections {
             target: Logic
@@ -75,6 +93,12 @@ ApplicationWindow {
             function onGetDirections () {
                 Logic.unwindStackView()
             }
+        }
+
+        background: Rectangle {
+            height: stackView.height
+            width: stackView.width
+            color: "darkgrey"
         }
     }
 }
