@@ -104,13 +104,15 @@ Item {
         SoftRecessedSearchBar {
             id: softRecessedSearchBar
 
-            anchors.left: backRect.right
-            anchors.leftMargin: 15
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
+            anchors {
+                left: backRect.right
+                leftMargin: 15
+                top: parent.top
+                right: parent.right
+                bottom: parent.bottom
+            }
 
-//            color:
+            color: "#ebebeb"
 
             onInputActiveFocusChanged: {
                 if (inputActiveFocus) {
