@@ -199,10 +199,29 @@ Page {
                 Logic.addWaypointAndGetDirections ( place.location.coordinate )
             }
 
+            onDownChanged: {
+                if (down) {
+                    background.shadow.visible = false
+                    background.color.a /= 1.2
+                    background.blurRadius /= 1.2
+                    background.border.width = 0
+                } else {
+                    background.shadow.visible = true
+                    background.color.a *= 1.2
+                    background.blurRadius *= 1.2
+                    background.border.width = 1
+                }
+            }
+
             background: SoftGlassBox {
                 source: mainMapPage
                 blurRadius: glassPullPane.blurRadius * 2
-                glassOpacity: glassPullPane.glassOpacity * 2
+                color {
+                    hsvHue: 0.0
+                    hsvSaturation: 0.0
+                    hsvValue: 0.80
+                    a: glassPullPane.glassOpacity * 2
+                }
                 radius: 0
                 width: directionsButton.width + 1
                 height: directionsButton.height + 1
@@ -223,13 +242,5 @@ Page {
                 }
             }
         }
-//        DropShadow {
-//            id: footerShadow
-//            anchors.fill: directionsButton
-//            source: directionsButton
-//            radius: 8
-//            samples: 32
-//            spread: 0
-//        }
     }
 }
