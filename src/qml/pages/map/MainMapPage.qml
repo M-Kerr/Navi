@@ -52,7 +52,7 @@ Item {
         property alias input: softRecessedSearchBar.input
         property string text: input.text
 
-        z: 2
+        z: 3
         height: 35
         width: root.width * 0.75
         anchors {
@@ -142,7 +142,7 @@ Item {
         id: searchPage
         visible: false
 
-        z: 1
+        z: 2
         anchors {
             bottom: root.top
             top: root.top
@@ -181,13 +181,19 @@ Item {
     }
 
     Image {
+        id: cameraFollowButton
+
         height: 80
         width: 80
         anchors.left: parent.left
         anchors.bottom: parent.bottom
         anchors.margins: 20
-        z: 2
-        visible: !root.following
+        z: 1
+        opacity: 0
+        visible: {
+            (root.StackView.status === StackView.Active) ? !root.following
+                                                   : false
+        }
         //        source: "qrc:car-focus.png"
         source: "../../resources/car-focus.png"
 
@@ -200,6 +206,32 @@ Item {
         }
 
         scale: area.pressed ? 0.85 : 1.0
+
+        NumberAnimation {
+            id: opacityOffAnimation
+
+            target: cameraFollowButton
+            property: "opacity"; to: 0; duration: 200
+            alwaysRunToEnd: false
+        }
+        NumberAnimation {
+            id: opacityOnAnimation
+
+            target: cameraFollowButton
+            property: "opacity"; to: 1; duration: 200
+            alwaysRunToEnd: false
+        }
+
+        onVisibleChanged: {
+            print("visible:",visible)
+            if (visible) {
+                opacityOffAnimation.stop()
+                opacityOnAnimation.start()
+            } else {
+                opacityOnAnimation.stop()
+                opacityOffAnimation.start()
+            }
+        }
 
         Behavior on scale {
             NumberAnimation {}
