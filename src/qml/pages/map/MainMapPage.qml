@@ -104,6 +104,7 @@ Item {
         SoftRecessedSearchBar {
             id: softRecessedSearchBar
 
+            z: 1
             anchors {
                 left: backRect.right
                 leftMargin: 15
@@ -112,7 +113,8 @@ Item {
                 bottom: parent.bottom
             }
 
-            color: "#ebebeb"
+            color: "transparent"
+            clearButton.topShadow.visible: false
 
             onInputActiveFocusChanged: {
                 if (inputActiveFocus) {
@@ -126,6 +128,23 @@ Item {
                     //TODO center-fit map on all markers
                     map.fitViewportToMapItems()
                     mainMapPage.state = ""
+                }
+            }
+
+            SoftGlassBox {
+                id: searchBarGlassBox
+
+                z: -1
+                anchors.fill: parent.background
+
+                source: map
+                radius: parent.radius
+                blurRadius: 30
+                frost.color {
+                    hsvHue: 0
+                    hsvSaturation: 0
+                    hsvValue: 0.80
+                    a: 0.20
                 }
             }
         }
@@ -223,7 +242,6 @@ Item {
         }
 
         onVisibleChanged: {
-            print("visible:",visible)
             if (visible) {
                 opacityOffAnimation.stop()
                 opacityOnAnimation.start()
