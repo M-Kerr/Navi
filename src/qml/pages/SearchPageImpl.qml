@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
+import "../components/SoftUI"
 
 Item {
     id: root
@@ -15,17 +16,19 @@ Item {
 
     Rectangle {
         id: headerRect
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         height: 90
         z: 1
-        color: "white"
+        color: "#ebebeb"
     }
 
     DropShadow {
         source: headerRect
         anchors.fill: headerRect
+
         radius: 16
         samples: 32
         verticalOffset: -0.15
