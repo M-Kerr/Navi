@@ -7,7 +7,6 @@
         <file>edge-gradient.png</file>
         <file>output.nmea.txt</file>
         <file>car-focus.png</file>
-        <file>car-focus2.png</file>
         <file>mapbox/aerialway.svg</file>
         <file>mapbox/airfield.svg</file>
         <file>mapbox/airport.svg</file>
@@ -196,5 +195,8 @@
         <file>mapbox/windmill.svg</file>
         <file>mapbox/zoo.svg</file>
         <file>marker.png</file>
+        <file>leftArrow.svg</file>
+        <file>locationMarker.svg</file>
+        <file>cameraFocus.svg</file>
     </qresource>
 </RCC>
