@@ -39,7 +39,7 @@ ApplicationWindow {
     property bool night
     property color bgColor: night? "black" : "lightgrey"
 
-    MainMapPage {
+    MapPage {
         id: mainMapPage
 
         following: applicationWindow.following

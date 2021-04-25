@@ -13,11 +13,11 @@
         <file>pages/SearchPage.qml</file>
         <file>pages/SearchPageImpl.qml</file>
         <file>pages/map/PlacesMapView.qml</file>
-        <file>pages/map/MainMapPage.qml</file>
-        <file>pages/map/MainMapStates.qml</file>
         <file>singletons/EsriRouteModel.qml</file>
         <file>singletons/Logic.qml</file>
         <file>singletons/GPS.qml</file>
         <file>components/GlassPullPane.qml</file>
+        <file>pages/map/MapPage.qml</file>
+        <file>pages/map/MapPageStates.qml</file>
     </qresource>
 </RCC>

@@ -32,9 +32,9 @@ Item {
     }
     StackView.onDeactivating: searchBar.enabled = false
 
-    MainMapStates { id: mainMapStates }
-    states: mainMapStates.states
-    transitions: mainMapStates.transitions
+    MapPageStates { id: mapPageStates }
+    states: mapPageStates.states
+    transitions: mapPageStates.transitions
     state: ""
     onFollowingChanged: {
         if (following) map.center = currentCoordinate;
