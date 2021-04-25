@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
 import MapboxPlugin 1.0
@@ -34,7 +35,16 @@ Item {
     MainMapStates { id: mainMapStates }
     states: mainMapStates.states
     transitions: mainMapStates.transitions
-    state: root.following ? "following" : ""
+    state: ""
+    onFollowingChanged: {
+        if (following) map.center = currentCoordinate;
+    }
+    onCurrentCoordinateChanged: {
+        if (following) {
+            map.center = currentCoordinate
+        }
+    }
+
 
     Image {
         anchors.fill: parent
@@ -63,6 +73,7 @@ Item {
 
         Binding {
             target: EsriSearchModel
+
             property: "searchTerm"
             value: searchBar.text
         }
@@ -72,17 +83,37 @@ Item {
             else opacity = 0;
         }
 
-        Rectangle {
+        //        Rectangle {
+        SoftGlassBox {
             id: backRect
-            anchors.left: parent.left
-            anchors.bottom: parent.bottom
+
             height: parent.height
             width:  0
+            anchors {
+                left: parent.left
+                bottom: parent.bottom
+            }
+
+            source: map
             radius: width
-            color: root.bgColor
-            clip: true
+            blurRadius: 30
+            frost.color {
+                hsvHue: 0
+                hsvSaturation: 0
+                hsvValue: 0.60
+                a: 0.65
+            }
+            //            shadow.visible: true
             enabled: false
             opacity: 0.0
+            layer.enabled: true
+            layer.effect: InnerShadow {
+                radius: 6
+                samples: 20
+                verticalOffset: 0.75
+                horizontalOffset: 0.75
+                color: "#c8c8c8"
+            }
 
             Label {
                 anchors.centerIn: parent
@@ -125,7 +156,6 @@ Item {
             onAccepted: {
                 if (text)
                 {
-                    //TODO center-fit map on all markers
                     map.fitViewportToMapItems()
                     mainMapPage.state = ""
                 }
@@ -139,7 +169,7 @@ Item {
 
                 source: map
                 radius: parent.radius
-                blurRadius: 30
+                blurRadius: 50
                 frost.color {
                     hsvHue: 0
                     hsvSaturation: 0
@@ -199,44 +229,38 @@ Item {
         }
     }
 
-    Image {
-        id: cameraFollowButton
+    SoftPlateauBoxV2 {
+        id: cameraFocusImageRect
 
-        height: 80
-        width: 80
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.margins: 20
         z: 1
+        height: 60
+        width: 60
+        anchors {
+            left: parent.left
+            bottom: parent.bottom
+            margins: 40
+        }
+
+        radius: width / 8
         opacity: 0
+        scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
+
         visible: {
             (root.StackView.status === StackView.Active) ? !root.following
-                                                   : false
+                                                         : false
         }
-        //        source: "qrc:car-focus.png"
-        source: "../../resources/car-focus.png"
-
-        MouseArea {
-            id: area
-            anchors.fill: parent
-            onClicked: {
-                root.following = true
-            }
-        }
-
-        scale: area.pressed ? 0.85 : 1.0
 
         NumberAnimation {
             id: opacityOffAnimation
 
-            target: cameraFollowButton
+            target: cameraFocusImageRect
             property: "opacity"; to: 0; duration: 200
             alwaysRunToEnd: false
         }
         NumberAnimation {
             id: opacityOnAnimation
 
-            target: cameraFollowButton
+            target: cameraFocusImageRect
             property: "opacity"; to: 1; duration: 200
             alwaysRunToEnd: false
         }
@@ -254,11 +278,58 @@ Item {
         Behavior on scale {
             NumberAnimation {}
         }
+
+        MouseArea {
+            id: cameraFocusMouseArea
+            anchors.fill: parent
+            onClicked: {
+                root.following = true
+            }
+        }
+
+        Image {
+            id: cameraFocusImage
+
+            height: 50
+            width: 50
+            anchors.centerIn: parent
+            // source: "qrc:resources/cameraFocus.svg"
+            source: "../../resources/cameraFocus.svg"
+
+        }
     }
 
     Map {
         id: map
+
         anchors.fill: parent
+
+        state: root.following ? "following" : ""
+        states: [
+            State {
+                name: ""
+                PropertyChanges {
+                    target: map;
+                    tilt: 0;
+                    bearing: 0;
+                    zoomLevel: map.zoomLevel
+                }
+            },
+            State {
+                name: "following"
+                // TODO: Change tilt and zoomLevel to more comfortable values
+                PropertyChanges { target: map; tilt: 60; zoomLevel: 20 }
+            }
+        ]
+        transitions: [
+            Transition {
+                from: "*"
+                to: "following"
+                RotationAnimation { target: map; property: "bearing"; duration: 100; direction: RotationAnimation.Shortest }
+                NumberAnimation { target: map; property: "zoomLevel"; duration: 100 }
+                NumberAnimation { target: map; property: "tilt"; duration: 100 }
+            }
+        ]
 
         Connections {
             target: EsriSearchModel
@@ -269,10 +340,12 @@ Item {
             target: Logic
 
             function onFitViewportToMapItems( items ) {
+                root.following = false
                 map.fitViewportToMapItems( items )
             }
 
             function onSelectPlace( modelItem ) {
+                root.following = false
                 map.centerView(modelItem.place.location.coordinate)
             }
         }
@@ -290,9 +363,7 @@ Item {
             return style;
         }
 
-        // WARNING: Dev environment only, not meant for production
         center: root.following ? root.currentCoordinate : map.center;
-        //                        positionSource.position.coordinate : map.center;
 
         zoomLevel: 12.25
         minimumZoomLevel: 0
@@ -335,8 +406,9 @@ Item {
         }
 
         onCenterChanged: {
-            if (previousLocation.coordinate === center || !root.following)
+            if (previousLocation.coordinate === center || !root.following) {
                 return;
+            }
 
             bearingAnimation.to = previousLocation.coordinate.azimuthTo(center);
             bearingAnimation.start();
@@ -345,16 +417,50 @@ Item {
         }
 
         MapQuickItem {
-            sourceItem: Image {
-                id: carMarker
-                //                source: "qrc:///current-location.png"
-                source: "../../resources/current-location.png"
+            id: carMarker
+
+            // WARNING: carMarker's zoomLevel must be 0. When != 0, MapQuickItem's
+            // rotation breaks. When MapQuickItem.zoomLevel !=0, it no longer
+            // rotates on the sourceItem's axis but rather some window
+            // coordinate axis. It may be possible to create a custom
+            // transformOrigin when zoomLevel != 0 that identifies the
+            // carMarker anchorPoint as the transformOrigin.
+            coordinate: root.currentCoordinate
+            anchorPoint.x: sourceItem.width / 2
+            anchorPoint.y: sourceItem.height / 2
+
+            onCoordinateChanged: {
+                if (following) {
+                    carMarkerRotationAnimation.to = previousCarLocation.coordinate.azimuthTo(coordinate) - map.bearing
+                    carMarkerRotationAnimation.start()
+                } else {
+                    carMarkerRotationAnimation.to = previousCarLocation.coordinate.azimuthTo(coordinate);
+                    carMarkerRotationAnimation.start()
+                }
+                previousCarLocation.coordinate = coordinate
             }
 
-            zoomLevel: map.zoomLevel
-            coordinate: root.currentCoordinate
-            anchorPoint.x: carMarker.width / 2
-            anchorPoint.y: carMarker.height / 2
+            RotationAnimation {
+                id: carMarkerRotationAnimation
+
+                target: carMarker
+                duration: 250
+                alwaysRunToEnd: false
+                direction: RotationAnimation.Shortest
+            }
+
+            Location {
+                id: previousCarLocation
+
+                coordinate: root.currentCoordinatee
+            }
+
+            sourceItem: Image {
+                height: 40
+                width: 40
+                //                source: "qrc:../../resources/locationMarker.svg"
+                source: "../../resources/locationMarker.svg"
+            }
         }
 
         Shortcut {
