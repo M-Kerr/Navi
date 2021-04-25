@@ -32,6 +32,7 @@ Item {
         radius: 16
         samples: 32
         verticalOffset: -0.15
+        color: "#c8c8c8"
     }
 
     //    ScrollView {
@@ -82,6 +83,22 @@ Item {
     //        }
     //    }
 
+    SoftGlassBox {
+        id: softGlassBox
+
+        anchors.fill: listView
+
+        source: map
+        radius: 0
+        blurRadius: 60
+        color {
+            hsvHue: 0
+            hsvSaturation: 0
+            hsvValue: 0.92
+            a: 0.80
+        }
+    }
+
     ListView {
         id: listView
         anchors.left: parent.left
@@ -102,7 +119,13 @@ Item {
             background: Rectangle {
                 border.width: 1
                 border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
-                color: bgColor
+                color {
+                    hsvHue: 0
+                    hsvSaturation: 0
+                    hsvValue: 0.92
+                    a: 0.40
+                }
+                opacity: 0.95
             }
 
             MouseArea {
