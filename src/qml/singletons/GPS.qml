@@ -17,7 +17,7 @@ Item {
     CheapRuler {
         id: ruler
 
-        property real carSpeed: 35
+        property real carSpeed: 95 //35
         property int nextTurnInstructionIndex: 1
         property var route
         property int _sumSegmentsDistance
