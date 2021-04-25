@@ -59,17 +59,66 @@ Item {
         }
     }
 
+    SoftGlassBox {
+        id: softGlassBox
+
+        height: headerRect.height
+        anchors {
+            top: root.top
+            left: root.left
+            right: root.right
+        }
+
+        source: map
+        radius: 0
+        //            blurRadius: 90
+        blurRadius: 60
+        shadow {
+            //                visible: height > 0 ? true: false
+            horizontalOffset: 0
+            verticalOffset: 0.5
+            radius: 8
+        }
+        color {
+            hsvHue: 0
+            hsvSaturation: 0
+            hsvValue: 0.92
+            a: 0.40
+        }
+        border {
+            width: 0
+        }
+
+        Behavior on height {
+            NumberAnimation { duration: 200 }
+        }
+
+        Timer {
+            id: glassBoxHeightTimer
+
+            interval: 300
+            onTriggered: {
+                parent.height = headerRect.height
+            }
+        }
+    }
+
     Rectangle {
         id: headerRect
 
-        height: parent.height * 0.2
+        height: parent.height * 0.15
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
         }
 
-        color: "black"
+        color {
+            hsvHue: 0
+            hsvSaturation: 0
+            hsvValue: 0.72
+            a: 0.60
+        }
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -200,49 +249,6 @@ Item {
         }
     }
 
-    SoftGlassBox {
-            id: softGlassBox
-
-            height: 0
-            anchors {
-                top: listView.top
-                left: listView.left
-                right: listView.right
-            }
-
-            source: map
-            radius: 0
-//            blurRadius: 90
-            blurRadius: 30
-            shadow {
-//                visible: height > 0 ? true: false
-                horizontalOffset: 0
-                verticalOffset: 0.5
-                radius: 8
-            }
-            color {
-                    hsvHue: 0
-                    hsvSaturation: 0
-                    hsvValue: 0.92
-                    a: 0.40
-            }
-            border {
-                width: 0
-            }
-
-            Behavior on height {
-                NumberAnimation { duration: 200 }
-            }
-
-            Timer {
-                id: glassBoxHeightTimer
-
-                interval: 300
-                onTriggered: {
-                    parent.height = 0
-                }
-            }
-    }
 
     ListView {
         id: listView
@@ -276,7 +282,7 @@ Item {
 
                 let newHeight = (segs.length - 1) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
-                softGlassBox.height = height
+                softGlassBox.height = height + headerRect.height
 
                 interactive = true
 
@@ -380,10 +386,8 @@ Item {
             NumberAnimation { property: "y"; duration: 250 }
         }
 
-        // I need to figure out why softglassbox is hiding all of the delegate
-        //text
-                delegate: Item {
-                    id: delegateItem
+        delegate: Item {
+            id: delegateItem
 
             property int staticIndex
             property bool hasManeuver: segment.maneuver && segment.maneuver.valid
@@ -396,6 +400,21 @@ Item {
             height: !visible? 0: ListView.view.delegateHeight
 
             enabled: staticIndex > root.currentDirectionIndex
+
+            Rectangle {
+                id: delegateBackgroundRect
+
+                anchors.fill: parent
+                border.width: 1
+                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.5)
+                color {
+                    hsvHue: 0
+                    hsvSaturation: 0
+                    hsvValue: 0.92
+                    a: 0.40
+                }
+                opacity: 0.999
+            }
 
             Item {
                 // Workaround to fix small gaps between delegates when clip
