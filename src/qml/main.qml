@@ -18,9 +18,12 @@ ApplicationWindow {
     //    width: 1024
     //    height: 768
     //    visibility: ApplicationWindow.FullScreen
+
     // WARNING: Dev tool, remove zoomInfo on release
     Text {
         id: zoomInfo
+
+        visible: false
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 100
