@@ -15,7 +15,7 @@ import ".."
 Item {
     id: root
 
-    property bool following
+    property bool following: true
     property bool traffic
     property bool night
     property color bgColor
@@ -304,37 +304,10 @@ Item {
 
         anchors.fill: parent
 
+        MapStates { id: mapStates }
+        states: mapStates.states
+        transitions: mapStates.transitions
         state: root.following ? "following" : ""
-        states: [
-            State {
-                name: ""
-                PropertyChanges {
-                    target: map;
-                    tilt: 0;
-                    bearing: 0;
-                    zoomLevel: map.zoomLevel
-                }
-            },
-            State {
-                name: "following"
-                // TODO: Change tilt and zoomLevel to more comfortable values
-                PropertyChanges { target: map; tilt: 60; zoomLevel: 20 }
-            }
-        ]
-        transitions: [
-            Transition {
-                from: "*"
-                to: "following"
-                RotationAnimation { target: map; property: "bearing"; duration: 100; direction: RotationAnimation.Shortest }
-                NumberAnimation { target: map; property: "zoomLevel"; duration: 100 }
-                NumberAnimation { target: map; property: "tilt"; duration: 100 }
-            }
-        ]
-
-        Connections {
-            target: EsriSearchModel
-
-        }
 
         Connections {
             target: Logic
@@ -542,6 +515,7 @@ Item {
 
         function onNavigate() {
             root.state = "navigating"
+            root.following = true
         }
 
         function onEndNavigation () {

@@ -19,5 +19,6 @@
         <file>components/GlassPullPane.qml</file>
         <file>pages/map/MapPage.qml</file>
         <file>pages/map/MapPageStates.qml</file>
+        <file>pages/map/MapStates.qml</file>
     </qresource>
 </RCC>
