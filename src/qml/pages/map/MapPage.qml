@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
@@ -44,7 +45,6 @@ Item {
             map.center = currentCoordinate
         }
     }
-
 
     Image {
         anchors.fill: parent
@@ -207,96 +207,6 @@ Item {
         id: directionsView
         z: 1
         visible: false
-    }
-
-    Button {
-        id: endNavigationButton
-
-        width: implicitWidth + 80
-        anchors {
-            horizontalCenter: parent.horizontalCenter
-            top: root.top
-            margins: 20
-        }
-
-        z: 2
-        visible: false
-        text: "End Navigation"
-
-        onClicked: {
-            Logic.endNavigation()
-            visible = false
-        }
-    }
-
-    SoftPlateauBoxV2 {
-        id: cameraFocusImageRect
-
-        z: 1
-        height: 60
-        width: 60
-        anchors {
-            left: parent.left
-            bottom: parent.bottom
-            margins: 40
-        }
-
-        radius: width / 8
-        opacity: 0
-        scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
-
-        visible: {
-            (root.StackView.status === StackView.Active) ? !root.following
-                                                         : false
-        }
-
-        NumberAnimation {
-            id: opacityOffAnimation
-
-            target: cameraFocusImageRect
-            property: "opacity"; to: 0; duration: 200
-            alwaysRunToEnd: false
-        }
-        NumberAnimation {
-            id: opacityOnAnimation
-
-            target: cameraFocusImageRect
-            property: "opacity"; to: 1; duration: 200
-            alwaysRunToEnd: false
-        }
-
-        onVisibleChanged: {
-            if (visible) {
-                opacityOffAnimation.stop()
-                opacityOnAnimation.start()
-            } else {
-                opacityOnAnimation.stop()
-                opacityOffAnimation.start()
-            }
-        }
-
-        Behavior on scale {
-            NumberAnimation {}
-        }
-
-        MouseArea {
-            id: cameraFocusMouseArea
-            anchors.fill: parent
-            onClicked: {
-                root.following = true
-            }
-        }
-
-        Image {
-            id: cameraFocusImage
-
-            height: 50
-            width: 50
-            anchors.centerIn: parent
-            // source: "qrc:resources/cameraFocus.svg"
-            source: "../../resources/cameraFocus.svg"
-
-        }
     }
 
     Map {
@@ -497,6 +407,76 @@ Item {
 
         Component.onCompleted: {
             map.createViews()
+        }
+    }
+
+    SoftPlateauBoxV2 {
+        id: cameraFocusImageRect
+
+        z: 1
+        height: 60
+        width: 60
+        y: parent.height - (75 + 20 + height)
+        anchors {
+            left: parent.left
+            margins: 20
+        }
+
+        radius: width / 8
+        opacity: 0
+        scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
+
+        visible: {
+            (root.StackView.status === StackView.Active) ? !root.following
+                                                         : false
+        }
+
+        NumberAnimation {
+            id: opacityOffAnimation
+
+            target: cameraFocusImageRect
+            property: "opacity"; to: 0; duration: 200
+            alwaysRunToEnd: false
+        }
+        NumberAnimation {
+            id: opacityOnAnimation
+
+            target: cameraFocusImageRect
+            property: "opacity"; to: 1; duration: 200
+            alwaysRunToEnd: false
+        }
+
+        onVisibleChanged: {
+            if (visible) {
+                opacityOffAnimation.stop()
+                opacityOnAnimation.start()
+            } else {
+                opacityOnAnimation.stop()
+                opacityOffAnimation.start()
+            }
+        }
+
+        Behavior on scale {
+            NumberAnimation {}
+        }
+
+        MouseArea {
+            id: cameraFocusMouseArea
+            anchors.fill: parent
+            onClicked: {
+                root.following = true
+            }
+        }
+
+        Image {
+            id: cameraFocusImage
+
+            height: 50
+            width: 50
+            anchors.centerIn: parent
+            // source: "qrc:resources/cameraFocus.svg"
+            source: "../../resources/cameraFocus.svg"
+
         }
     }
 
