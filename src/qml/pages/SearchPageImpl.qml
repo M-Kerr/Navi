@@ -6,6 +6,7 @@ import QtGraphicalEffects 1.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
+import AppUtil 1.0
 import "../components/SoftUI"
 
 Item {
@@ -119,12 +120,7 @@ Item {
             background: Rectangle {
                 border.width: 1
                 border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
-                color {
-                    hsvHue: 0
-                    hsvSaturation: 0
-                    hsvValue: 0.92
-                    a: 0.40
-                }
+                color: AppUtil.color.primary
                 opacity: 0.95
             }
 
@@ -180,8 +176,8 @@ Item {
                         if (i !== -1) place.name.slice(0, i);
                         else place.name
                     }
-                    font.bold: true
-                    font.family: "Arial"
+                    font: AppUtil.headerFont
+                    color: AppUtil.color.fontPrimary
                 }
 
                 Label {
@@ -189,7 +185,8 @@ Item {
 
                     height: parent.height / 2
                     text: place.location.address.street
-                    font.family: "Arial"
+                    font: AppUtil.subHeaderFont
+                    color: AppUtil.color.fontSecondary
                 }
             }
 
@@ -206,16 +203,16 @@ Item {
 
                     Layout.alignment: Qt.AlignHCenter
                     text: Math.round((distance / 1760) * 100) / 100
-                    font.bold: true
-                    font.family: "Arial"
+                    font: AppUtil.headerFont
+                    color: AppUtil.color.fontPrimary
                     verticalAlignment: Text.AlignBottom
                 }
                 Label {
                     id: milesTextLabel
                     Layout.alignment: Qt.AlignHCenter
                     text: "miles"
-                    font.weight: Font.Thin
-                    font.family: "Arial"
+                    font: AppUtil.subHeaderFont
+                    color: AppUtil.color.fontSecondary
                     verticalAlignment: Text.AlignTop
                 }
             }

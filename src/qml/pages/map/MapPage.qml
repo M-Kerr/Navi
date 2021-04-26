@@ -8,6 +8,7 @@ import MapboxPlugin 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
 import GPS 1.0
+import AppUtil 1.0
 import "../../components/SoftUI"
 import "../../components"
 import "../../animations"
@@ -145,6 +146,7 @@ Item {
             }
 
             color: "transparent"
+            input.placeholderTextColor: AppUtil.color.fontSecondary
             clearButton.topShadow.visible: false
 
             onInputActiveFocusChanged: {

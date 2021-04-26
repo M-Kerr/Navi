@@ -1,6 +1,7 @@
 pragma Singleton
 
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
 //    property real radius: 50
 //    property real shadowRadius: 60
@@ -18,25 +19,13 @@ import QtQuick 2.0
 QtObject {
     id: root
 
-    property QtObject header: Text {
-        font {
-        }
-    }
+    property font headerFont: Qt.font({bold: true, family: "Arial"})
 
-    property QtObject secondaryHeader: Text {
-        font {
-        }
-    }
+//    property font secondaryHeaderFont: Qt.font({})
 
-    property QtObject subHeader: Text {
-        font {
-        }
-    }
+    property font subHeaderFont: Qt.font({family: "Arial"})
 
-    property QtObject body: Text {
-        font {
-        }
-    }
+//    property font bodyFont: Qt.font({})
 
     property QtObject fontFamilyPrimary: FontLoader {
         //            source:
@@ -46,13 +35,13 @@ QtObject {
     }
 
     property QtObject color: QtObject {
-        property color primary
-        property color secondary
+        property color primary: Qt.hsva(0.0, 0.0, 0.92, 1)
+        property color secondary: Qt.hsva(0.0, 0.75, 0.52, 1)
         property color accent
         property color background
         property color backgroundSecondary
-        property color fontPrimary
-        property color fontSecondary
+        property color fontPrimary: Qt.hsva(6 * (1/360), 0.25, 0.32, 1)
+        property color fontSecondary: Qt.hsva(4 * (1/360), 0.10, 0.52, 1)
         property color fontAccent
     }
 }

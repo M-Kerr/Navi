@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
+import AppUtil 1.0
 import "pages/map"
 import "components"
 import "components/SoftUI"
@@ -119,12 +120,16 @@ ApplicationWindow {
                     id: arrivalTime
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "Temp."
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
                 }
 
                 Label {
                     id: arrivalLabel
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "arrival"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
                 }
             }
 
@@ -135,12 +140,16 @@ ApplicationWindow {
                     id: timeRemaining
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "Temp."
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
                 }
 
                 Label {
                     id: timeLabel
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "min"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
                 }
             }
             ColumnLayout {
@@ -150,12 +159,16 @@ ApplicationWindow {
                     id: milesRemaining
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "Temp."
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
                 }
 
                 Label {
                     id: milesLabel
                     ColumnLayout.alignment: Qt.AlignLeft
                     text: "mi"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
                 }
             }
 
@@ -186,41 +199,33 @@ ApplicationWindow {
                         background.shadow.visible = false
                         background.color.a /= 1.2
                         background.blurRadius /= 1.2
-                        background.border.width = 0
+                        resumeButton.scale = 0.99
                     } else {
                         background.shadow.visible = true
                         background.color.a *= 1.2
                         background.blurRadius *= 1.2
-                        background.border.width = 1
+                        resumeButton.scale = 1.0
                     }
                 }
 
                 background: SoftGlassBox {
-                    source: mainMapPage
+                    source: tripPullPane.source
                     blurRadius: tripPullPane.blurRadius * 2
                     color {
                         hsvHue: 0.0
                         hsvSaturation: 0.0
                         hsvValue: 0.80
-                        a: tripPullPane.glassOpacity * 2
+                        a: Math.min(tripPullPane.color.a * 2, 1.0)
                     }
                     radius: 0
                     width: resumeButton.width + 1
                     height: resumeButton.height + 1
-                    border {
-                        width: 1
-                        color {
-                            hsvHue: 0.0
-                            hsvSaturation: 0.0
-                            hsvValue: 0.90
-                            a: 0.40
-                        }
-                    }
                     shadow {
                         visible: true
                         horizontalOffset: 0
-                        verticalOffset: -0.3
-                        radius: 14
+                        verticalOffset: 0
+                        radius: 4
+                        color: Qt.darker(resumeButton.background.color, 3.0)
                     }
                 }
             }
@@ -252,41 +257,33 @@ ApplicationWindow {
                         background.shadow.visible = false
                         background.color.a /= 1.2
                         background.blurRadius /= 1.2
-                        background.border.width = 0
+                        endNavigationButton.scale = 0.99
                     } else {
                         background.shadow.visible = true
                         background.color.a *= 1.2
                         background.blurRadius *= 1.2
-                        background.border.width = 1
+                        endNavigationButton.scale = 1.0
                     }
                 }
 
                 background: SoftGlassBox {
-                    source: mainMapPage
+                    source: tripPullPane.source
                     blurRadius: tripPullPane.blurRadius * 2
-                    color {
-                        hsvHue: 0.0
-                        hsvSaturation: 0.0
-                        hsvValue: 0.80
-                        a: tripPullPane.glassOpacity * 2
-                    }
+                    color: AppUtil.color.secondary
                     radius: height / 6
                     width: endNavigationButton.width + 1
                     height: endNavigationButton.height + 1
-                    border {
-                        width: 1
-                        color {
-                            hsvHue: 0.0
-                            hsvSaturation: 0.0
-                            hsvValue: 0.90
-                            a: 0.40
-                        }
-                    }
                     shadow {
                         visible: true
                         horizontalOffset: 0
-                        verticalOffset: -0.3
-                        radius: 14
+                        verticalOffset: 0
+                        radius: 4
+                        color: Qt.darker(endNavigationButton.background.color,
+                                         3.0)
+                    }
+
+                    Component.onCompleted: {
+                        color.a = Math.min(tripPullPane.color.a * 2, 1.0)
                     }
                 }
 
@@ -304,6 +301,11 @@ ApplicationWindow {
                         id: endLabel
 
                         text: "End"
+                        color: AppUtil.color.primary
+                        font: AppUtil.headerFont
+                        Component.onCompleted: {
+                            font.pixelSize = 16
+                        }
                     }
 
                     Label {
@@ -345,33 +347,3 @@ ApplicationWindow {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
