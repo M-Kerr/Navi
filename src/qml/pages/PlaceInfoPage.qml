@@ -220,7 +220,7 @@ Page {
                     hsvHue: 0.0
                     hsvSaturation: 0.0
                     hsvValue: 0.80
-                    a: glassPullPane.glassOpacity * 2
+                    a: Math.min(glassPullPane.color.a * 2, 1.0)
                 }
                 radius: 0
                 width: directionsButton.width + 1
