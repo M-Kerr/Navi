@@ -14,17 +14,14 @@ Item {
         getDirections ()
     }
 
+    // EsriRouteModel
+    signal tripStateUpdated()
+
     // Map
     signal fitViewportToPlacesMapView ()
     signal fitViewportToMapItems ( var items )
     signal navigate ()
     signal endNavigation ()
-
-    // StackView
-    signal pushStackView ( string page, var properties )
-    signal popStackView ()
-    signal unwindStackView ()
-
     signal selectPlace ( var modelItem )
     onSelectPlace: {
         // WARNING: replace with qrc: for production
@@ -39,4 +36,9 @@ Item {
         fitViewportToPlacesMapView()
         popStackView()
     }
+
+    // StackView
+    signal pushStackView ( string page, var properties )
+    signal popStackView ()
+    signal unwindStackView ()
 }
