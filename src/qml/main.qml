@@ -4,8 +4,10 @@ import QtLocation 5.15
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+import QtQml 2.15
 import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
+import EsriRouteModel 1.0
 import Logic 1.0
 import AppUtil 1.0
 import "pages/map"
@@ -119,7 +121,6 @@ ApplicationWindow {
                 Label {
                     id: arrivalTime
                     ColumnLayout.alignment: Qt.AlignLeft
-                    text: "Temp."
                     color: AppUtil.color.fontPrimary
                     font: AppUtil.headerFont
                 }
@@ -139,7 +140,6 @@ ApplicationWindow {
                 Label {
                     id: timeRemaining
                     ColumnLayout.alignment: Qt.AlignLeft
-                    text: "Temp."
                     color: AppUtil.color.fontPrimary
                     font: AppUtil.headerFont
                 }
@@ -147,7 +147,6 @@ ApplicationWindow {
                 Label {
                     id: timeLabel
                     ColumnLayout.alignment: Qt.AlignLeft
-                    text: "min"
                     color: AppUtil.color.fontSecondary
                     font: AppUtil.subHeaderFont
                 }
@@ -158,7 +157,6 @@ ApplicationWindow {
                 Label {
                     id: milesRemaining
                     ColumnLayout.alignment: Qt.AlignLeft
-                    text: "Temp."
                     color: AppUtil.color.fontPrimary
                     font: AppUtil.headerFont
                 }
@@ -166,7 +164,6 @@ ApplicationWindow {
                 Label {
                     id: milesLabel
                     ColumnLayout.alignment: Qt.AlignLeft
-                    text: "mi"
                     color: AppUtil.color.fontSecondary
                     font: AppUtil.subHeaderFont
                 }
@@ -345,5 +342,66 @@ ApplicationWindow {
         function onEndNavigation () {
             tripPullPane.visible = false
         }
+
+        function onTripStateUpdated () {
+            // EsriRouteModel.tripTimeRemaining
+            let hours = Math.floor(EsriRouteModel.tripTimeRemaining / 3600)
+            let minutes = Math.floor((EsriRouteModel.tripTimeRemaining % 3600)
+                                     / 60);
+            if (hours) {
+                timeLabel.text = "hrs"
+                timeRemaining.text = hours
+                if (hours < 14) timeRemaining.text += ":" + minutes;
+            } else {
+                timeLabel.text = "min"
+                if (!minutes) timeRemaining.text = "< 1";
+                else timeRemaining.text = minutes;
+            }
+
+            // EsriRouteModel.tripArrivalTime
+            arrivalTime.text = EsriRouteModel.tripArrivalTime.toLocaleTimeString(Locale.ShortFormat);
+
+            // EsriRouteModel.tripDistanceRemaining
+            if (EsriRouteModel.tripDistanceRemaining > 1000) {
+                // Convert to miles
+                milesRemaining.text = Math.round(
+                            (EsriRouteModel.tripDistanceRemaining / 5280) * 10)
+                            / 10;
+                milesLabel.text = "mi"
+            } else {
+                milesRemaining.text = EsriRouteModel.tripDistanceRemaining
+                milesLabel.text = "ft"
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
