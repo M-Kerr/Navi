@@ -158,9 +158,9 @@ Page {
                     Layout.alignment: Qt.AlignHCenter
                     text: {
                        if ( root.place ) {
-                            Math.round(
-                                (root.placeDistance / 1760) * 100
-                                ) / 100 + " miles away" ;
+                           // meters to miles conversion
+                           Math.round((root.placeDistance / 1609) * 100) / 100
+                                   + " miles away (geodesic)" ;
                        }
                        else "";
                     }

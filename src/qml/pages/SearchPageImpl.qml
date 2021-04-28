@@ -202,7 +202,9 @@ Item {
                     id: milesValueLabel
 
                     Layout.alignment: Qt.AlignHCenter
-                    text: Math.round((distance / 1760) * 100) / 100
+                    // PlaceSearchModel returns GEODESIC METERS! (Distance as the crow flies)
+                    // meters to miles conversion
+                    text: Math.round((distance / 1609) * 100) / 100
                     font: AppUtil.headerFont
                     color: AppUtil.color.fontPrimary
                     verticalAlignment: Text.AlignBottom

@@ -18,31 +18,35 @@ Item {
     CheapRuler {
         id: ruler
 
-        // property real currentDistance === total distance traveled in millimeters
-        // weeeird
+        // km/h
         property real carSpeed: 95 //35
         property int nextTurnInstructionIndex: 1
         property var route
+        // Meters
         property int _sumSegmentsDistance
 
-        path: [QtPositioning.coordinate(34.049988197958406, -118.31766833213446)]
-
+        // currentDistance: percentage of trip traveled
         PropertyAnimation on currentDistance {
             id: currentDistanceAnimation
 
-            duration: ruler.distance / ruler.carSpeed * 60 * 60 * 1000
+            // ruler.distance: kilometers
+            duration: (ruler.distance / ruler.carSpeed) * 60 * 60 * 1000
             alwaysRunToEnd: false
         }
 
+        // GPS position when app launches
+        path: [QtPositioning.coordinate(34.049988197958406, -118.31766833213446)]
+
         // WARNING: This is a simple algorithm to pre-warn turn instructions,
-        // for demonstration purposes only with the CheapRuler vehicle.
+        // for demonstration purposes only with the CheapRuler GPS vehicle.
         // For a smoother user experience with actual vehicle tracking,
         // more variables should be accounted for, e.g., vehicle speed and
         // travel time to next segment.
         onCurrentDistanceChanged: {
 
             // TLDR: when <= 100 feet from end of segment, present next
-            // instruction.
+            // turn instruction.
+            // How:
             // Continually adds the next segment's distance into
             // _sumSegmentsDistance when the current segment is completed.
             // When the difference between total distance traveled
@@ -52,12 +56,14 @@ Item {
             // _sumSegmentDistance).
 
             // 1 meter = 3.28084 feet
-            if (_sumSegmentsDistance - (currentDistance * 1000 * 3.28084) <= 100 &&
-                // Stop incrementing once we're at the final segment's instruction
-                nextTurnInstructionIndex < route.segments.length - 1) {
+            if ((_sumSegmentsDistance - (currentDistance * 1000))  * 3.28084
+                        <= 100
+                        && nextTurnInstructionIndex
+                        < route.segments.length - 1) {
+
                 nextTurnInstructionIndex++;
-                // Add the next segment's distance to the sum
-                _sumSegmentsDistance += route.segments[nextTurnInstructionIndex].distance
+                _sumSegmentsDistance += route
+                                .segments[nextTurnInstructionIndex].distance;
             }
         }
     }
@@ -69,6 +75,7 @@ Item {
             ruler.nextTurnInstructionIndex = 1
             ruler.route = EsriRouteModel.routeModel.get(0)
             // Initialize _sumSegmentsDistance with the first segment's distance
+            // Meters
             ruler._sumSegmentsDistance = ruler.route.segments[ruler.nextTurnInstructionIndex].distance
 
             ruler.path = EsriRouteModel.routeModel.get(0).path
@@ -77,6 +84,10 @@ Item {
             currentDistanceAnimation.stop();
             currentDistanceAnimation.to = ruler.distance;
             currentDistanceAnimation.start();
+        }
+
+        function onEndNavigation () {
+            currentDistanceAnimation.stop();
         }
     }
 

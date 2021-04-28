@@ -15,34 +15,18 @@ Item {
     property int tripTimeRemaining
     // Date
     property var tripArrivalTime
-    // Feet
+    // Meters
     property int tripDistanceRemaining
 
     property int _currentRouteSegment
     property var _routeSegments
 
     // NOT a total of distance remaining. Used in conjunction with
-    // _currentDistanceFt to find the distance remaining in the current segment,
-    // sums (increments) with the next segment's distance as the segment is
-    // entered.
+    // GPS.ruler.currentDistance to find the distance remaining in the current
+    // segment, sums (increments) with the next segment's distance as the
+    // segment is entered.
+    // Meters
     property int _sumRemainingSegmentDistance
-
-    // GPS.ruler.currentDistance is in millimeters, tracks trip distance traveled
-    property real _currentDistanceFt: GPS.ruler.currentDistance * 1000 * 3.28084
-
-
-    on_CurrentDistanceFtChanged: {
-
-        let remainingSegmentDistance = _sumRemainingSegmentDistance - _currentDistanceFt
-
-        // Calculates route segment vehicle is currently traveling and
-        // increments _sumRemainingSegmentDistance
-        if (remainingSegmentDistance <= 0
-            && _currentRouteSegment < _routeSegments.length) {
-            _currentRouteSegment++
-            _sumRemainingSegmentDistance += _routeSegments[_currentRouteSegment].distance
-        }
-    }
 
     RouteModel {
         id: routeModel
@@ -72,7 +56,7 @@ Item {
             print("errorString:", errorString);
         }
 
-        // NOTE Debugging status updates. delete for release
+        // NOTE Debugging status updates. Log for release
         onStatusChanged: {
             switch (status) {
                 case RouteModel.Null: print(" No route requests have been issued "
@@ -108,17 +92,19 @@ Item {
 
     function updateTripState () {
 
-        let curSegment = root._routeSegments[root._currentRouteSegment]
-        let remainingSegmentDistance = _sumRemainingSegmentDistance - _currentDistanceFt
+        let segment = root._routeSegments[root._currentRouteSegment]
+        // real;Meters
+        let remainingSegmentDistance =  _sumRemainingSegmentDistance
+                                        - (GPS.ruler.currentDistance * 1000); // km -> m
 
         // Calculate tripTimeRemaining.
         // Subtracts the % of current segment already traveled from its
         // travel time, summing with the travel time of the remaining segments.
-        let percentCurSegRemaining = remainingSegmentDistance / curSegment.distance;
-        let curSegmentTimeRemaining = Math.round(curSegment.travelTime
-                                       * percentCurSegRemaining);
-        // sum current segment time with remaining segment times
-        let sumTime = curSegmentTimeRemaining
+        // segment.distance: meters
+        let percentSegRemaining = remainingSegmentDistance / segment.distance;
+        let segmentTimeRemaining = Math.round(segment.travelTime
+                                                 * percentSegRemaining);
+        let sumTime = segmentTimeRemaining
         for (let i = _currentRouteSegment + 1; i < root._routeSegments.length; i++) {
             sumTime += root._routeSegments[i].travelTime
         }
@@ -126,19 +112,21 @@ Item {
         tripArrivalTime = new Date(Date.now() + (tripTimeRemaining * 1000))
 
         // Calculate tripDistanceRemaining
+        // real;Meters
         let sumDistance = (remainingSegmentDistance > 0) ?
-            remainingSegmentDistance : 0;
+                remainingSegmentDistance : 0;
         for (let x = _currentRouteSegment + 1; x < _routeSegments.length; x++) {
             sumDistance += _routeSegments[x].distance
         }
-        // Meters to feet
-        tripDistanceRemaining = Math.round(sumDistance * 3.281)
+        // Meters
+        tripDistanceRemaining = Math.round(sumDistance)
 
         Logic.tripStateUpdated()
     }
 
     Connections {
         id: routeModelConnections
+
         target: routeModel
         enabled: false
 
@@ -152,6 +140,7 @@ Item {
 
     Connections {
         id: logicConnections
+
         target: Logic
 
         function onAddWaypoint ( coordinate ) {
@@ -188,5 +177,21 @@ Item {
     Connections {
         target: GPS.ruler
 
+        // GPS.ruler.currentDistance is in kilometers, tracks trip distance traveled
+        function onCurrentDistanceChanged () {
+
+            // Meters
+            let remainingSegmentDistance =      _sumRemainingSegmentDistance
+                                                - (GPS.ruler.currentDistance
+                                                   * 1000); // km -> m
+
+            // Calculates route segment vehicle is currently traveling and
+            // increments _sumRemainingSegmentDistance
+            if (remainingSegmentDistance <= 0
+                    && _currentRouteSegment < _routeSegments.length) {
+                _currentRouteSegment++
+                _sumRemainingSegmentDistance += _routeSegments[_currentRouteSegment].distance
+            }
+        }
     }
 }

@@ -152,17 +152,17 @@ ApplicationWindow {
                 }
             }
             ColumnLayout {
-                id: milesRemainingColumn
+                id: distanceRemainingColumn
 
                 Label {
-                    id: milesRemaining
+                    id: distanceRemaining
                     ColumnLayout.alignment: Qt.AlignLeft
                     color: AppUtil.color.fontPrimary
                     font: AppUtil.headerFont
                 }
 
                 Label {
-                    id: milesLabel
+                    id: distanceLabel
                     ColumnLayout.alignment: Qt.AlignLeft
                     color: AppUtil.color.fontSecondary
                     font: AppUtil.subHeaderFont
@@ -344,7 +344,7 @@ ApplicationWindow {
         }
 
         function onTripStateUpdated () {
-            // EsriRouteModel.tripTimeRemaining
+            // EsriRouteModel.tripTimeRemaining: int;seconds
             let hours = Math.floor(EsriRouteModel.tripTimeRemaining / 3600)
             let minutes = Math.floor((EsriRouteModel.tripTimeRemaining % 3600)
                                      / 60);
@@ -358,50 +358,21 @@ ApplicationWindow {
                 else timeRemaining.text = minutes;
             }
 
-            // EsriRouteModel.tripArrivalTime
+            // EsriRouteModel.tripArrivalTime: Date
             arrivalTime.text = EsriRouteModel.tripArrivalTime.toLocaleTimeString(Locale.ShortFormat);
 
-            // EsriRouteModel.tripDistanceRemaining
-            if (EsriRouteModel.tripDistanceRemaining > 1000) {
+            // EsriRouteModel.tripDistanceRemaining: int;meters
+            // Convert to feet
+            let distanceFeet = EsriRouteModel.tripDistanceRemaining *  3.281
+            if (distanceFeet > 1000) {
                 // Convert to miles
-                milesRemaining.text = Math.round(
-                            (EsriRouteModel.tripDistanceRemaining / 5280) * 10)
-                            / 10;
-                milesLabel.text = "mi"
+                distanceRemaining.text =   Math.round((distanceFeet / 5280) * 100)
+                                        / 100;
+                distanceLabel.text = "mi"
             } else {
-                milesRemaining.text = EsriRouteModel.tripDistanceRemaining
-                milesLabel.text = "ft"
+                distanceRemaining.text = distanceFeet
+                distanceLabel.text = "ft"
             }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
