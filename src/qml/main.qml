@@ -89,6 +89,8 @@ ApplicationWindow {
         }
     }
 
+    // NOTE: this would probably be more maintainable if we
+    // states
     GlassPullPane {
         id: tripPullPane
 
@@ -115,80 +117,146 @@ ApplicationWindow {
             }
 
             spacing: 20
-            ColumnLayout {
-                id: arrivalColumn
 
-                Label {
-                    id: arrivalTime
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    color: AppUtil.color.fontPrimary
-                    font: AppUtil.headerFont
+            RowLayout {
+                id: shortDetailsRow
+
+                height: childrenRect.height
+                width: childrenRect.width
+                spacing: 30
+
+                ColumnLayout {
+                    id: arrivalColumn
+
+                    Label {
+                        id: arrivalTime
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        color: AppUtil.color.fontPrimary
+                        font: AppUtil.headerFont
+                    }
+
+                    Label {
+                        id: arrivalLabel
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        text: "arrival"
+                        color: AppUtil.color.fontSecondary
+                        font: AppUtil.subHeaderFont
+                    }
                 }
 
-                Label {
-                    id: arrivalLabel
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    text: "arrival"
-                    color: AppUtil.color.fontSecondary
-                    font: AppUtil.subHeaderFont
+                ColumnLayout {
+                    id: timeRemainingColumn
+
+                    Label {
+                        id: timeRemaining
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        color: AppUtil.color.fontPrimary
+                        font: AppUtil.headerFont
+                    }
+
+                    Label {
+                        id: timeLabel
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        color: AppUtil.color.fontSecondary
+                        font: AppUtil.subHeaderFont
+                    }
                 }
-            }
+                ColumnLayout {
+                    id: distanceRemainingColumn
 
-            ColumnLayout {
-                id: timeRemainingColumn
+                    Label {
+                        id: distanceRemaining
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        color: AppUtil.color.fontPrimary
+                        font: AppUtil.headerFont
+                    }
 
-                Label {
-                    id: timeRemaining
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    color: AppUtil.color.fontPrimary
-                    font: AppUtil.headerFont
+                    Label {
+                        id: distanceLabel
+                        ColumnLayout.alignment: Qt.AlignLeft
+                        color: AppUtil.color.fontSecondary
+                        font: AppUtil.subHeaderFont
+                    }
                 }
 
-                Label {
-                    id: timeLabel
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    color: AppUtil.color.fontSecondary
-                    font: AppUtil.subHeaderFont
+                Item {
+                    id: topRowBuffer1
+
+                    RowLayout.fillWidth: true
                 }
-            }
-            ColumnLayout {
-                id: distanceRemainingColumn
-
-                Label {
-                    id: distanceRemaining
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    color: AppUtil.color.fontPrimary
-                    font: AppUtil.headerFont
-                }
-
-                Label {
-                    id: distanceLabel
-                    ColumnLayout.alignment: Qt.AlignLeft
-                    color: AppUtil.color.fontSecondary
-                    font: AppUtil.subHeaderFont
-                }
-            }
-
-            Item {
-                id: topRowBuffer1
-
-                RowLayout.fillWidth: true
             }
 
             Button {
                 id: resumeButton
 
+                property alias openAnimation: openAnimation
+                property alias closeAnimation: closeAnimation
+
                 implicitHeight: 40
+                implicitWidth: topRow.width / 2 - (topRow.spacing / 2)
 
                 visible: false
-                text: "Resume"
+                opacity: 0
+
+                SequentialAnimation {
+                    id: openAnimation
+
+                    alwaysRunToEnd: false
+
+                    ParallelAnimation {
+
+                        PropertyAction {
+                            target: shortDetailsRow
+                            property: "visible"
+                            value: false
+                        }
+
+                        PropertyAction {
+                            target: resumeButton
+                            property: "visible"
+                            value: true
+                        }
+                    }
+
+                    NumberAnimation {
+                        target: resumeButton
+                        property: "opacity"
+                        to: 1
+                        duration: 200
+                    }
+                }
+
+                SequentialAnimation {
+                    id: closeAnimation
+
+                    alwaysRunToEnd: false
+
+                    NumberAnimation {
+                        target: resumeButton
+                        property: "opacity"
+                        to: 0
+                        duration: 400
+                    }
+
+                    ParallelAnimation {
+
+                        PropertyAction {
+                            target: resumeButton
+                            property: "visible"
+                            value: false
+                        }
+
+                        PropertyAction {
+                            target: shortDetailsRow
+                            property: "visible"
+                            value: true
+                        }
+                    }
+                }
 
                 onClicked: {
-                    // NOTE: instead of calling endNavigation(), should check for
-                    // navigating state and prompt user to end navigating to
-                    // previous destination
-                    Logic.endNavigation()
-                    Logic.addWaypointAndGetDirections ( place.location.coordinate )
+                    closeAnimation.start()
+                    endNavigationButton.shrinkAnimation.start()
                 }
 
                 onDownChanged: {
@@ -214,9 +282,10 @@ ApplicationWindow {
                         hsvValue: 0.80
                         a: Math.min(tripPullPane.color.a * 2, 1.0)
                     }
-                    radius: 0
+                    radius: height / 6
                     width: resumeButton.width + 1
                     height: resumeButton.height + 1
+                    border.width: 0
                     shadow {
                         visible: true
                         horizontalOffset: 0
@@ -225,27 +294,97 @@ ApplicationWindow {
                         color: Qt.darker(resumeButton.background.color, 3.0)
                     }
                 }
+
+                Label {
+                    id: resumeLabel
+
+                    anchors.centerIn: parent
+
+                    text: "Resume"
+                    color: AppUtil.color.primary
+                    font: AppUtil.headerFont
+                    Component.onCompleted: {
+                        font.pixelSize = 16
+                    }
+                }
             }
             // End
             Button {
                 id: endNavigationButton
 
+                property alias shrinkAnimation: shrinkAnimation
+                property alias expandAnimation: expandAnimation
+
                 property bool _expanded: false
 
                 implicitHeight: 40
-                //                implicitWidth: endLabel.width + endButtonRow.margins
+                implicitWidth: endButtonRow.width + 40
 
-                RowLayout.fillWidth: false
+
+                ParallelAnimation {
+                    id: expandAnimation
+
+                    NumberAnimation {
+                        target: endNavigationButton
+                        property: "implicitWidth"
+                        to: topRow.width / 2 - (topRow.spacing / 2)
+                        duration: 200
+                    }
+                    PropertyAction {
+                        target: routeLabel
+                        property: "visible"
+                        value: true
+                    }
+                    NumberAnimation {
+                        target: routeLabel
+                        property: "opacity"
+                        to: 1
+                    }
+                    PropertyAction {
+                        target: endNavigationButton
+                        property: "_expanded"
+                        value: true
+                    }
+                }
+
+                SequentialAnimation {
+                    id: shrinkAnimation
+
+                    ParallelAnimation {
+                        NumberAnimation {
+                            target: endNavigationButton
+                            property: "implicitWidth"
+                            to: endButtonRow.width + 40
+                            duration: 200
+                        }
+                        NumberAnimation {
+                            target: routeLabel
+                            property: "opacity"
+                            to: 0
+                        }
+                        PropertyAction {
+                            target: endNavigationButton
+                            property: "_expanded"
+                            value: false
+                        }
+                    }
+
+                    PropertyAction {
+                        target: routeLabel
+                        property: "visible"
+                        value: false
+                    }
+                }
 
                 onClicked: {
                     if (_expanded) {
                         Logic.endNavigation()
                         tripPullPane.visible = false
+                        resumeButton.closeAnimation.start()
+                        endNavigationButton.shrinkAnimation.start()
                     } else {
-                        // expand the button - call expandAnimation
-                        //  - make Resume visible
-                        //  - fade in "Route"
-                        _expanded = true
+                        resumeButton.openAnimation.start()
+                        expandAnimation.start()
                     }
                 }
 
@@ -289,7 +428,6 @@ ApplicationWindow {
 
                     anchors {
                         centerIn: parent
-                        margins: 10
                     }
 
                     spacing: 4
@@ -308,8 +446,14 @@ ApplicationWindow {
                     Label {
                         id: routeLabel
 
-                        visible: false
                         text: "Route"
+                        visible: false
+                        opacity: 0
+                        color: AppUtil.color.primary
+                        font: AppUtil.headerFont
+                        Component.onCompleted: {
+                            font.pixelSize = 16
+                        }
                     }
                 }
             }
@@ -367,7 +511,7 @@ ApplicationWindow {
             if (distanceFeet > 1000) {
                 // Convert to miles
                 distanceRemaining.text =   Math.round((distanceFeet / 5280) * 100)
-                                        / 100;
+                        / 100;
                 distanceLabel.text = "mi"
             } else {
                 distanceRemaining.text = distanceFeet
