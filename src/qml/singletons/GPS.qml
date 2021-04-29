@@ -26,6 +26,7 @@ Item {
         property int _sumSegmentsDistance
 
         // currentDistance: percentage of trip traveled
+        property alias currentDistanceAnimation: currentDistanceAnimation
         PropertyAnimation on currentDistance {
             id: currentDistanceAnimation
 
