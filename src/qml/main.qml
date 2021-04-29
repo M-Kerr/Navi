@@ -94,6 +94,9 @@ ApplicationWindow {
     GlassPullPane {
         id: tripPullPane
 
+        property real rowHeight: 40
+        property real rowMargins: (minHeight / 2) - (rowHeight / 2)
+
         visible: false
         minHeight: 75
         source: stackView
@@ -105,355 +108,452 @@ ApplicationWindow {
             a: 0.70
         }
 
+
+        // margin 10
+        // height 60
+        // spacing 20 //probably doesn't matter
+
+        //        RowLayout {
+        //            id: topRow
+
+        //            height: 60
+        //            anchors {
+        //                top: parent.top
+        //                left: parent.left
+        //                right: parent.right
+        //                margins: 10
+        //            }
+
+        //            spacing: 20
+
         RowLayout {
-            id: topRow
+            id: shortDetailsRow
 
-            height: 60
+            implicitHeight: tripPullPane.rowHeight
             anchors {
-                top: parent.top
-                left: parent.left
-                right: parent.right
-                margins: 10
+                top: tripPullPane.top
+                left: tripPullPane.left
+                margins: tripPullPane.rowMargins
             }
 
-            spacing: 20
+            spacing: 30
 
-            RowLayout {
-                id: shortDetailsRow
+            Item {
+                id: arrivalLabelGroup
 
-                height: childrenRect.height
-                width: childrenRect.width
-                spacing: 30
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
 
-                ColumnLayout {
-                    id: arrivalColumn
+                Label {
+                    id: arrivalTime
 
-                    Label {
-                        id: arrivalTime
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        color: AppUtil.color.fontPrimary
-                        font: AppUtil.headerFont
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
                     }
 
-                    Label {
-                        id: arrivalLabel
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        text: "arrival"
-                        color: AppUtil.color.fontSecondary
-                        font: AppUtil.subHeaderFont
-                    }
-                }
-
-                ColumnLayout {
-                    id: timeRemainingColumn
-
-                    Label {
-                        id: timeRemaining
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        color: AppUtil.color.fontPrimary
-                        font: AppUtil.headerFont
-                    }
-
-                    Label {
-                        id: timeLabel
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        color: AppUtil.color.fontSecondary
-                        font: AppUtil.subHeaderFont
-                    }
-                }
-                ColumnLayout {
-                    id: distanceRemainingColumn
-
-                    Label {
-                        id: distanceRemaining
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        color: AppUtil.color.fontPrimary
-                        font: AppUtil.headerFont
-                    }
-
-                    Label {
-                        id: distanceLabel
-                        ColumnLayout.alignment: Qt.AlignLeft
-                        color: AppUtil.color.fontSecondary
-                        font: AppUtil.subHeaderFont
-                    }
-                }
-
-                Item {
-                    id: topRowBuffer1
-
-                    RowLayout.fillWidth: true
-                }
-            }
-
-            Button {
-                id: resumeButton
-
-                property alias openAnimation: openAnimation
-                property alias closeAnimation: closeAnimation
-
-                implicitHeight: 40
-                implicitWidth: topRow.width / 2 - (topRow.spacing / 2)
-
-                visible: false
-                opacity: 0
-
-                SequentialAnimation {
-                    id: openAnimation
-
-                    alwaysRunToEnd: false
-
-                    ParallelAnimation {
-
-                        PropertyAction {
-                            target: shortDetailsRow
-                            property: "visible"
-                            value: false
-                        }
-
-                        PropertyAction {
-                            target: resumeButton
-                            property: "visible"
-                            value: true
-                        }
-                    }
-
-                    NumberAnimation {
-                        target: resumeButton
-                        property: "opacity"
-                        to: 1
-                        duration: 200
-                    }
-                }
-
-                SequentialAnimation {
-                    id: closeAnimation
-
-                    alwaysRunToEnd: false
-
-                    NumberAnimation {
-                        target: resumeButton
-                        property: "opacity"
-                        to: 0
-                        duration: 400
-                    }
-
-                    ParallelAnimation {
-
-                        PropertyAction {
-                            target: resumeButton
-                            property: "visible"
-                            value: false
-                        }
-
-                        PropertyAction {
-                            target: shortDetailsRow
-                            property: "visible"
-                            value: true
-                        }
-                    }
-                }
-
-                onClicked: {
-                    closeAnimation.start()
-                    endNavigationButton.shrinkAnimation.start()
-                }
-
-                onDownChanged: {
-                    if (down) {
-                        background.shadow.visible = false
-                        background.color.a /= 1.2
-                        background.blurRadius /= 1.2
-                        resumeButton.scale = 0.99
-                    } else {
-                        background.shadow.visible = true
-                        background.color.a *= 1.2
-                        background.blurRadius *= 1.2
-                        resumeButton.scale = 1.0
-                    }
-                }
-
-                background: SoftGlassBox {
-                    source: tripPullPane.source
-                    blurRadius: tripPullPane.blurRadius * 2
-                    color {
-                        hsvHue: 0.0
-                        hsvSaturation: 0.0
-                        hsvValue: 0.80
-                        a: Math.min(tripPullPane.color.a * 2, 1.0)
-                    }
-                    radius: height / 6
-                    width: resumeButton.width + 1
-                    height: resumeButton.height + 1
-                    border.width: 0
-                    shadow {
-                        visible: true
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: 4
-                        color: Qt.darker(resumeButton.background.color, 3.0)
-                    }
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
                 }
 
                 Label {
-                    id: resumeLabel
+                    id: arrivalLabel
 
-                    anchors.centerIn: parent
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
 
-                    text: "Resume"
+                    text: "arrival"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+
+            Item {
+                id: timeLabelGroup
+
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
+
+                Label {
+                    id: timeRemaining
+
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
+                }
+
+                Label {
+                    id: timeLabel
+
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+
+            Item {
+                id: distanceLabelGroup
+
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
+
+                Label {
+                    id: distanceRemaining
+
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
+                }
+
+                Label {
+                    id: distanceLabel
+
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+        }
+
+        Button {
+            id: resumeButton
+
+            property alias openAnimation: openAnimation
+            property alias closeAnimation: closeAnimation
+
+            implicitHeight: tripPullPane.rowHeight
+            implicitWidth: {
+                tripPullPane.width / 2 - tripPullPane.rowMargins
+                        - 10 // spacing
+            }
+            anchors {
+                top: tripPullPane.top
+                left: tripPullPane.left
+                margins: tripPullPane.rowMargins
+            }
+
+            visible: false
+            opacity: 0
+
+            SequentialAnimation {
+                id: openAnimation
+
+                alwaysRunToEnd: false
+
+                PropertyAction {
+                    target: shortDetailsRow
+                    property: "visible"
+                    value: false
+                }
+
+                PauseAnimation { duration: 50 }
+
+                PropertyAction {
+                    target: resumeButton
+                    property: "visible"
+                    value: true
+                }
+
+                NumberAnimation {
+                    target: resumeButton
+                    property: "opacity"
+                    to: 1
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            SequentialAnimation {
+                id: closeAnimation
+
+                alwaysRunToEnd: false
+
+                NumberAnimation {
+                    target: resumeButton
+                    property: "opacity"
+                    to: 0
+                    duration: 250
+                    easing.type: Easing.InQuad
+                }
+
+                PropertyAction {
+                    target: resumeButton
+                    property: "visible"
+                    value: false
+                }
+
+                // Resets button to visually unpressed state
+                ScriptAction {
+                    script: resumeButton.canceled()
+                }
+
+                PauseAnimation { duration: 50 }
+
+                PropertyAction {
+                    target: shortDetailsRow
+                    property: "visible"
+                    value: true
+                }
+            }
+
+            onClicked: {
+                closeAnimation.start()
+                endNavigationButton.shrinkAnimation.start()
+            }
+
+            onPressed: {
+                background.shadow.visible = false
+                background.color.a /= 1.2
+                background.blurRadius /= 1.2
+                resumeButton.scale = 0.99
+            }
+
+            onCanceled: {
+                background.shadow.visible = true
+                background.color.a *= 1.2
+                background.blurRadius *= 1.2
+                resumeButton.scale = 1.0
+            }
+
+            background: SoftGlassBox {
+                source: tripPullPane.source
+                blurRadius: tripPullPane.blurRadius * 2
+                color {
+                    hsvHue: 0.0
+                    hsvSaturation: 0.0
+                    hsvValue: 0.80
+                    a: Math.min(tripPullPane.color.a * 2, 1.0)
+                }
+                radius: height / 6
+                width: resumeButton.width + 1
+                height: resumeButton.height + 1
+                shadow {
+                    visible: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 4
+                    color: Qt.darker(resumeButton.background.color, 3.0)
+                }
+            }
+
+            Label {
+                id: resumeLabel
+
+                anchors.centerIn: parent
+
+                text: "Resume"
+                color: AppUtil.color.primary
+                font: AppUtil.headerFont
+                Component.onCompleted: {
+                    font.pixelSize = 16
+                }
+            }
+        }
+
+        Button {
+            id: endNavigationButton
+
+            property alias shrinkAnimation: shrinkAnimation
+            property alias expandAnimation: expandAnimation
+            property bool _expanded: false
+
+            implicitHeight: tripPullPane.rowHeight
+            implicitWidth: endLabel.width + 40
+            anchors {
+                top: tripPullPane.top
+                right: tripPullPane.right
+                margins: tripPullPane.rowMargins
+            }
+
+            ParallelAnimation {
+                id: expandAnimation
+
+                property int duration: 250
+
+                NumberAnimation {
+                    target: endNavigationButton
+                    property: "implicitWidth"
+                    to: {
+                        tripPullPane.width / 2 - tripPullPane.rowMargins
+                                - 10 // spacing
+                    }
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: endLabel.anchors
+                    property: "horizontalCenterOffset"
+                    to: {
+                        (endLabel.width
+                         - endLabel.width
+                         - routeLabel.width
+                         - routeLabel.anchors.leftMargin)
+                                / 2
+                    }
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InOutQuad
+                }
+                PropertyAction {
+                    target: routeLabel
+                    property: "visible"
+                    value: true
+                }
+                NumberAnimation {
+                    target: routeLabel
+                    property: "opacity"
+                    to: 1
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InQuad
+                }
+                PropertyAction {
+                    target: endNavigationButton
+                    property: "_expanded"
+                    value: true
+                }
+            }
+
+            SequentialAnimation {
+                id: shrinkAnimation
+
+                property int duration: 250
+
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: endNavigationButton
+                        property: "implicitWidth"
+                        to: endLabel.width + 40
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: endLabel.anchors
+                        property: "horizontalCenterOffset"
+                        to: 0
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: routeLabel
+                        property: "opacity"
+                        to: 0
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InQuad
+                    }
+                    PropertyAction {
+                        target: endNavigationButton
+                        property: "_expanded"
+                        value: false
+                    }
+                }
+
+                PropertyAction {
+                    target: routeLabel
+                    property: "visible"
+                    value: false
+                }
+            }
+
+            onClicked: {
+                if (_expanded) {
+                    Logic.endNavigation()
+                    tripPullPane.visible = false
+                    resumeButton.closeAnimation.start()
+                    endNavigationButton.shrinkAnimation.start()
+                } else {
+                    resumeButton.openAnimation.start()
+                    expandAnimation.start()
+                }
+            }
+
+            onDownChanged: {
+                if (down) {
+                    background.shadow.visible = false
+                    background.color.a /= 1.2
+                    background.blurRadius /= 1.2
+                    endNavigationButton.scale = 0.99
+                } else {
+                    background.shadow.visible = true
+                    background.color.a *= 1.2
+                    background.blurRadius *= 1.2
+                    endNavigationButton.scale = 1.0
+                }
+            }
+
+            background: SoftGlassBox {
+                source: tripPullPane.source
+                blurRadius: tripPullPane.blurRadius * 2
+                color: AppUtil.color.secondary
+                radius: height / 6
+                width: endNavigationButton.width + 1
+                height: endNavigationButton.height + 1
+                shadow {
+                    visible: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 4
+                    color: Qt.darker(endNavigationButton.background.color,
+                                     3.0)
+                }
+
+                Component.onCompleted: {
+                    color.a = Math.min(tripPullPane.color.a * 2, 1.0)
+                }
+            }
+
+            Item {
+                anchors.fill: parent
+                clip: true
+
+                Label {
+                    id: endLabel
+
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        horizontalCenter: parent.horizontalCenter
+                    }
+
+                    text: "End"
                     color: AppUtil.color.primary
                     font: AppUtil.headerFont
                     Component.onCompleted: {
                         font.pixelSize = 16
                     }
                 }
-            }
-            // End
-            Button {
-                id: endNavigationButton
 
-                property alias shrinkAnimation: shrinkAnimation
-                property alias expandAnimation: expandAnimation
-
-                property bool _expanded: false
-
-                implicitHeight: 40
-                implicitWidth: endButtonRow.width + 40
-
-
-                ParallelAnimation {
-                    id: expandAnimation
-
-                    NumberAnimation {
-                        target: endNavigationButton
-                        property: "implicitWidth"
-                        to: topRow.width / 2 - (topRow.spacing / 2)
-                        duration: 200
-                    }
-                    PropertyAction {
-                        target: routeLabel
-                        property: "visible"
-                        value: true
-                    }
-                    NumberAnimation {
-                        target: routeLabel
-                        property: "opacity"
-                        to: 1
-                    }
-                    PropertyAction {
-                        target: endNavigationButton
-                        property: "_expanded"
-                        value: true
-                    }
-                }
-
-                SequentialAnimation {
-                    id: shrinkAnimation
-
-                    ParallelAnimation {
-                        NumberAnimation {
-                            target: endNavigationButton
-                            property: "implicitWidth"
-                            to: endButtonRow.width + 40
-                            duration: 200
-                        }
-                        NumberAnimation {
-                            target: routeLabel
-                            property: "opacity"
-                            to: 0
-                        }
-                        PropertyAction {
-                            target: endNavigationButton
-                            property: "_expanded"
-                            value: false
-                        }
-                    }
-
-                    PropertyAction {
-                        target: routeLabel
-                        property: "visible"
-                        value: false
-                    }
-                }
-
-                onClicked: {
-                    if (_expanded) {
-                        Logic.endNavigation()
-                        tripPullPane.visible = false
-                        resumeButton.closeAnimation.start()
-                        endNavigationButton.shrinkAnimation.start()
-                    } else {
-                        resumeButton.openAnimation.start()
-                        expandAnimation.start()
-                    }
-                }
-
-                onDownChanged: {
-                    if (down) {
-                        background.shadow.visible = false
-                        background.color.a /= 1.2
-                        background.blurRadius /= 1.2
-                        endNavigationButton.scale = 0.99
-                    } else {
-                        background.shadow.visible = true
-                        background.color.a *= 1.2
-                        background.blurRadius *= 1.2
-                        endNavigationButton.scale = 1.0
-                    }
-                }
-
-                background: SoftGlassBox {
-                    source: tripPullPane.source
-                    blurRadius: tripPullPane.blurRadius * 2
-                    color: AppUtil.color.secondary
-                    radius: height / 6
-                    width: endNavigationButton.width + 1
-                    height: endNavigationButton.height + 1
-                    shadow {
-                        visible: true
-                        horizontalOffset: 0
-                        verticalOffset: 0
-                        radius: 4
-                        color: Qt.darker(endNavigationButton.background.color,
-                                         3.0)
-                    }
-
-                    Component.onCompleted: {
-                        color.a = Math.min(tripPullPane.color.a * 2, 1.0)
-                    }
-                }
-
-                RowLayout {
-                    id: endButtonRow
+                Label {
+                    id: routeLabel
 
                     anchors {
-                        centerIn: parent
+                        verticalCenter: parent.verticalCenter
+                        left: endLabel.right
+                        leftMargin: 4
                     }
 
-                    spacing: 4
-
-                    Label {
-                        id: endLabel
-
-                        text: "End"
-                        color: AppUtil.color.primary
-                        font: AppUtil.headerFont
-                        Component.onCompleted: {
-                            font.pixelSize = 16
-                        }
-                    }
-
-                    Label {
-                        id: routeLabel
-
-                        text: "Route"
-                        visible: false
-                        opacity: 0
-                        color: AppUtil.color.primary
-                        font: AppUtil.headerFont
-                        Component.onCompleted: {
-                            font.pixelSize = 16
-                        }
+                    text: "Route"
+                    visible: false
+                    opacity: 0
+                    color: AppUtil.color.primary
+                    font: AppUtil.headerFont
+                    Component.onCompleted: {
+                        font.pixelSize = 16
                     }
                 }
             }
