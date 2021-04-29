@@ -188,10 +188,18 @@ Item {
             // Calculates route segment vehicle is currently traveling and
             // increments _sumRemainingSegmentDistance
             if (remainingSegmentDistance <= 0
-                    && _currentRouteSegment < _routeSegments.length) {
+                    && _currentRouteSegment < _routeSegments.length - 1) {
                 _currentRouteSegment++
                 _sumRemainingSegmentDistance += _routeSegments[_currentRouteSegment].distance
             }
+        }
+    }
+
+    Connections {
+        target: GPS.ruler.currentDistanceAnimation
+
+        function onFinished () {
+            Logic.endNavigation()
         }
     }
 }
