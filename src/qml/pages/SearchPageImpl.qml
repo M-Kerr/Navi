@@ -9,31 +9,50 @@ import Logic 1.0
 import AppUtil 1.0
 import "../components/SoftUI"
 
-Item {
+Control {
     id: root
     anchors.fill: parent
 
     property bool night
 
+    wheelEnabled: true
     Rectangle {
         id: headerRect
 
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        height: 90
         z: 1
+        height: 90
+        anchors {
+            top: parent.top
+            left: parent.left
+            right: parent.right
+        }
         color: "#ebebeb"
+        opacity: 0.01
     }
 
-    DropShadow {
-        source: headerRect
-        anchors.fill: headerRect
+    Item {
 
-        radius: 16
-        samples: 32
-        verticalOffset: -0.15
-        color: "#c8c8c8"
+        z: 1
+        height: 20
+        anchors {
+            top: headerRect.bottom
+            left: headerRect.left
+            right: headerRect.right
+        }
+        clip: true
+
+        DropShadow {
+
+            y: -height
+            height: headerRect.height
+            width: headerRect.width
+
+            source: headerRect
+            radius: 16
+            samples: 32
+            verticalOffset: -0.15
+            color: "#c8c8c8"
+        }
     }
 
     //    ScrollView {
@@ -87,7 +106,7 @@ Item {
     SoftGlassBox {
         id: softGlassBox
 
-        anchors.fill: listView
+        anchors.fill: root
 
         source: map
         radius: 0
@@ -102,120 +121,148 @@ Item {
 
     ListView {
         id: listView
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: headerRect.bottom
-        anchors.bottom: parent.bottom
+
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: headerRect.bottom
+            bottom: parent.bottom
+        }
+
         model: EsriSearchModel
+        clip: true
 
         // TODO: This Frame is improperly implemented.? Provide it a RowLayout
         // as its contentItem's child? Although, its current implementation
         // already works for dynamic sizing, and should be slightly more
         // performant because it doesn't use a RowLayout.
         delegate: Frame {
+            id: frame
+
             width: listView.width
             height: 110
-            z: listView.currentIndex === model.index ? 2 : 1
 
             background: Rectangle {
-                border.width: 1
-                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.2)
-                color: AppUtil.color.primary
-                opacity: 0.95
+                border {
+                    width: (index % 2 === 1)? 1: 0
+                    color: night? Qt.lighter(AppUtil.color.primary, 1.15)
+                                : Qt.darker(AppUtil.color.primary, 1.2)
+                }
+
+                color: "transparent"
+                //                color: AppUtil.color.primary
             }
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
                     Logic.selectPlace(model)
+                    frame.z = 0
+                    body.scale = 1
+                }
+                onPressed: {
+                    frame.z = 1
+                    body.scale = 0.99
+                }
+                onCanceled: {
+                    frame.z = 0
+                    body.scale = 1
                 }
             }
 
             Item {
-                id: markerRect
-                height: parent.height * 0.5
-                width: height
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
+                id: body
+                anchors.fill: parent
 
-                Image {
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    asynchronous: true
-                    source: "../resources/marker2.png"
-                }
-            }
+                Item {
+                    id: markerRect
+                    height: parent.height * 0.5
+                    width: height
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
 
-            ColumnLayout {
-                id: placeNameAddressColumn
-
-                height: parent.height * 0.5
-                anchors {
-                    verticalCenter: parent.verticalCenter
-                    left: markerRect.right
-                    right: distanceColumn.left
-                    leftMargin: 15
-                    rightMargin: 15
-                }
-
-                Layout.minimumWidth: 662
-                Layout.fillWidth: true
-                Layout.alignment: Qt.AlignVCenter
-
-                spacing: 3
-                clip: true
-
-                // TODO: if/else logic to determine place result type
-                // and its visual representation
-                Label {
-                    id: placeNameLabel
-
-                    height: parent.height / 2
-                    text:{
-                        let i = place.name.indexOf(",")
-                        if (i !== -1) place.name.slice(0, i);
-                        else place.name
+                    Image {
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+                        asynchronous: true
+                        source: "../resources/marker2.png"
                     }
-                    font: AppUtil.headerFont
-                    color: AppUtil.color.fontPrimary
                 }
 
-                Label {
-                    id: placeAddressLabel
+                ColumnLayout {
+                    id: placeNameAddressColumn
 
-                    height: parent.height / 2
-                    text: place.location.address.street
-                    font: AppUtil.subHeaderFont
-                    color: AppUtil.color.fontSecondary
+                    height: parent.height * 0.5
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        left: markerRect.right
+                        right: distanceColumn.left
+                        leftMargin: 15
+                        rightMargin: 15
+                    }
+
+                    Layout.minimumWidth: 662
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignVCenter
+
+                    spacing: 3
+                    clip: true
+
+                    // TODO: if/else logic to determine place result type
+                    // and its visual representation
+                    Label {
+                        id: placeNameLabel
+
+                        height: parent.height / 2
+                        text:{
+                            let i = place.name.indexOf(",")
+                            if (i !== -1) place.name.slice(0, i);
+                            else place.name
+                        }
+                        font: AppUtil.headerFont
+                        color: AppUtil.color.fontPrimary
+                    }
+
+                    Label {
+                        id: placeAddressLabel
+
+                        height: parent.height / 2
+                        text: place.location.address.street
+                        font: AppUtil.subHeaderFont
+                        color: AppUtil.color.fontSecondary
+                    }
                 }
-            }
 
-            ColumnLayout {
-                id: distanceColumn
-                height: parent.height * 0.5
-                width: height + 13
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                spacing: 0
+                ColumnLayout {
+                    id: distanceColumn
+                    height: parent.height * 0.5
+                    width: height + 13
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        right: parent.right
+                    }
+                    spacing: 0
 
-                Label {
-                    id: milesValueLabel
+                    Label {
+                        id: milesValueLabel
 
-                    Layout.alignment: Qt.AlignHCenter
-                    // PlaceSearchModel returns GEODESIC METERS! (Distance as the crow flies)
-                    // meters to miles conversion
-                    text: Math.round((distance / 1609) * 100) / 100
-                    font: AppUtil.headerFont
-                    color: AppUtil.color.fontPrimary
-                    verticalAlignment: Text.AlignBottom
-                }
-                Label {
-                    id: milesTextLabel
-                    Layout.alignment: Qt.AlignHCenter
-                    text: "miles"
-                    font: AppUtil.subHeaderFont
-                    color: AppUtil.color.fontSecondary
-                    verticalAlignment: Text.AlignTop
+                        Layout.alignment: Qt.AlignHCenter
+                        // PlaceSearchModel returns GEODESIC METERS! (Distance as the crow flies)
+                        // meters to miles conversion
+                        text: Math.round((distance / 1609) * 100) / 100
+                        font: AppUtil.headerFont
+                        color: AppUtil.color.fontPrimary
+                        verticalAlignment: Text.AlignBottom
+                    }
+
+                    Label {
+                        id: milesTextLabel
+                        Layout.alignment: Qt.AlignHCenter
+                        text: "miles"
+                        font: AppUtil.subHeaderFont
+                        color: AppUtil.color.fontSecondary
+                        verticalAlignment: Text.AlignTop
+                    }
                 }
             }
         }
