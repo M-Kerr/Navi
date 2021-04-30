@@ -8,13 +8,13 @@ import Logic 1.0
 import "../components"
 import "../components/SoftUI"
 
-Page {
+Item {
     id: root
 
     property Place place
     property real placeDistance
 
-    background: Item {}
+//    background: Item {}
 
     BackButton {
         id: backButton
@@ -175,11 +175,11 @@ Page {
         }
     }
 
-    footer: Rectangle {
-        id: footerItem
+//    footer: Rectangle {
+//        id: footerItem
 
-        height: directionsButton.implicitHeight
-        width: parent.width
+//        height: directionsButton.implicitHeight
+//        width: parent.width
 //        color: "transparent"
 
         Button {
@@ -187,7 +187,7 @@ Page {
 
             implicitHeight: 40
             width: parent.width
-            anchors.centerIn: parent
+            anchors.bottom: parent.bottom
 
             text: "Directions"
 
@@ -242,5 +242,4 @@ Page {
                 }
             }
         }
-    }
 }
