@@ -5,6 +5,7 @@ import QtLocation 5.15
 import QtGraphicalEffects 1.15
 import QtPositioning 5.15
 import Logic 1.0
+import AppUtil 1.0
 import "../components"
 import "../components/SoftUI"
 
@@ -14,10 +15,9 @@ Item {
     property Place place
     property real placeDistance
 
-//    background: Item {}
-
     BackButton {
         id: backButton
+
         onClicked: {
             Logic.backToPlacesMap()
         }
@@ -25,6 +25,7 @@ Item {
 
     CloseButton {
         id: closeButton
+
         onClicked: {
             Logic.fitViewportToPlacesMapView()
             Logic.unwindStackView()
@@ -45,14 +46,19 @@ Item {
 
         Rectangle {
             id: imageRect
+
             height: 30
             width: 30
+            anchors {
+                verticalCenter: parent.top
+                horizontalCenter: parent.horizontalCenter
+            }
+
             radius: height / 2
-            anchors.verticalCenter: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
 
             Image {
                 id: markerImage
+
                 anchors.centerIn: parent
                 //            source: "qrc://marker.png"
                 source: "../resources/marker.png"
@@ -62,7 +68,9 @@ Item {
 
         DropShadow {
             id: imageRectShadow
+
             anchors.fill: imageRect
+
             source: imageRect
             radius: 1.5
             samples: 9
@@ -71,32 +79,34 @@ Item {
 
         ColumnLayout {
             id: clipItem
+
             clip: true
 
-            anchors.top: imageRect.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 15
-            anchors.leftMargin: 20
-            anchors.rightMargin: 20
-            anchors.bottomMargin: 5
+            anchors {
+                top: imageRect.bottom
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                topMargin: 15
+                leftMargin: 20
+                rightMargin: 20
+                bottomMargin: 5
+            }
 
             spacing: 10
 
-            // TODO:
-            // If the section doesn't exist, the ColumnLayout.visible = false
             ColumnLayout {
                 id: titleSection
+
                 Layout.alignment: Qt.AlignHCenter
-                //                anchors.top: parent.top
-                //                anchors.right: parent.right
-                //                anchors.left: parent.left
+
                 spacing: 4
 
                 Label {
                     id: nameLabel;
+
                     width: parent.width
+
                     Layout.alignment: Qt.AlignHCenter
 
                     text:{
@@ -108,18 +118,18 @@ Item {
                         }
                         else ""
                     }
-
-                    font { family: "Arial"; bold: true }
+                    font: AppUtil.headerFont
+                    color: AppUtil.color.fontPrimary
                 }
 
                 Label {
                     id: streetCityLabel
-                    width: parent.width
-                    Layout.alignment: Qt.AlignHCenter
-                    visible: text
 
-                    font { family: "Arial" }
-                    color: "grey"
+                    width: parent.width
+
+                    Layout.alignment: Qt.AlignHCenter
+
+                    visible: text
                     text: {
                         let t = ""
 
@@ -138,36 +148,40 @@ Item {
 
                         return t
                     }
+                    font: AppUtil.subHeaderFont
+                    color: AppUtil.color.fontSecondary
                 }
 
                 Label {
                     id: contactPhone
+
                     Layout.alignment: Qt.AlignHCenter
+                    horizontalAlignment: Text.AlignHCenter
+
                     text: {
                         if (root.place) "Phone: " + root.place.primaryPhone;
                         else "";
                     }
-
-                    font.family: "Arial"
-                    horizontalAlignment: Text.AlignHCenter
+                    font: AppUtil.bodyFont
+                    color: AppUtil.color.fontPrimary
                 }
 
                 Label {
                     id: distance
+
                     width: parent.width
                     Layout.alignment: Qt.AlignHCenter
+
                     text: {
-                       if ( root.place ) {
-                           // meters to miles conversion
-                           Math.round((root.placeDistance / 1609) * 100) / 100
-                                   + " miles away (geodesic)" ;
-                       }
-                       else "";
+                        if ( root.place ) {
+                            // meters to miles conversion
+                            Math.round((root.placeDistance / 1609) * 100) / 100
+                                    + " miles away (geodesic)" ;
+                        }
+                        else "";
                     }
-                    font {
-                        family: "Arial"
-                        weight: Font.Thin
-                    }
+                    font: AppUtil.bodyFont
+                    color: AppUtil.color.fontPrimary
                 }
             }
 
@@ -175,71 +189,58 @@ Item {
         }
     }
 
-//    footer: Rectangle {
-//        id: footerItem
+    Button {
+        id: directionsButton
 
-//        height: directionsButton.implicitHeight
-//        width: parent.width
-//        color: "transparent"
+        implicitHeight: 40
+        width: parent.width
+        anchors.bottom: parent.bottom
 
-        Button {
-            id: directionsButton
+        text: "Directions"
 
-            implicitHeight: 40
-            width: parent.width
-            anchors.bottom: parent.bottom
+        onClicked: {
+            // NOTE in a future update:
+            // instead of calling endNavigation(), should check for
+            // navigating state and prompt user to end navigating to
+            // previous destination
+            Logic.endNavigation()
+            Logic.addWaypointAndGetDirections ( place.location.coordinate )
+        }
 
-            text: "Directions"
-
-            onClicked: {
-                // NOTE: instead of calling endNavigation(), should check for
-                // navigating state and prompt user to end navigating to
-                // previous destination
-                Logic.endNavigation()
-                Logic.addWaypointAndGetDirections ( place.location.coordinate )
-            }
-
-            onDownChanged: {
-                if (down) {
-                    background.shadow.visible = false
-                    background.color.a /= 1.2
-                    background.blurRadius /= 1.2
-                    background.border.width = 0
-                } else {
-                    background.shadow.visible = true
-                    background.color.a *= 1.2
-                    background.blurRadius *= 1.2
-                    background.border.width = 1
-                }
-            }
-
-            background: SoftGlassBox {
-                source: mainMapPage
-                blurRadius: glassPullPane.blurRadius * 2
-                color {
-                    hsvHue: 0.0
-                    hsvSaturation: 0.0
-                    hsvValue: 0.80
-                    a: Math.min(glassPullPane.color.a * 2, 1.0)
-                }
-                radius: 0
-                width: directionsButton.width + 1
-                height: directionsButton.height + 1
-                border {
-                    width: 1
-                    color {
-                        hsvHue: 0.0
-                        hsvSaturation: 0.0
-                        hsvValue: 0.90
-                        a: 0.40
-                    }
-                }
-                shadow {
-                    visible: true
-                    horizontalOffset: 0
-                    verticalOffset: -0.3
-                    radius: 14
-                }
+        onDownChanged: {
+            if (down) {
+                background.shadow.visible = false
+                background.color.a /= 1.2
+                background.blurRadius /= 1.2
+                background.border.width = 0
+            } else {
+                background.shadow.visible = true
+                background.color.a *= 1.2
+                background.blurRadius *= 1.2
+                background.border.width = 1
             }
         }
+
+        background: SoftGlassBox {
+            source: mainMapPage
+
+            width: directionsButton.width + 1
+            height: directionsButton.height + 1
+
+            color: AppUtil.color.background
+            radius: 0
+            blurRadius: glassPullPane.blurRadius * 2
+            border {
+                width: 1
+                color: AppUtil.color.backgroundBorder
+            }
+            shadow {
+                visible: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 6
+                color: AppUtil.color.backgroundDarkShadow
+            }
+        }
+    }
 }

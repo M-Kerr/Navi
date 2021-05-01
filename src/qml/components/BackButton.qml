@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import AppUtil 1.0
 import "SoftUI"
 
 Item {
@@ -21,25 +22,11 @@ Item {
         anchors.fill: parent
         radius: parent.width
         blurRadius: 40
-        color {
-            hsvHue: 0.0
-            hsvSaturation: 0.0
-            hsvValue: 0.07
-            a: 0.50
-        }
+        color: AppUtil.color.background
 
         border {
             width: 3
-            color {
-                hsvHue: 0.0
-                hsvSaturation: 0.0
-                hsvValue: 0.60
-                a: 0.60
-            }
-        }
-
-        shadow {
-//            visible: true
+            color: AppUtil.color.backgroundBorder
         }
 
         MouseArea {
@@ -59,6 +46,7 @@ Item {
             bold: true
             pixelSize: 20
         }
+        color: AppUtil.color.fontSecondary
         background: Item {}
     }
 }

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import AppUtil 1.0
 import "SoftUI"
 
 SoftGlassBox {
@@ -16,15 +17,11 @@ SoftGlassBox {
     }
 
     radius: 0
-    color {
-        hsvHue: 0
-        hsvSaturation: 0
-        hsvValue: 0.92
-        a: 0.40
-    }
+    color: AppUtil.color.background
 
     border {
         width: 0
+        color: AppUtil.color.backgroundBorder
     }
 
     MouseArea {

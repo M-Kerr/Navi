@@ -38,6 +38,8 @@ MapItemView {
                     height: 90
                     width: 60
 
+                    // Dialog with this place's information is dynamically
+                    // loaded when the marker glyph is selected by the user.
                     property var markerInfoBox: null
                     function selectMarker() {
 
@@ -66,6 +68,7 @@ MapItemView {
                         anchors.right: resultItem.right
                         height: 60
 
+                        // Marker glyph on map
                         Image {
                             id: markerImage;
                             anchors.fill: parent
@@ -73,6 +76,7 @@ MapItemView {
                         }
                     }
 
+                    // Place name text underneath the marker glyph
                     Label {
                         id: resultTitle
                         anchors.top: markerItem.bottom

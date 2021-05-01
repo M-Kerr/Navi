@@ -17,8 +17,11 @@ import "components/SoftUI"
 ApplicationWindow {
     id: applicationWindow
 
-    width: 1024
-    height: 1024
+    //320 x 568
+    width: 320
+    height: 568
+//    width: 1024
+//    height: 1024
     visible: true
     // WARNING: return to widescreen for production
     //    width: 1024
@@ -349,7 +352,7 @@ ApplicationWindow {
                     visible: true
                     horizontalOffset: 0
                     verticalOffset: 0
-                    radius: 4
+                    radius: 2
                     color: Qt.darker(resumeButton.background.color, 3.0)
                 }
             }
@@ -360,7 +363,7 @@ ApplicationWindow {
                 anchors.centerIn: parent
 
                 text: "Resume"
-                color: AppUtil.color.primary
+                color: AppUtil.color.fontSecondary
                 font: AppUtil.headerFont
                 Component.onCompleted: {
                     font.pixelSize = 16
@@ -500,7 +503,7 @@ ApplicationWindow {
             background: SoftGlassBox {
                 source: tripPullPane.source
                 blurRadius: tripPullPane.blurRadius * 2
-                color: AppUtil.color.secondary
+                color: AppUtil.color.accent
                 radius: height / 6
                 width: endNavigationButton.width + 1
                 height: endNavigationButton.height + 1
@@ -508,7 +511,7 @@ ApplicationWindow {
                     visible: true
                     horizontalOffset: 0
                     verticalOffset: 0
-                    radius: 4
+                    radius: 2
                     color: Qt.darker(endNavigationButton.background.color,
                                      3.0)
                 }
@@ -531,7 +534,7 @@ ApplicationWindow {
                     }
 
                     text: "End"
-                    color: AppUtil.color.primary
+                    color: AppUtil.color.fontSecondary
                     font: AppUtil.headerFont
                     Component.onCompleted: {
                         font.pixelSize = 16
@@ -550,7 +553,7 @@ ApplicationWindow {
                     text: "Route"
                     visible: false
                     opacity: 0
-                    color: AppUtil.color.primary
+                    color: AppUtil.color.fontSecondary
                     font: AppUtil.headerFont
                     Component.onCompleted: {
                         font.pixelSize = 16

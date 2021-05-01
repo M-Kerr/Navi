@@ -84,7 +84,6 @@ Item {
             else opacity = 0;
         }
 
-        //        Rectangle {
         SoftGlassBox {
             id: backRect
 
@@ -98,13 +97,7 @@ Item {
             source: map
             radius: width
             blurRadius: 30
-            frost.color {
-                hsvHue: 0
-                hsvSaturation: 0
-                hsvValue: 0.60
-                a: 0.65
-            }
-            //            shadow.visible: true
+            color: AppUtil.color.foreground
             enabled: false
             opacity: 0.0
             layer.enabled: true
@@ -130,6 +123,10 @@ Item {
                 onClicked: {
                     mainMapPage.state = ""
                 }
+            }
+
+            Component.onCompleted: {
+                color.a = 0.65
             }
         }
 
@@ -172,11 +169,10 @@ Item {
                 source: map
                 radius: parent.radius
                 blurRadius: 50
-                frost.color {
-                    hsvHue: 0
-                    hsvSaturation: 0
-                    hsvValue: 0.80
-                    a: 0.20
+                color: AppUtil.color.foreground
+
+                Component.onCompleted: {
+                    color.a = 0.20
                 }
             }
         }
@@ -412,7 +408,7 @@ Item {
         }
     }
 
-    SoftPlateauBoxV2 {
+    Rectangle {
         id: cameraFocusImageRect
 
         z: 1
@@ -424,6 +420,7 @@ Item {
             margins: 20
         }
 
+        color: AppUtil.color.foreground
         radius: width / 8
         opacity: 0
         scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0

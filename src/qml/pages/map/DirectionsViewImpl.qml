@@ -24,6 +24,7 @@ import QtLocation 5.15
 import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
+import AppUtil 1.0
 import "../../components"
 import "../../components/SoftUI"
 
@@ -59,66 +60,59 @@ Item {
         }
     }
 
-    SoftGlassBox {
-        id: softGlassBox
+//    SoftGlassBox {
+//        id: softGlassBox
 
-        height: headerRect.height
-        anchors {
-            top: root.top
-            left: root.left
-            right: root.right
-        }
+//        height: headerRect.height
+//        anchors {
+//            top: root.top
+//            left: root.left
+//            right: root.right
+//        }
 
-        source: map
-        radius: 0
-        //            blurRadius: 90
-        blurRadius: 60
-        shadow {
-            //                visible: height > 0 ? true: false
-            horizontalOffset: 0
-            verticalOffset: 0.5
-            radius: 8
-        }
-        color {
-            hsvHue: 0
-            hsvSaturation: 0
-            hsvValue: 0.92
-            a: 0.40
-        }
-        border {
-            width: 0
-        }
+//        source: map
+//        blurRadius: 40
+//        shadow {
+//            //                visible: height > 0 ? true: false
+//            horizontalOffset: 0
+//            verticalOffset: 0.5
+//            radius: 8
+//            color: AppUtil.color.backgroundDarkShadow
+//        }
+//        color: AppUtil.color.background
+//        border {
+//            width: 0
+//        }
 
-        Behavior on height {
-            NumberAnimation { duration: 200 }
-        }
+//        Behavior on height {
+//            NumberAnimation { duration: 150 }
+//        }
 
-        Timer {
-            id: glassBoxHeightTimer
+//        Timer {
+//            id: glassBoxHeightTimer
 
-            interval: 300
-            onTriggered: {
-                parent.height = headerRect.height
-            }
-        }
-    }
+//            interval: 300
+//            onTriggered: {
+//                parent.height = headerRect.height
+//            }
+//        }
+
+//        Component.onCompleted: {
+//            color.a = 0.20
+//        }
+//    }
 
     Rectangle {
         id: headerRect
 
-        height: parent.height * 0.15
+        height: parent.height * 0.125
         anchors {
             top: parent.top
             left: parent.left
             right: parent.right
         }
 
-        color {
-            hsvHue: 0
-            hsvSaturation: 0
-            hsvValue: 0.72
-            a: 0.60
-        }
+        color: AppUtil.color.fontPrimary
 
         ColumnLayout {
             anchors.centerIn: parent
@@ -128,12 +122,11 @@ Item {
                 id: headerRectLabel
 
                 Layout.alignment: Qt.AlignHCenter
-                color: "white"
                 text: ""
-
-                font {
-                    bold: true
-                    family: "Arial"
+                font: AppUtil.headerFont
+                color: AppUtil.color.foreground
+                Component.onCompleted: {
+                    font.pixelSize = 15
                 }
             }
 
@@ -141,11 +134,12 @@ Item {
                 id: headerRectDistanceLabel
 
                 Layout.alignment: Qt.AlignHCenter
-                visible: text
-                color: "white"
 
-                font {
-                    family: "Arial"
+                visible: text
+                font: AppUtil.headerFont
+                color: AppUtil.color.foreground
+                Component.onCompleted: {
+                    font.pixelSize = 15
                 }
             }
         }
@@ -183,7 +177,9 @@ Item {
 
         property alias text: nextInstructionRectLabel.text
 
-        height: headerRect.height / 3
+        // WARNING: Having a height will break the openAnimation when animate
+        // open on load is implemented.
+        height: headerRect.height / 2
         width: listView.width
         anchors {
             top: headerRect.bottom
@@ -191,36 +187,61 @@ Item {
             right: parent.right
         }
 
-        color: "grey"
-        visible: !listView.open && text !== ""
+        color: AppUtil.color.background
+        visible: text !== ""
+        clip: true
+
+        SequentialAnimation {
+            id: nextInstructionRectOpenAnimation
+            alwaysRunToEnd: false
+
+            PauseAnimation { duration: 500 }
+
+            NumberAnimation {
+                target: nextInstructionRect
+                property: "height"
+                to: headerRect.height / 3
+                duration: 450
+                easing {
+                    type: Easing.OutQuad
+                }
+            }
+        }
+
+        NumberAnimation {
+            id: nextInstructionRectCloseAnimation
+            alwaysRunToEnd: false
+
+            target: nextInstructionRect
+            property: "height"
+            to: 0
+            duration: 100
+            easing {
+                type: Easing.OutQuad
+            }
+        }
 
         ColumnLayout {
             anchors.centerIn: parent
-            spacing: 8
+            spacing: 4
 
             Label {
                 id: nextInstructionRectLabel
 
                 Layout.alignment: Qt.AlignHCenter
-                color: "black"
                 text: ""
-
-                font {
-                    bold: true
-                    family: "Arial"
-                }
+                color: AppUtil.color.fontSecondary
+                font: AppUtil.headerFont
             }
 
             Label {
                 id: nextInstructionRectDistanceLabel
 
                 Layout.alignment: Qt.AlignHCenter
-                visible: text
-                color: "black"
 
-                font {
-                    family: "Arial"
-                }
+                visible: text
+                color: AppUtil.color.fontSecondary
+                font: AppUtil.headerFont
             }
         }
 
@@ -249,7 +270,6 @@ Item {
         }
     }
 
-
     ListView {
         id: listView
 
@@ -258,7 +278,7 @@ Item {
         property real _maxHeight: parent.height - headerRect.height
 
         anchors {
-            top: headerRect.bottom
+            top: nextInstructionRect.bottom
             left: parent.left
             right:parent.right
         }
@@ -277,27 +297,35 @@ Item {
 
         onOpenChanged: {
             if (open && EsriRouteModel.status === RouteModel.Ready) {
+                nextInstructionRectOpenAnimation.stop()
+                nextInstructionRectCloseAnimation.start()
+
                 let segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
 
                 let newHeight = (segs.length - 1) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
-                softGlassBox.height = height + headerRect.height
+//                softGlassBox.height = height + headerRect.height
 
                 interactive = true
 
                 for (var i=0; i < segs.length; i++) {
                     directionsListModel.append({segment: segs[i]});
                 }
-
+            } else if (open && EsriRouteModel.status !== RouteModel.Ready) {
+                open = false
             } else {
                 interactive = false
+
                 // Fixes remove transition bug when view isn't at beginning
                 positionViewAtBeginning()
+
                 for (let i=directionsListModel.count - 1; i >= 0 ; i--) {
                     directionsListModel.remove(i, 1);
                 }
-                glassBoxHeightTimer.start()
+
+                nextInstructionRectCloseAnimation.stop()
+                nextInstructionRectOpenAnimation.start()
             }
         }
 
@@ -307,7 +335,7 @@ Item {
                     property: "y"
                     duration: 250
                     easing {
-                        type: Easing.InOutQuad
+                        type: Easing.OutQuad
                     }
                 }
 
@@ -317,31 +345,25 @@ Item {
                     to: 1
                     duration: 50
                     easing {
-                        type: Easing.InOutQuad
+                        type: Easing.OutQuad
                     }
                 }
             }
         }
 
         remove: Transition {
-            ParallelAnimation {
-                SequentialAnimation{
+            SequentialAnimation{
 
-                    ParallelAnimation {
-                        PropertyAction {
-                            property: "instructionLabel.text"
-                            value: "________________________________________"
-                        }
+                PropertyAction {
+                    property: "clipBox.width"
+                    value: "columnLayout.width"
+                }
 
-                        PropertyAction {
-                            property: "instructionDistanceLabel.text"
-                            value: "____________________"
-                        }
+                ParallelAnimation {
 
-                        PropertyAction {
-                            property: "clipBox.width"
-                            value: "columnLayout.width"
-                        }
+                    ColorAnimation {
+                        to: AppUtil.color.foreground
+                        duration: 200
                     }
 
                     NumberAnimation {
@@ -349,32 +371,34 @@ Item {
                         to: 0
                         duration: 150
                         easing {
-                            type: Easing.InOutQuad
+                            type: Easing.OutQuad
                         }
                     }
-                }
 
-                SequentialAnimation {
-                    PauseAnimation {
-                        duration: 100
-                    }
+                    SequentialAnimation {
 
-                    ParallelAnimation {
-                        NumberAnimation {
-                            property: "height"
-                            to: 0
-                            duration: 250
-                            easing {
-                                type: Easing.InOutQuad
+                        PauseAnimation {
+                            duration: 75
+                        }
+
+                        ParallelAnimation {
+
+                            NumberAnimation {
+                                property: "y"
+                                to: -listView.delegateHeight
+                                duration: 300
+                                easing {
+                                    type: Easing.OutQuad
+                                }
                             }
-                        }
 
-                        NumberAnimation {
-                            property: "opacity"
-                            to: 0
-                            duration: 300
-                            easing {
-                                type: Easing.InOutQuad
+                            NumberAnimation {
+                                property: "opacity"
+                                to: 0.10
+                                duration: 350
+                                easing {
+                                    type: Easing.OutQuad
+                                }
                             }
                         }
                     }
@@ -399,21 +423,16 @@ Item {
             width: listView.width
             height: !visible? 0: ListView.view.delegateHeight
 
-            enabled: staticIndex > root.currentDirectionIndex
-
             Rectangle {
                 id: delegateBackgroundRect
 
                 anchors.fill: parent
-                border.width: 1
-                border.color: night? Qt.lighter(color, 1.15) : Qt.darker(color, 1.5)
-                color {
-                    hsvHue: 0
-                    hsvSaturation: 0
-                    hsvValue: 0.92
-                    a: 0.40
+
+                border {
+                    width: 0.5
+                    color: AppUtil.color.foregroundBorder
                 }
-                opacity: 0.999
+                color: AppUtil.color.foreground
             }
 
             Item {
@@ -436,12 +455,21 @@ Item {
                         id: instructionLabel
 
                         Layout.alignment: Qt.AlignHCenter
+
                         text: {
                             if (hasManeuver) {
                                 segment.maneuver.instructionText
                             }
                             else "";
                         }
+                        color: {
+                            if (staticIndex > root.currentDirectionIndex) {
+                                AppUtil.color.fontPrimary
+                            } else {
+                                AppUtil.color.fontSecondary
+                            }
+                        }
+                        font: AppUtil.subHeaderFont
                     }
 
                     Label {
@@ -455,6 +483,14 @@ Item {
                             }
                             else "";
                         }
+                        color: {
+                            if (staticIndex > root.currentDirectionIndex) {
+                                AppUtil.color.fontPrimary
+                            } else {
+                                AppUtil.color.fontSecondary
+                            }
+                        }
+                        font: AppUtil.subHeaderFont
                     }
                 }
             }

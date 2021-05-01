@@ -8,7 +8,7 @@ Rectangle {
     anchors.right: parent.right
     height: minHeight
 
-    color: "lightsteelblue"
+    color: AppUtil.color.background
 
     property int minHeight: 150
     property int maxHeight: parent.height * 0.75
