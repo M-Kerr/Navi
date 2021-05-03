@@ -11,7 +11,6 @@ SoftGlassBox {
 
     readonly property alias dragging: internal.dragging
 
-
     height: minHeight
     anchors {
         bottom: parent.bottom
