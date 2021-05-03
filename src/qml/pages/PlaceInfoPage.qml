@@ -37,12 +37,7 @@ Item {
 
         source: mainMapPage
         blurRadius: 40
-        color {
-            hsvHue: 0
-            hsvSaturation: 0
-            hsvValue: 0.90
-            a: 0.70
-        }
+        color: AppUtil.color.foreground
 
         Rectangle {
             id: imageRect
@@ -187,6 +182,10 @@ Item {
 
             Item {id: filler; Layout.fillHeight: true }
         }
+
+        Component.onCompleted: {
+            color.a = 0.80
+        }
     }
 
     Button {
@@ -195,8 +194,8 @@ Item {
         implicitHeight: 40
         width: parent.width
         anchors.bottom: parent.bottom
-
-        text: "Directions"
+        leftInset: -1
+        rightInset: -1
 
         onClicked: {
             // NOTE in a future update:
@@ -210,28 +209,22 @@ Item {
         onDownChanged: {
             if (down) {
                 background.shadow.visible = false
-                background.color.a /= 1.2
-                background.blurRadius /= 1.2
-                background.border.width = 0
+                background.blurRadius *= 1.2
+                directionsLabel.scale = 0.95
             } else {
                 background.shadow.visible = true
-                background.color.a *= 1.2
-                background.blurRadius *= 1.2
-                background.border.width = 1
+                background.blurRadius /= 1.2
+                directionsLabel.scale = 1.0
             }
         }
 
         background: SoftGlassBox {
+
             source: mainMapPage
-
-            width: directionsButton.width + 1
-            height: directionsButton.height + 1
-
             color: AppUtil.color.background
-            radius: 0
             blurRadius: glassPullPane.blurRadius * 2
             border {
-                width: 1
+                width: 0
                 color: AppUtil.color.backgroundBorder
             }
             shadow {
@@ -242,5 +235,44 @@ Item {
                 color: AppUtil.color.backgroundDarkShadow
             }
         }
+
+        Label {
+            id: directionsLabel
+
+            anchors.centerIn:directionsButton
+            text: "Directions"
+            font: AppUtil.headerFont
+            color: AppUtil.color.fontSecondary
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
