@@ -20,8 +20,8 @@ ApplicationWindow {
     //320 x 568
     width: 320
     height: 568
-//    width: 1024
-//    height: 1024
+    //    width: 1024
+    //    height: 1024
     visible: true
     // WARNING: return to widescreen for production
     //    width: 1024
@@ -103,14 +103,8 @@ ApplicationWindow {
         visible: false
         minHeight: 75
         source: stackView
-        blurRadius: 40
-        color {
-            hsvHue: 0
-            hsvSaturation: 0
-            hsvValue: 0.90
-            a: 0.70
-        }
-
+        blurRadius: 60
+        color: AppUtil.color.foreground
 
         // margin 10
         // height 60
@@ -505,15 +499,12 @@ ApplicationWindow {
                 blurRadius: tripPullPane.blurRadius * 2
                 color: AppUtil.color.accent
                 radius: height / 6
-                width: endNavigationButton.width + 1
-                height: endNavigationButton.height + 1
                 shadow {
                     visible: true
                     horizontalOffset: 0
                     verticalOffset: 0
                     radius: 2
-                    color: Qt.darker(endNavigationButton.background.color,
-                                     3.0)
+                    color: AppUtil.color.accentDarkShadow
                 }
 
                 Component.onCompleted: {
@@ -560,6 +551,10 @@ ApplicationWindow {
                     }
                 }
             }
+        }
+
+        Component.onCompleted: {
+            color.a = 0.925
         }
     }
 
