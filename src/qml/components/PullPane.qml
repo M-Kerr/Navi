@@ -14,6 +14,15 @@ Rectangle {
     property int maxHeight: parent.height * 0.75
     property alias mouseArea: mouseArea
 
+    readonly property alias dragging: internal.dragging
+
+    QtObject {
+        id: internal
+
+        property bool dragging: false
+        property real lastY
+    }
+
     MouseArea {
         id: mouseArea
         anchors.fill:parent
@@ -21,20 +30,32 @@ Rectangle {
         property bool dragging: false
         property real lastY
 
-        onPositionChanged: {
-            if (    dragging
-                    && root.maxHeight > root.height + (lastY - mouse.y)
-                    && root.height + (lastY - mouse.y) > root.minHeight )
-            {
-                root.height += lastY - mouse.y
-            }
-        }
-
         onPressed: {
-            lastY = mouse.y
-            dragging = true
+            root.startDrag(mouse)
         }
 
-        onReleased: dragging = false
+        onReleased: root.stopDrag()
+
+        onPositionChanged: {
+            root.drag(mouse)
+        }
+    }
+
+    function startDrag (mouse) {
+        internal.lastY = mouse.y
+        internal.dragging = true
+    }
+
+    function stopDrag() {
+        internal.dragging = false
+    }
+
+    function drag (mouse) {
+        if (    internal.dragging
+                && maxHeight > height + (internal.lastY - mouse.y)
+                && height + (internal.lastY - mouse.y) > minHeight )
+        {
+            height += internal.lastY - mouse.y
+        }
     }
 }
