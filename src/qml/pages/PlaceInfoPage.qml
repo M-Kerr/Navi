@@ -85,6 +85,7 @@ Item {
             radius: 1.5
             samples: 9
             verticalOffset: 0.75
+            color: AppUtil.color.backgroundDarkShadow
         }
 
         ColumnLayout {
