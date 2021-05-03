@@ -55,7 +55,7 @@ QtObject {
         property color background: "#B9B7BD"
         property color backgroundBorder: Qt.darker(background, 1.2)
         property color backgroundLightShadow: Qt.lighter(background, 1.8)
-        property color backgroundDarkShadow: Qt.darker(background, 1.5)
+        property color backgroundDarkShadow: Qt.darker(background, 2.5)
         property color foreground: "#EEEDE7"
         property color foregroundBorder: Qt.darker(foreground, 1.2)
         property color foregroundLightShadow: Qt.lighter(foreground, 1.8)
@@ -64,6 +64,9 @@ QtObject {
 //        property color accent // look on color wheel
 //        property color accent: "#BD0A1C" // temporary
         property color accent: "#C44B4E" // temporary
+        property color accentBorder: Qt.darker(accent, 1.2)
+        property color accentLightShadow: Qt.lighter(accent, 1.8)
+        property color accentDarkShadow: Qt.darker(accent, 3.0)
 
         property color fontPrimary: "#868B8E"
         property color fontSecondary: "#E7D2CC"
