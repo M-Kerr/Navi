@@ -142,12 +142,14 @@ Control {
             width: listView.width
             height: 110
 
+            leftInset: -1
+            rightInset: -1
             background: Rectangle {
                 border {
                     width: (index % 2 === 1)? 1: 0
 //                    color: night? Qt.lighter(AppUtil.color.primary, 1.15)
 //                                : Qt.darker(AppUtil.color.primary, 1.2)
-                    color: Qt.darker(AppUtil.color.background, 1.2)
+                    color: AppUtil.color.backgroundBorder
                 }
 
                 color: "transparent"
