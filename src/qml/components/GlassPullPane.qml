@@ -9,6 +9,9 @@ SoftGlassBox {
     property int maxHeight: parent.height * 0.75
     property alias mouseArea: mouseArea
 
+    readonly property alias dragging: internal.dragging
+
+
     height: minHeight
     anchors {
         bottom: parent.bottom
@@ -28,23 +31,39 @@ SoftGlassBox {
         id: mouseArea
         anchors.fill:parent
 
-        property bool dragging: false
-        property real lastY
+        onPressed: {
+            root.startDrag(mouse)
+        }
+
+        onReleased: root.stopDrag()
 
         onPositionChanged: {
-            if (    dragging
-                    && root.maxHeight > root.height + (lastY - mouse.y)
-                    && root.height + (lastY - mouse.y) > root.minHeight )
-            {
-                root.height += lastY - mouse.y
-            }
+            root.drag(mouse)
         }
+    }
 
-        onPressed: {
-            lastY = mouse.y
-            dragging = true
+    QtObject {
+        id: internal
+
+        property bool dragging: false
+        property real lastY
+    }
+
+    function startDrag (mouse) {
+        internal.lastY = mouse.y
+        internal.dragging = true
+    }
+
+    function stopDrag() {
+        internal.dragging = false
+    }
+
+    function drag (mouse) {
+        if (    internal.dragging
+                && maxHeight > height + (internal.lastY - mouse.y)
+                && height + (internal.lastY - mouse.y) > minHeight )
+        {
+            height += internal.lastY - mouse.y
         }
-
-        onReleased: dragging = false
     }
 }
