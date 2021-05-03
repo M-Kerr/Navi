@@ -50,6 +50,7 @@ Item {
             }
 
             radius: height / 2
+            color: AppUtil.color.background
 
             Image {
                 id: markerImage
@@ -58,6 +59,20 @@ Item {
                 //            source: "qrc://marker.png"
                 source: "../resources/marker.png"
                 scale: 0.4
+            }
+
+            MouseArea {
+                anchors.fill: parent
+
+                onPressed: {
+                    glassPullPane.startDrag(mouse)
+                }
+
+                onReleased: glassPullPane.stopDrag()
+
+                onPositionChanged: {
+                    glassPullPane.drag(mouse)
+                }
             }
         }
 
