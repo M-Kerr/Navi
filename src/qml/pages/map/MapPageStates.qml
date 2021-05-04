@@ -11,14 +11,20 @@ QtObject {
             }
             AnchorChanges {
                 target: searchPage
-                anchors.bottom: root.top
-                anchors.top: root.top
-                anchors.left: root.left
-                anchors.right: root.right
+                anchors {
+                    bottom: root.top
+                    top: root.top
+                    left: root.left
+                    right: root.right
+                }
             }
             PropertyChanges {
                 target: root
                 focus: true
+            }
+            PropertyChanges {
+                target: tripPullPane
+                visible: false
             }
             PropertyChanges {
                 target: directionsView
@@ -34,10 +40,12 @@ QtObject {
             }
             AnchorChanges {
                 target: searchPage;
-                anchors.bottom: root.bottom
-                anchors.top: root.top
-                anchors.left: root.left
-                anchors.right: root.right
+                anchors {
+                    bottom: root.bottom
+                    top: root.top
+                    left: root.left
+                    right: root.right
+                }
             }
         },
         State {
@@ -47,7 +55,7 @@ QtObject {
                 enabled: false
             }
             PropertyChanges {
-                target: endNavigationButton
+                target: tripPullPane
                 visible: true
             }
             PropertyChanges {
@@ -61,6 +69,10 @@ QtObject {
         Transition {
             from: "*"
             to: "navigating"
+        },
+        Transition {
+            from: "navigating"
+            to: ""
         },
         Transition {
             from: "*"
