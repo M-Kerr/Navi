@@ -37,75 +37,10 @@ Item {
 
     anchors.fill: parent
 
-    Connections {
-        target: root
-
-        function onCurrentDirectionIndexChanged () {
-            headerRect.updateText();
-            nextInstructionRect.updateText();
-        }
-    }
-
-    Connections {
-        target: Logic
-
-        function onNavigate () {
-            headerRect.updateText()
-            nextInstructionRect.updateText()
-        }
-
-        function onEndNavigation () {
-            directionsListModel.clear()
-            listView.open = false
-        }
-    }
-
-//    SoftGlassBox {
-//        id: softGlassBox
-
-//        height: headerRect.height
-//        anchors {
-//            top: root.top
-//            left: root.left
-//            right: root.right
-//        }
-
-//        source: map
-//        blurRadius: 40
-//        shadow {
-//            //                visible: height > 0 ? true: false
-//            horizontalOffset: 0
-//            verticalOffset: 0.5
-//            radius: 8
-//            color: AppUtil.color.backgroundDarkShadow
-//        }
-//        color: AppUtil.color.background
-//        border {
-//            width: 0
-//        }
-
-//        Behavior on height {
-//            NumberAnimation { duration: 150 }
-//        }
-
-//        Timer {
-//            id: glassBoxHeightTimer
-
-//            interval: 300
-//            onTriggered: {
-//                parent.height = headerRect.height
-//            }
-//        }
-
-//        Component.onCompleted: {
-//            color.a = 0.20
-//        }
-//    }
-
     Rectangle {
         id: headerRect
 
-        height: parent.height * 0.125
+        height: parent.height * 0.15
         anchors {
             top: parent.top
             left: parent.left
@@ -115,13 +50,14 @@ Item {
         color: AppUtil.color.fontPrimary
 
         ColumnLayout {
-            anchors.centerIn: parent
-            spacing: 8
+            anchors.fill: parent
+            spacing: 3
 
             Label {
                 id: headerRectLabel
 
                 Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.Wrap
                 text: ""
                 font: AppUtil.headerFont
                 color: AppUtil.color.foreground
@@ -136,6 +72,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
 
                 visible: text
+                wrapMode: Text.Wrap
                 font: AppUtil.headerFont
                 color: AppUtil.color.foreground
                 Component.onCompleted: {
@@ -229,6 +166,7 @@ Item {
                 id: nextInstructionRectLabel
 
                 Layout.alignment: Qt.AlignHCenter
+                wrapMode: Text.Wrap
                 text: ""
                 color: AppUtil.color.fontSecondary
                 font: AppUtil.headerFont
@@ -240,6 +178,7 @@ Item {
                 Layout.alignment: Qt.AlignHCenter
 
                 visible: text
+                wrapMode: Text.Wrap
                 color: AppUtil.color.fontSecondary
                 font: AppUtil.headerFont
             }
@@ -305,7 +244,7 @@ Item {
 
                 let newHeight = (segs.length - 1) * delegateHeight
                 height = newHeight < _maxHeight ? newHeight : _maxHeight
-//                softGlassBox.height = height + headerRect.height
+                //                softGlassBox.height = height + headerRect.height
 
                 interactive = true
 
@@ -456,6 +395,7 @@ Item {
 
                         Layout.alignment: Qt.AlignHCenter
 
+                        wrapMode: Text.Wrap
                         text: {
                             if (hasManeuver) {
                                 segment.maneuver.instructionText
@@ -477,6 +417,7 @@ Item {
 
                         Layout.alignment: Qt.AlignHCenter
 
+                        wrapMode: Text.Wrap
                         text: {
                             if (hasManeuver) {
                                 "Travel " + Math.round(segment.distance) + " feet"
@@ -504,6 +445,29 @@ Item {
                 // changes upon removal, so visible cannot be a binding.
                 visible = (hasManeuver && 0 < staticIndex)
             }
+        }
+    }
+
+    Connections {
+        target: root
+
+        function onCurrentDirectionIndexChanged () {
+            headerRect.updateText();
+            nextInstructionRect.updateText();
+        }
+    }
+
+    Connections {
+        target: Logic
+
+        function onNavigate () {
+            headerRect.updateText()
+            nextInstructionRect.updateText()
+        }
+
+        function onEndNavigation () {
+            directionsListModel.clear()
+            listView.open = false
         }
     }
 }
