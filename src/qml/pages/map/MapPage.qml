@@ -4,8 +4,10 @@ import QtQuick.Layouts 1.15
 import QtGraphicalEffects 1.15
 import QtLocation 5.15
 import QtPositioning 5.15
+import QtQml 2.15
 import MapboxPlugin 1.0
 import EsriSearchModel 1.0
+import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
 import AppUtil 1.0
@@ -45,16 +47,6 @@ Item {
         if (following) {
             map.center = currentCoordinate
         }
-    }
-
-    Image {
-        anchors.fill: parent
-        z: 1
-
-        //        source: "qrc:edge-gradient.png"
-        source: "../../resources/edge-gradient.png"
-        opacity: 0.7
-        visible: root.following
     }
 
     Item {
@@ -249,7 +241,6 @@ Item {
         zoomLevel: 12.25
         minimumZoomLevel: 0
         maximumZoomLevel: 20
-        tilt: 60
 
         copyrightsVisible: false
 
@@ -306,6 +297,7 @@ Item {
             // coordinate axis. It may be possible to create a custom
             // transformOrigin when zoomLevel != 0 that identifies the
             // carMarker anchorPoint as the transformOrigin.
+            zoomLevel: root.state === "navigating" ? 0 : map.zoomLevel
             coordinate: root.currentCoordinate
             anchorPoint.x: sourceItem.width / 2
             anchorPoint.y: sourceItem.height / 2
@@ -337,8 +329,8 @@ Item {
             }
 
             sourceItem: Image {
-                height: 40
-                width: 40
+                height: 30
+                width: 30
                 //                source: "qrc:../../resources/locationMarker.svg"
                 source: "../../resources/locationMarker.svg"
             }
@@ -357,7 +349,7 @@ Item {
 
         function centerView(itemCoordinate) {
             map.center = itemCoordinate
-            map.zoomLevel = 18.5
+            map.zoomLevel = 17.5
         }
 
         //        PlacesMapView {
@@ -408,21 +400,37 @@ Item {
         }
     }
 
+    Image {
+        id: edgeGradient
+
+        height: parent.height + 50
+        width: parent.width
+        y: -50
+
+        //        source: "qrc:edge-gradient.png"
+        source: "../../resources/edge-gradient.png"
+        opacity: 0.35
+        visible: root.following
+    }
+
     Rectangle {
         id: cameraFocusImageRect
 
         z: 1
-        height: 60
-        width: 60
-        y: parent.height - (75 + 20 + height)
+        height: 40
+        width: 40
+        y: parent.height - anchors.margins - height
+           - (tripPullPane.visible * tripPullPane.height)
+
         anchors {
             left: parent.left
-            margins: 20
+            margins: 10
         }
 
-        color: AppUtil.color.foreground
+        color: AppUtil.color.background
         radius: width / 8
         opacity: 0
+
         scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
 
         visible: {
@@ -430,19 +438,65 @@ Item {
                                                          : false
         }
 
-        NumberAnimation {
-            id: opacityOffAnimation
+        SequentialAnimation {
+                id: opacityOffAnimation
 
-            target: cameraFocusImageRect
-            property: "opacity"; to: 0; duration: 200
-            alwaysRunToEnd: false
+                alwaysRunToEnd: false
+            PropertyAction {
+                target: opacityBinding
+                property: "when"
+                value: false
+            }
+            NumberAnimation {
+                target: cameraFocusImageRect
+                property: "opacity"; to: 0; duration: 200
+            }
         }
-        NumberAnimation {
+
+        // Binds the opacity to 'y' position.
+        SequentialAnimation {
             id: opacityOnAnimation
 
-            target: cameraFocusImageRect
-            property: "opacity"; to: 1; duration: 200
             alwaysRunToEnd: false
+
+            NumberAnimation {
+                target: cameraFocusImageRect
+                property: "opacity"
+                to: Math.min(
+                        Math.pow(cameraFocusImageRect.y
+                                 / (root.height
+                                    - cameraFocusImageRect.anchors.margins
+                                    - cameraFocusImageRect.height
+                                    - tripPullPane.minHeight
+                                    ),
+                                 8),
+                        1.0)
+                duration: 150
+            }
+
+            PropertyAction {
+                target: opacityBinding
+                property: "when"
+                value: true
+            }
+        }
+
+        Binding {
+            id: opacityBinding
+
+            target: cameraFocusImageRect
+            property: "opacity"
+            value: Math.min(
+                       Math.pow(cameraFocusImageRect.y
+                                / (root.height
+                                   - cameraFocusImageRect.anchors.margins
+                                   - cameraFocusImageRect.height
+                                   - tripPullPane.minHeight
+                                   ),
+                                8),
+                       1.0)
+            when: false
+            restoreMode: Binding.RestoreBindingOrValue
         }
 
         onVisibleChanged: {
@@ -456,7 +510,7 @@ Item {
         }
 
         Behavior on scale {
-            NumberAnimation {}
+            NumberAnimation { duration: 35 }
         }
 
         MouseArea {
@@ -470,12 +524,458 @@ Item {
         Image {
             id: cameraFocusImage
 
-            height: 50
-            width: 50
-            anchors.centerIn: parent
+            anchors.fill: parent
+
             // source: "qrc:resources/cameraFocus.svg"
             source: "../../resources/cameraFocus.svg"
+        }
+    }
 
+    // NOTE: this would probably be more maintainable if we used
+    // states
+    GlassPullPane {
+        id: tripPullPane
+
+        property real rowHeight: 40
+        property real rowMargins: (minHeight / 2) - (rowHeight / 2)
+
+        visible: false
+        minHeight: 75
+        source: map
+        blurRadius: 60
+        color: AppUtil.color.foreground
+
+        RowLayout {
+            id: shortDetailsRow
+
+            implicitHeight: tripPullPane.rowHeight
+            anchors {
+                top: tripPullPane.top
+                left: tripPullPane.left
+                margins: tripPullPane.rowMargins
+            }
+
+            spacing: 30
+
+            Item {
+                id: arrivalLabelGroup
+
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
+
+                Label {
+                    id: arrivalTime
+
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
+                }
+
+                Label {
+                    id: arrivalLabel
+
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    text: "arrival"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+
+            Item {
+                id: timeLabelGroup
+
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
+
+                Label {
+                    id: timeRemaining
+
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
+                }
+
+                Label {
+                    id: timeLabel
+
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+
+            Item {
+                id: distanceLabelGroup
+
+                implicitHeight: parent.height
+                implicitWidth: childrenRect.width
+
+                Label {
+                    id: distanceRemaining
+
+                    anchors {
+                        bottom: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontPrimary
+                    font: AppUtil.headerFont
+                }
+
+                Label {
+                    id: distanceLabel
+
+                    anchors {
+                        top: parent.verticalCenter
+                        margins: 2.5
+                    }
+
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.subHeaderFont
+                }
+            }
+        }
+
+        Button {
+            id: resumeButton
+
+            property alias openAnimation: openAnimation
+            property alias closeAnimation: closeAnimation
+
+            implicitHeight: tripPullPane.rowHeight
+            implicitWidth: {
+                tripPullPane.width / 2 - tripPullPane.rowMargins
+                        - 10 // spacing
+            }
+            anchors {
+                top: tripPullPane.top
+                left: tripPullPane.left
+                margins: tripPullPane.rowMargins
+            }
+
+            visible: false
+            opacity: 0
+
+            SequentialAnimation {
+                id: openAnimation
+
+                alwaysRunToEnd: false
+
+                PropertyAction {
+                    target: shortDetailsRow
+                    property: "visible"
+                    value: false
+                }
+
+                PauseAnimation { duration: 50 }
+
+                PropertyAction {
+                    target: resumeButton
+                    property: "visible"
+                    value: true
+                }
+
+                NumberAnimation {
+                    target: resumeButton
+                    property: "opacity"
+                    to: 1
+                    duration: 100
+                    easing.type: Easing.InOutQuad
+                }
+            }
+
+            SequentialAnimation {
+                id: closeAnimation
+
+                alwaysRunToEnd: false
+
+                NumberAnimation {
+                    target: resumeButton
+                    property: "opacity"
+                    to: 0
+                    duration: 250
+                    easing.type: Easing.InQuad
+                }
+
+                PropertyAction {
+                    target: resumeButton
+                    property: "visible"
+                    value: false
+                }
+
+                // Resets button to visually unpressed state
+                ScriptAction {
+                    script: resumeButton.canceled()
+                }
+
+                PauseAnimation { duration: 50 }
+
+                PropertyAction {
+                    target: shortDetailsRow
+                    property: "visible"
+                    value: true
+                }
+            }
+
+            onClicked: {
+                closeAnimation.start()
+                endNavigationButton.shrinkAnimation.start()
+            }
+
+            onPressed: {
+                background.shadow.visible = false
+                background.color.a /= 1.2
+                background.blurRadius /= 1.2
+                resumeButton.scale = 0.99
+            }
+
+            onCanceled: {
+                background.shadow.visible = true
+                background.color.a *= 1.2
+                background.blurRadius *= 1.2
+                resumeButton.scale = 1.0
+            }
+
+            background: SoftGlassBox {
+                source: tripPullPane.source
+                blurRadius: tripPullPane.blurRadius * 2
+                color {
+                    hsvHue: 0.0
+                    hsvSaturation: 0.0
+                    hsvValue: 0.80
+                    a: Math.min(tripPullPane.color.a * 2, 1.0)
+                }
+                radius: height / 6
+                width: resumeButton.width + 1
+                height: resumeButton.height + 1
+                shadow {
+                    visible: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 2
+                    color: Qt.darker(resumeButton.background.color, 3.0)
+                }
+            }
+
+            Label {
+                id: resumeLabel
+
+                anchors.centerIn: parent
+
+                text: "Resume"
+                color: AppUtil.color.fontSecondary
+                font: AppUtil.headerFont
+                Component.onCompleted: {
+                    font.pixelSize = 16
+                }
+            }
+        }
+
+        Button {
+            id: endNavigationButton
+
+            property alias shrinkAnimation: shrinkAnimation
+            property alias expandAnimation: expandAnimation
+            property bool _expanded: false
+
+            implicitHeight: tripPullPane.rowHeight
+            implicitWidth: endLabel.width + 40
+            anchors {
+                top: tripPullPane.top
+                right: tripPullPane.right
+                margins: tripPullPane.rowMargins
+            }
+
+            ParallelAnimation {
+                id: expandAnimation
+
+                property int duration: 250
+
+                NumberAnimation {
+                    target: endNavigationButton
+                    property: "implicitWidth"
+                    to: {
+                        tripPullPane.width / 2 - tripPullPane.rowMargins
+                                - 10 // spacing
+                    }
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: endLabel.anchors
+                    property: "horizontalCenterOffset"
+                    to: {
+                        (endLabel.width
+                         - endLabel.width
+                         - routeLabel.width
+                         - routeLabel.anchors.leftMargin)
+                                / 2
+                    }
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InOutQuad
+                }
+                PropertyAction {
+                    target: routeLabel
+                    property: "visible"
+                    value: true
+                }
+                NumberAnimation {
+                    target: routeLabel
+                    property: "opacity"
+                    to: 1
+                    duration: expandAnimation.duration
+                    easing.type: Easing.InQuad
+                }
+                PropertyAction {
+                    target: endNavigationButton
+                    property: "_expanded"
+                    value: true
+                }
+            }
+
+            SequentialAnimation {
+                id: shrinkAnimation
+
+                property int duration: 250
+
+                ParallelAnimation {
+                    NumberAnimation {
+                        target: endNavigationButton
+                        property: "implicitWidth"
+                        to: endLabel.width + 40
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: endLabel.anchors
+                        property: "horizontalCenterOffset"
+                        to: 0
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InOutQuad
+                    }
+                    NumberAnimation {
+                        target: routeLabel
+                        property: "opacity"
+                        to: 0
+                        duration: shrinkAnimation.duration
+                        easing.type: Easing.InQuad
+                    }
+                    PropertyAction {
+                        target: endNavigationButton
+                        property: "_expanded"
+                        value: false
+                    }
+                }
+
+                PropertyAction {
+                    target: routeLabel
+                    property: "visible"
+                    value: false
+                }
+            }
+
+            onClicked: {
+                if (_expanded) {
+                    Logic.endNavigation()
+                    resumeButton.closeAnimation.start()
+                    endNavigationButton.shrinkAnimation.start()
+                } else {
+                    resumeButton.openAnimation.start()
+                    expandAnimation.start()
+                }
+            }
+
+            onDownChanged: {
+                if (down) {
+                    background.shadow.visible = false
+                    background.color.a /= 1.2
+                    background.blurRadius /= 1.2
+                    endNavigationButton.scale = 0.99
+                } else {
+                    background.shadow.visible = true
+                    background.color.a *= 1.2
+                    background.blurRadius *= 1.2
+                    endNavigationButton.scale = 1.0
+                }
+            }
+
+            background: SoftGlassBox {
+                source: tripPullPane.source
+                blurRadius: tripPullPane.blurRadius * 2
+                color: AppUtil.color.accent
+                radius: height / 6
+                shadow {
+                    visible: true
+                    horizontalOffset: 0
+                    verticalOffset: 0
+                    radius: 2
+                    color: AppUtil.color.accentDarkShadow
+                }
+
+                Component.onCompleted: {
+                    color.a = Math.min(tripPullPane.color.a * 2, 1.0)
+                }
+            }
+
+            Item {
+                anchors.fill: parent
+                clip: true
+
+                Label {
+                    id: endLabel
+
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        horizontalCenter: parent.horizontalCenter
+                    }
+
+                    text: "End"
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.headerFont
+                    Component.onCompleted: {
+                        font.pixelSize = 16
+                    }
+                }
+
+                Label {
+                    id: routeLabel
+
+                    anchors {
+                        verticalCenter: parent.verticalCenter
+                        left: endLabel.right
+                        leftMargin: 4
+                    }
+
+                    text: "Route"
+                    visible: false
+                    opacity: 0
+                    color: AppUtil.color.fontSecondary
+                    font: AppUtil.headerFont
+                    Component.onCompleted: {
+                        font.pixelSize = 16
+                    }
+                }
+            }
+        }
+
+        Component.onCompleted: {
+            color.a = 0.925
         }
     }
 
@@ -493,12 +993,46 @@ Item {
         }
 
         function onNavigate() {
-            root.state = "navigating"
             root.following = true
+            root.state = "navigating"
         }
 
         function onEndNavigation () {
             root.state = ""
+        }
+
+        function onTripStateUpdated () {
+            // EsriRouteModel.tripTimeRemaining: int;seconds
+            let hours = Math.floor(EsriRouteModel.tripTimeRemaining / 3600)
+            let minutes = Math.floor((EsriRouteModel.tripTimeRemaining % 3600)
+                                     / 60);
+            if (hours) {
+                timeLabel.text = "hrs"
+                timeRemaining.text = hours
+                if (hours < 14) timeRemaining.text += ":" + minutes;
+            } else {
+                timeLabel.text = "min"
+                if (!minutes) timeRemaining.text = "< 1";
+                else timeRemaining.text = minutes;
+            }
+
+            // EsriRouteModel.tripArrivalTime: Date
+            arrivalTime.text = EsriRouteModel.tripArrivalTime.toLocaleTimeString(Locale.ShortFormat);
+
+            // EsriRouteModel.tripDistanceRemaining: int;meters
+            // Convert to feet
+            let distanceFeet = Math.round(EsriRouteModel.tripDistanceRemaining
+                                          *  3.281)
+
+            if (distanceFeet > 1000) {
+                // Convert to miles
+                distanceRemaining.text = Math.round((distanceFeet / 5280) * 100)
+                        / 100;
+                distanceLabel.text = "mi"
+            } else {
+                distanceRemaining.text = distanceFeet
+                distanceLabel.text = "ft"
+            }
         }
     }
 }
