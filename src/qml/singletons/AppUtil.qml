@@ -69,6 +69,10 @@ QtObject {
         property color accentDarkShadow: Qt.darker(accent, 3.0)
 
         property color fontPrimary: "#868B8E"
+        property color fontPrimaryBorder: Qt.darker(fontPrimary, 1.2)
+        property color fontPrimaryLightShadow: Qt.lighter(fontPrimary, 1.8)
+        property color fontPrimaryDarkShadow: Qt.darker(fontPrimary, 2.5)
+
         property color fontSecondary: "#E7D2CC"
         property color fontAccent // look on color wheel
     }
