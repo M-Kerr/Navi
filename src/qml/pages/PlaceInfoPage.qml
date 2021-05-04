@@ -18,6 +18,18 @@ Item {
     BackButton {
         id: backButton
 
+        anchors {
+            top: parent.top
+            left: parent.left
+            topMargin: 10
+            leftMargin: 5
+        }
+
+        source: mainMapPage
+        radius: width / 2
+        color: AppUtil.color.backgroundDarkShadow
+        label.color: AppUtil.color.foreground
+
         onClicked: {
             Logic.backToPlacesMap()
         }
@@ -25,6 +37,18 @@ Item {
 
     CloseButton {
         id: closeButton
+
+        anchors {
+            top: parent.top
+            right: parent.right
+            topMargin: 10
+            rightMargin: 5
+        }
+
+        source: mainMapPage
+        radius: width / 2
+        color: AppUtil.color.backgroundDarkShadow
+        label.color: AppUtil.color.foreground
 
         onClicked: {
             Logic.fitViewportToPlacesMapView()

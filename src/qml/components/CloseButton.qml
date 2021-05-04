@@ -1,52 +1,43 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtGraphicalEffects 1.15
 import AppUtil 1.0
-import "../components"
-import "../components/SoftUI"
+import "SoftUI"
 
-Item {
+SoftGlassBox {
     id: root
 
-    height: 50; width: 50
-    anchors.top: parent.top
-    anchors.right: parent.right
-    anchors.margins: 60
+    signal clicked(var mouse)
 
-    signal clicked()
     property alias mouseArea: mouseArea
+    property alias label: label
     property alias text: label.text
+    property real radiusDivisor: 0
 
-    SoftGlassBox {
-        id: softGlassBox
+    implicitHeight: 35
+    implicitWidth: 35
 
-        source: mainMapPage
-        anchors.fill: parent
-        radius: parent.width
-        blurRadius: 40
-        color: AppUtil.color.background
-
-        border {
-            width: 3
-            color: AppUtil.color.backgroundBorder
-        }
-
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            onClicked: root.clicked()
-        }
-    }
+    blurRadius: 40
 
     Label {
         id: label
-        anchors.centerIn: softGlassBox
+        anchors.centerIn: root
         text: "X"
         font {
             family: "Arial"
             bold: true
             pixelSize: 20
-       }
-        color: AppUtil.color.fontSecondary
+        }
         background: Item {}
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onClicked: root.clicked(mouse)
+    }
+
+    Component.onCompleted: {
+        color.a = 0.4
     }
 }
