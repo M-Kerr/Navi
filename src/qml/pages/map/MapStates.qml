@@ -14,7 +14,7 @@ QtObject {
             State {
                 name: "following"
                 // TODO: Change tilt and zoomLevel to more comfortable values
-                PropertyChanges { target: map; tilt: 60; zoomLevel: 20 }
+                PropertyChanges { target: map; tilt: 60; zoomLevel: 17 }
             }
     ]
 
