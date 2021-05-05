@@ -41,6 +41,7 @@ Item {
         id: headerRect
 
         height: parent.height * 0.15
+
         anchors {
             top: parent.top
             left: parent.left
@@ -50,19 +51,29 @@ Item {
         color: AppUtil.color.fontPrimary
 
         ColumnLayout {
-            anchors.fill: parent
+            id: headerColumn
+
+            anchors {
+                fill: parent
+                margins: 10
+            }
+
             spacing: 3
 
             Label {
                 id: headerRectLabel
 
+                Layout.maximumWidth: headerColumn.width
                 Layout.alignment: Qt.AlignHCenter
+
+                horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
                 text: ""
                 font: AppUtil.headerFont
                 color: AppUtil.color.foreground
+
                 Component.onCompleted: {
-                    font.pixelSize = 15
+                    font.pixelSize = 17
                 }
             }
 
@@ -70,13 +81,16 @@ Item {
                 id: headerRectDistanceLabel
 
                 Layout.alignment: Qt.AlignHCenter
+                Layout.maximumWidth: headerColumn.width
 
                 visible: text
+                horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
                 font: AppUtil.headerFont
                 color: AppUtil.color.foreground
+
                 Component.onCompleted: {
-                    font.pixelSize = 15
+                    font.pixelSize = 17
                 }
             }
         }
@@ -116,7 +130,9 @@ Item {
 
         // WARNING: Having a height will break the openAnimation when animate
         // open on load is implemented.
-        height: headerRect.height / 2
+
+        height: headerRect.height * 0.75
+
         width: listView.width
         anchors {
             top: headerRect.bottom
@@ -159,14 +175,23 @@ Item {
         }
 
         ColumnLayout {
-            anchors.centerIn: parent
-            spacing: 4
+            id: nextInstructionColumn
+
+            anchors {
+                fill: parent
+                margins: 10
+            }
+
+            spacing: 3
 
             Label {
                 id: nextInstructionRectLabel
 
                 Layout.alignment: Qt.AlignHCenter
+                Layout.maximumWidth: nextInstructionColumn.width
+
                 wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
                 text: ""
                 color: AppUtil.color.fontSecondary
                 font: AppUtil.headerFont
@@ -176,9 +201,11 @@ Item {
                 id: nextInstructionRectDistanceLabel
 
                 Layout.alignment: Qt.AlignHCenter
+                Layout.maximumWidth: nextInstructionColumn.width
 
                 visible: text
                 wrapMode: Text.Wrap
+                horizontalAlignment: Text.AlignHCenter
                 color: AppUtil.color.fontSecondary
                 font: AppUtil.headerFont
             }
