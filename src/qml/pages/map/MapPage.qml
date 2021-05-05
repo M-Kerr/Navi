@@ -432,12 +432,12 @@ Item {
         visible: root.following
     }
 
-    Rectangle {
+    Item {
         id: cameraFocusImageRect
 
         z: 1
-        height: 40
-        width: 40
+        height: 30
+        width: 30
         y: parent.height - anchors.margins - height
            - (tripPullPane.visible * tripPullPane.height)
 
@@ -446,8 +446,6 @@ Item {
             margins: 10
         }
 
-        color: AppUtil.color.background
-        radius: width / 8
         opacity: 0
 
         scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
@@ -488,7 +486,7 @@ Item {
                                     - cameraFocusImageRect.height
                                     - tripPullPane.minHeight
                                     ),
-                                 8),
+                                 20),
                         1.0)
                 duration: 150
             }
@@ -512,7 +510,7 @@ Item {
                                    - cameraFocusImageRect.height
                                    - tripPullPane.minHeight
                                    ),
-                                8),
+                                20),
                        1.0)
             when: false
             restoreMode: Binding.RestoreBindingOrValue
@@ -544,9 +542,29 @@ Item {
             id: cameraFocusImage
 
             anchors.fill: parent
+            visible: false
 
-            // source: "qrc:resources/cameraFocus.svg"
-            source: "../../resources/cameraFocus.svg"
+            // source: "qrc:resources/focus.svg"
+            source: "../../resources/focus.png"
+
+        }
+
+        ColorOverlay {
+            id: imageColorOverlay
+            source: cameraFocusImage
+
+            anchors.fill: source
+            color: AppUtil.color.accent
+        }
+        DropShadow {
+            source: imageColorOverlay
+
+            anchors.fill: source
+            color: AppUtil.color.accentDarkShadow
+            radius: 6
+            samples: (radius * 2) + 1
+            verticalOffset: 4
+            horizontalOffset: -1
         }
     }
 
