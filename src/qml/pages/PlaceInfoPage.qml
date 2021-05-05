@@ -28,7 +28,6 @@ Item {
         source: mainMapPage
         radius: width / 2
         color: AppUtil.color.backgroundDarkShadow
-        label.color: AppUtil.color.foreground
 
         onClicked: {
             Logic.backToPlacesMap()
@@ -48,7 +47,6 @@ Item {
         source: mainMapPage
         radius: width / 2
         color: AppUtil.color.backgroundDarkShadow
-        label.color: AppUtil.color.foreground
 
         onClicked: {
             Logic.fitViewportToPlacesMapView()
