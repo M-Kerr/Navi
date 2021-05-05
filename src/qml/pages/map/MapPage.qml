@@ -151,7 +151,6 @@ Item {
             color: "transparent"
             input.placeholderTextColor: AppUtil.color.fontSecondary
             input.color: AppUtil.color.fontPrimary
-            clearButton.topShadow.visible: true
             clearButton.color: AppUtil.color.fontPrimary
 
             onInputActiveFocusChanged: {
