@@ -359,9 +359,13 @@ Item {
         //                    RouteView {
         //                        id: routeView
         //                    }
-        // WARNING: dev tool, delete and replace with above View components
+        // WARNING: dev tool above and below, delete and replace with above
+        // View components
         property var placesMapView: null
         property var routeView: null
+        // instantiate impl and assign directionsView as parent. When
+        // directionsView visibility changes, it'll change the visibility
+        // of its child impl.
         property var directionsViewImpl: null
 
         function createViews () {
