@@ -198,5 +198,6 @@
         <file>leftArrow.svg</file>
         <file>locationMarker.svg</file>
         <file>cameraFocus.svg</file>
+        <file>close.svg</file>
     </qresource>
 </RCC>
