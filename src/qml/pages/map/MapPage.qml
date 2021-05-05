@@ -101,12 +101,26 @@ Item {
                 color: "#c8c8c8"
             }
 
-            Label {
-                anchors.centerIn: parent
-                text: "≺"
-                font.bold: true
-                font.family: "Arial"
-                color: root.night? "grey" : "black"
+            Image {
+                id: backImage
+
+                anchors {
+                    fill: parent
+                    margins: 11
+                }
+
+                visible: false
+                source: "../../resources/arrow.svg"
+                rotation: -90
+            }
+
+            ColorOverlay {
+
+                anchors.fill: source
+
+                source: backImage
+                color: AppUtil.color.fontPrimary
+                rotation: -90
             }
 
             MouseArea {
@@ -136,7 +150,9 @@ Item {
 
             color: "transparent"
             input.placeholderTextColor: AppUtil.color.fontSecondary
-            clearButton.topShadow.visible: false
+            input.color: AppUtil.color.fontPrimary
+            clearButton.topShadow.visible: true
+            clearButton.color: AppUtil.color.fontPrimary
 
             onInputActiveFocusChanged: {
                 if (inputActiveFocus) {
