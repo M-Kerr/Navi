@@ -6,19 +6,29 @@ import QtQuick.Controls 2.15
 QtObject {
     id: root
 
-    property font headerFont: Qt.font({bold: true, family: "Arial"})
+//    property font headerFont: Qt.font({bold: true, family: latoBold.name})
+    property font headerFont: Qt.font({bold: true, family: nunito.name})
 
-    //    property font secondaryHeaderFont: Qt.font({})
+    property font secondaryHeaderFont: Qt.font({family: nunito.name})
 
     property font subHeaderFont: Qt.font({family: "Arial"})
 
     property font bodyFont: Qt.font({family: "Arial"})
 
-    property QtObject fontFamilyPrimary: FontLoader {
-        //            source:
+    property QtObject vollkorn: FontLoader {
+                    source: "../resources/fonts/Vollkorn/Vollkorn-VariableFont_wght.ttf"
     }
-    property QtObject fontFamilySecondary: FontLoader {
-        //            source:
+    property QtObject lato: FontLoader {
+                    source: "../resources/fonts/lato/Lato-Regular.ttf"
+    }
+    property QtObject latoBold: FontLoader {
+                    source: "../resources/fonts/lato/Lato-Bold.ttf"
+    }
+    property QtObject oswald: FontLoader {
+                    source: "../resources/fonts/oswald/Oswald-VariableFont_wght.ttf"
+    }
+    property QtObject nunito: FontLoader {
+                    source: "../resources/fonts/nunito/Nunito-Bold.ttf"
     }
 
     property QtObject color: QtObject {
