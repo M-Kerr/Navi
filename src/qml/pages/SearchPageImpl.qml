@@ -146,7 +146,6 @@ Control {
                 ColumnLayout {
                     id: placeNameAddressColumn
 
-                    height: parent.height * 0.5
                     anchors {
                         verticalCenter: parent.verticalCenter
                         left: markerRect.right
@@ -155,19 +154,15 @@ Control {
                         rightMargin: 15
                     }
 
-                    Layout.minimumWidth: 662
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignVCenter
-
-                    spacing: 3
+                    spacing: 6
                     clip: true
 
-                    // TODO: if/else logic to determine place result type
-                    // and its visual representation
                     Label {
                         id: placeNameLabel
 
-                        height: parent.height / 2
+                        Layout.maximumWidth: placeNameAddressColumn.width
+                        Layout.alignment: Qt.AlignLeft
+
                         text:{
                             let i = place.name.indexOf(",")
                             if (i !== -1) place.name.slice(0, i);
@@ -175,38 +170,44 @@ Control {
                         }
                         font: AppUtil.headerFont
                         color: AppUtil.color.fontPrimary
+                        wrapMode: Text.Wrap
                     }
 
                     Label {
                         id: placeAddressLabel
 
-                        height: parent.height / 2
+                        Layout.maximumWidth: placeNameAddressColumn.width
+                        Layout.alignment: Qt.AlignLeft
+
                         text: place.location.address.street
                         font: AppUtil.subHeaderFont
                         color: AppUtil.color.fontSecondary
+                        wrapMode: Text.Wrap
                     }
                 }
 
                 ColumnLayout {
                     id: distanceColumn
                     height: parent.height * 0.5
-                    width: height + 13
+                    width: height
                     anchors {
                         verticalCenter: parent.verticalCenter
                         right: parent.right
                     }
-                    spacing: 0
+                    spacing: 6
 
                     Label {
                         id: milesValueLabel
 
                         Layout.alignment: Qt.AlignHCenter
-                        // PlaceSearchModel returns GEODESIC METERS! (Distance as the crow flies)
-                        // meters to miles conversion
+
+                        // PlaceSearchModel returns geodesic meters
+                        // (as the crow flies).
+                        // meters -> miles
                         text: Math.round((distance / 1609) * 100) / 100
                         font: AppUtil.headerFont
                         color: AppUtil.color.fontPrimary
-                        verticalAlignment: Text.AlignBottom
+//                        verticalAlignment: Text.AlignBottom
                     }
 
                     Label {
@@ -215,7 +216,7 @@ Control {
                         text: "miles"
                         font: AppUtil.subHeaderFont
                         color: AppUtil.color.fontSecondary
-                        verticalAlignment: Text.AlignTop
+//                        verticalAlignment: Text.AlignTop
                     }
                 }
             }
