@@ -387,13 +387,18 @@ Item {
             Rectangle {
                 id: delegateBackgroundRect
 
-                anchors.fill: parent
+                anchors {
+                    fill: parent
+                    // remove side borders
+                    leftMargin: -1
+                    rightMargin: -1
+                }
 
+                color: AppUtil.color.foreground
                 border {
-                    width: 0.5
+                    width: delegateItem.staticIndex % 2? 1 : 0
                     color: AppUtil.color.foregroundBorder
                 }
-                color: AppUtil.color.foreground
             }
 
             Item {
@@ -415,7 +420,8 @@ Item {
                     Label {
                         id: instructionLabel
 
-                        Layout.maximumWidth: delegateItem.width
+                        // 20 == margins
+                        Layout.maximumWidth: delegateItem.width - 20
                         Layout.alignment: Qt.AlignHCenter
 
                         horizontalAlignment: Text.AlignHCenter
@@ -442,7 +448,8 @@ Item {
                     Label {
                         id: instructionDistanceLabel
 
-                        Layout.maximumWidth: delegateItem.width
+                        // 20 == margins
+                        Layout.maximumWidth: delegateItem.width - 20
                         Layout.alignment: Qt.AlignHCenter
 
                         horizontalAlignment: Text.AlignHCenter
