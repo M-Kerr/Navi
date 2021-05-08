@@ -576,6 +576,7 @@ Item {
         property real rowHeight: 40
         property real rowMargins: (minHeight / 2) - (rowHeight / 2)
 
+        z: 1
         visible: false
         minHeight: 75
         source: map
