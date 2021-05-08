@@ -272,7 +272,7 @@ Item {
             property real maxHeight: root.height - headerRect.height
                                      - tripPullPane.height
 
-            property real delegateHeight: headerRect.height / 2
+            property real delegateHeight: headerRect.height * 0.55
             property list<RouteSegment> segs
 
             function addDelegates () {
@@ -340,11 +340,6 @@ Item {
 
         remove: Transition {
             SequentialAnimation{
-
-                PropertyAction {
-                    property: "clipBox.width"
-                    value: "columnLayout.width"
-                }
 
                 PropertyAction {
                     property: "background.border.width"
@@ -415,13 +410,15 @@ Item {
                     id: columnLayout
 
                     anchors.centerIn: parent
-                    spacing: 8
+                    spacing: 6
 
                     Label {
                         id: instructionLabel
 
+                        Layout.maximumWidth: delegateItem.width
                         Layout.alignment: Qt.AlignHCenter
 
+                        horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.Wrap
                         text: {
                             if (hasManeuver) {
@@ -437,18 +434,25 @@ Item {
                             }
                         }
                         font: AppUtil.subHeaderFont
+                        Component.onCompleted: {
+                            font.pixelSize = 12
+                        }
                     }
 
                     Label {
                         id: instructionDistanceLabel
 
+                        Layout.maximumWidth: delegateItem.width
                         Layout.alignment: Qt.AlignHCenter
 
+                        horizontalAlignment: Text.AlignHCenter
                         wrapMode: Text.Wrap
                         text: {
                             if (hasManeuver) {
                                 // meters -> ft
-                                "Travel " + Math.round(segment.distance * 3.281) + " ft."
+                                "Travel "
+                                        + Math.round(segment.distance * 3.281)
+                                        + " ft."
                             }
                             else "";
                         }
@@ -460,6 +464,9 @@ Item {
                             }
                         }
                         font: AppUtil.subHeaderFont
+                        Component.onCompleted: {
+                            font.pixelSize = 11
+                        }
                     }
                 }
             }
