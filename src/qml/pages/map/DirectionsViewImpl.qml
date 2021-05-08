@@ -21,6 +21,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtPositioning 5.15
 import QtLocation 5.15
+import QtQml 2.15
 import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
@@ -111,7 +112,7 @@ Item {
                 if (segment.maneuver.valid) {
                     headerRectLabel.text = segment.maneuver.instructionText
                     headerRectDistanceLabel.text = "Travel "
-                            // meters -> ft
+                    // meters -> ft
                             + Math.round(segment.distance * 3.281) + " ft."
                 } else {
                     //                    root.currentDirectionIndex++
@@ -236,7 +237,7 @@ Item {
                 if (segment.maneuver.valid) {
                     nextInstructionRectLabel.text = segment.maneuver.instructionText
                     nextInstructionRectDistanceLabel.text = "Travel "
-                            // meters -> ft
+                    // meters -> ft
                             + Math.round(segment.distance * 3.281) + " ft."
                 }
             } else {
@@ -250,8 +251,6 @@ Item {
         id: listView
 
         property bool open: false
-        property real delegateHeight: headerRect.height / 2
-        property real _maxHeight: parent.height - headerRect.height
 
         anchors {
             top: nextInstructionRect.bottom
@@ -267,6 +266,23 @@ Item {
         interactive: false
         clip: true
 
+        QtObject {
+            id: internal
+
+            property real maxHeight: root.height - headerRect.height
+                                     - tripPullPane.height
+
+            property real delegateHeight: headerRect.height / 2
+            property list<RouteSegment> segs
+
+            function addDelegates () {
+                for (var i=0; i < internal.segs.length; i++) {
+                    directionsListModel.append({segment: internal.segs[i]});
+                }
+                nextInstructionRectCloseAnimation.finished.disconnect(internal.addDelegates)
+            }
+        }
+
         model: ListModel {
             id: directionsListModel
         }
@@ -276,18 +292,13 @@ Item {
                 nextInstructionRectOpenAnimation.stop()
                 nextInstructionRectCloseAnimation.start()
 
-                let segs = EsriRouteModel.routeModel.get(0).segments
+                internal.segs = EsriRouteModel.routeModel.get(0).segments
                 directionsListModel.clear()
 
-                let newHeight = (segs.length - 1) * delegateHeight
-                height = newHeight < _maxHeight ? newHeight : _maxHeight
-                //                softGlassBox.height = height + headerRect.height
+                nextInstructionRectCloseAnimation.finished.connect(internal.addDelegates)
 
                 interactive = true
 
-                for (var i=0; i < segs.length; i++) {
-                    directionsListModel.append({segment: segs[i]});
-                }
             } else if (open && EsriRouteModel.status !== RouteModel.Ready) {
                 open = false
             } else {
@@ -335,48 +346,26 @@ Item {
                     value: "columnLayout.width"
                 }
 
-                ParallelAnimation {
+                PropertyAction {
+                    property: "background.border.width"
+                    value: 0
+                }
 
-                    ColorAnimation {
-                        to: AppUtil.color.foreground
-                        duration: 200
+                NumberAnimation {
+                    property: "clipBox.width"
+                    to: 0
+                    duration: 150
+                    easing {
+                        type: Easing.OutQuad
                     }
+                }
 
-                    NumberAnimation {
-                        property: "clipBox.width"
-                        to: 0
-                        duration: 150
-                        easing {
-                            type: Easing.OutQuad
-                        }
-                    }
-
-                    SequentialAnimation {
-
-                        PauseAnimation {
-                            duration: 75
-                        }
-
-                        ParallelAnimation {
-
-                            NumberAnimation {
-                                property: "y"
-                                to: -listView.delegateHeight
-                                duration: 300
-                                easing {
-                                    type: Easing.OutQuad
-                                }
-                            }
-
-                            NumberAnimation {
-                                property: "opacity"
-                                to: 0.10
-                                duration: 350
-                                easing {
-                                    type: Easing.OutQuad
-                                }
-                            }
-                        }
+                NumberAnimation {
+                    property: "opacity"
+                    to: 0
+                    duration: 350
+                    easing {
+                        type: Easing.OutQuad
                     }
                 }
             }
@@ -395,9 +384,10 @@ Item {
             property alias instructionDistanceLabel: instructionDistanceLabel
             property alias clipBox: clipBox
             property alias columnLayout: columnLayout
+            property alias background: delegateBackgroundRect
 
             width: listView.width
-            height: !visible? 0: ListView.view.delegateHeight
+            height: !visible? 0: internal.delegateHeight
 
             Rectangle {
                 id: delegateBackgroundRect
@@ -506,6 +496,27 @@ Item {
         function onEndNavigation () {
             directionsListModel.clear()
             listView.open = false
+        }
+    }
+
+    Connections {
+        target: tripPullPane
+
+        function onHeightChanged () {
+            // calculate max height and resize
+        }
+    }
+
+    Binding {
+        target: listView
+        property: "height"
+        when: listView.open
+        restoreMode: Binding.RestoreNone
+        value: {
+            (internal.segs.length - 1)
+                    * internal.delegateHeight < internal.maxHeight ?
+                        (internal.segs.length - 1) * internal.delegateHeight
+                      : internal.maxHeight;
         }
     }
 }
