@@ -40,7 +40,7 @@ Item {
     Rectangle {
         id: headerRect
 
-        height: parent.height * 0.15
+        height: parent.height * 0.2
 
         anchors {
             top: parent.top
@@ -73,7 +73,7 @@ Item {
                 color: AppUtil.color.foreground
 
                 Component.onCompleted: {
-                    font.pixelSize = 17
+                    font.pixelSize = 16
                 }
             }
 
@@ -86,11 +86,11 @@ Item {
                 visible: text
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
-                font: AppUtil.headerFont
+                font: AppUtil.secondaryHeaderFont
                 color: AppUtil.color.foreground
 
                 Component.onCompleted: {
-                    font.pixelSize = 17
+                    font.pixelSize = 14
                 }
             }
         }
@@ -111,7 +111,8 @@ Item {
                 if (segment.maneuver.valid) {
                     headerRectLabel.text = segment.maneuver.instructionText
                     headerRectDistanceLabel.text = "Travel "
-                            + Math.round(segment.distance) + " feet"
+                            // meters -> ft
+                            + Math.round(segment.distance * 3.281) + " ft."
                 } else {
                     //                    root.currentDirectionIndex++
                     print("maneuver invalid, headerRect increased currentDirectionIndex. Index is now:", root.currentDirectionIndex)
@@ -131,7 +132,7 @@ Item {
         // WARNING: Having a height will break the openAnimation when animate
         // open on load is implemented.
 
-        height: headerRect.height * 0.75
+        height: headerRect.height * 0.66
 
         width: listView.width
         anchors {
@@ -153,7 +154,7 @@ Item {
             NumberAnimation {
                 target: nextInstructionRect
                 property: "height"
-                to: headerRect.height / 3
+                to: headerRect.height * 0.66
                 duration: 450
                 easing {
                     type: Easing.OutQuad
@@ -194,7 +195,11 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 text: ""
                 color: AppUtil.color.fontSecondary
-                font: AppUtil.headerFont
+                font: AppUtil.secondaryHeaderFont
+
+                Component.onCompleted: {
+                    font.pixelSize = 12
+                }
             }
 
             Label {
@@ -207,7 +212,11 @@ Item {
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
                 color: AppUtil.color.fontSecondary
-                font: AppUtil.headerFont
+                font: AppUtil.secondaryHeaderFont
+
+                Component.onCompleted: {
+                    font.pixelSize = 12
+                }
             }
         }
 
@@ -227,7 +236,8 @@ Item {
                 if (segment.maneuver.valid) {
                     nextInstructionRectLabel.text = segment.maneuver.instructionText
                     nextInstructionRectDistanceLabel.text = "Travel "
-                            + Math.round(segment.distance) + " feet"
+                            // meters -> ft
+                            + Math.round(segment.distance * 3.281) + " ft."
                 }
             } else {
                 nextInstructionRectLabel.text = ""
@@ -447,7 +457,8 @@ Item {
                         wrapMode: Text.Wrap
                         text: {
                             if (hasManeuver) {
-                                "Travel " + Math.round(segment.distance) + " feet"
+                                // meters -> ft
+                                "Travel " + Math.round(segment.distance * 3.281) + " ft."
                             }
                             else "";
                         }
