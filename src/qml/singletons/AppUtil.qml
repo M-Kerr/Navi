@@ -11,9 +11,9 @@ QtObject {
 
     property font secondaryHeaderFont: Qt.font({family: nunito.name})
 
-    property font subHeaderFont: Qt.font({family: "Arial"})
+    property font subHeaderFont: Qt.font({family: nunito.name})
 
-    property font bodyFont: Qt.font({family: "Arial"})
+    property font bodyFont: Qt.font({family: nunito.name})
 
     property QtObject vollkorn: FontLoader {
                     source: "../resources/fonts/Vollkorn/Vollkorn-VariableFont_wght.ttf"
