@@ -60,6 +60,7 @@ Item {
         source: mainMapPage
         blurRadius: 40
         color: AppUtil.color.foreground
+        minHeight:  distance.y + distance.height + directionsButton.height + 10
 
         Rectangle {
             id: imageRect
@@ -110,115 +111,131 @@ Item {
             color: AppUtil.color.backgroundDarkShadow
         }
 
-        ColumnLayout {
-            id: clipItem
-
-            clip: true
+        Label {
+            id: nameLabel;
 
             anchors {
                 top: imageRect.bottom
                 left: parent.left
                 right: parent.right
-                bottom: parent.bottom
-                topMargin: 15
+                topMargin: 10
                 leftMargin: 20
                 rightMargin: 20
-                bottomMargin: 5
             }
 
-            spacing: 10
-
-            ColumnLayout {
-                id: titleSection
-
-                Layout.alignment: Qt.AlignHCenter
-
-                spacing: 4
-
-                Label {
-                    id: nameLabel;
-
-                    width: parent.width
-
-                    Layout.alignment: Qt.AlignHCenter
-
-                    text:{
-                        if (root.place)
-                        {
-                            let i = root.place.name.indexOf(",")
-                            if (i !== -1) root.place.name.slice(0, i);
-                            else root.place.name
-                        }
-                        else ""
-                    }
-                    font: AppUtil.headerFont
-                    color: AppUtil.color.fontPrimary
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text:{
+                if (root.place)
+                {
+                    let i = root.place.name.indexOf(",")
+                    if (i !== -1) root.place.name.slice(0, i);
+                    else root.place.name
                 }
+                else ""
+            }
+            font: AppUtil.headerFont
+            color: AppUtil.color.fontPrimary
+        }
 
-                Label {
-                    id: streetCityLabel
+        Label {
+            id: streetCityLabel
 
-                    width: parent.width
-
-                    Layout.alignment: Qt.AlignHCenter
-
-                    visible: text
-                    text: {
-                        let t = ""
-
-                        if (root.place) {
-                            if (root.place.location.address.street
-                                    && root.place.location.address.city)
-                            {
-                                t += root.place.location.address.street + ", "
-                                t += root.place.location.address.city
-                            }
-                            else if (root.place.location.address.street)
-                                t += root.place.location.address.street;
-                            else if (root.place.location.address.city)
-                                t += root.place.location.address.city;
-                        }
-
-                        return t
-                    }
-                    font: AppUtil.subHeaderFont
-                    color: AppUtil.color.fontSecondary
-                }
-
-                Label {
-                    id: contactPhone
-
-                    Layout.alignment: Qt.AlignHCenter
-                    horizontalAlignment: Text.AlignHCenter
-
-                    text: {
-                        if (root.place) "Phone: " + root.place.primaryPhone;
-                        else "";
-                    }
-                    font: AppUtil.bodyFont
-                    color: AppUtil.color.fontPrimary
-                }
-
-                Label {
-                    id: distance
-
-                    width: parent.width
-                    Layout.alignment: Qt.AlignHCenter
-
-                    text: {
-                        if ( root.place ) {
-                            // meters to miles conversion
-                            Math.round((root.placeDistance / 1609) * 100) / 100
-                                    + " miles away (geodesic)" ;
-                        }
-                        else "";
-                    }
-                    font: AppUtil.bodyFont
-                    color: AppUtil.color.fontPrimary
-                }
+            anchors {
+                top: nameLabel.bottom
+                left: parent.left
+                right: parent.right
+                topMargin: 6
+                leftMargin: 20
+                rightMargin: 20
             }
 
-            Item {id: filler; Layout.fillHeight: true }
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            visible: text
+            text: {
+                let t = ""
+
+                if (root.place) {
+                    if (root.place.location.address.street
+                            && root.place.location.address.city)
+                    {
+                        t += root.place.location.address.street + ", "
+                        t += root.place.location.address.city
+                    }
+                    else if (root.place.location.address.street)
+                        t += root.place.location.address.street;
+                    else if (root.place.location.address.city)
+                        t += root.place.location.address.city;
+                }
+
+                return t
+            }
+            font: AppUtil.subHeaderFont
+            color: AppUtil.color.fontSecondary
+        }
+
+        Rectangle {
+            id: headerDiv
+
+            height: 1
+            width: parent.width / 3
+            anchors {
+                top: streetCityLabel.bottom
+                horizontalCenter: parent.horizontalCenter
+                topMargin: 10
+            }
+            color: AppUtil.color.foregroundBorder
+        }
+
+        Label {
+            id: phoneLabel
+
+            anchors {
+                top: headerDiv.bottom
+                left: parent.left
+                right: parent.right
+                topMargin: 10
+                leftMargin: 20
+                rightMargin: 20
+            }
+
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            visible: text
+            text: {
+                if (root.place.primaryPhone) "Phone: " + root.place.primaryPhone;
+                else "";
+            }
+            font: AppUtil.bodyFont
+            color: AppUtil.color.fontPrimary
+            Component.onCompleted: print("visible:",visible)
+        }
+
+        Label {
+            id: distance
+
+            anchors {
+                top: phoneLabel.visible? phoneLabel.bottom : headerDiv.bottom
+                left: parent.left
+                right: parent.right
+                topMargin: phoneLabel.visible? 4 : 10
+                leftMargin: 20
+                rightMargin: 20
+            }
+
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text: {
+                if ( root.place ) {
+                    // meters to miles conversion
+                    Math.round((root.placeDistance / 1609) * 100) / 100
+                            + " miles away (geodesic)" ;
+                }
+                else "";
+            }
+            font: AppUtil.bodyFont
+            color: AppUtil.color.fontPrimary
         }
 
         Component.onCompleted: {
