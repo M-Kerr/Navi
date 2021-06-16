@@ -6,7 +6,7 @@ import QtGraphicalEffects 1.15
 import EsriSearchModel 1.0
 import Logic 1.0
 import AppUtil 1.0
-import "../animations"
+import "qrc:///animations"
 
 MapQuickItem {
     id: root

@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import AppUtil 1.0
-import "SoftUI"
+import "qrc:///SoftUI"
 
 SoftGlassBox {
     id: root

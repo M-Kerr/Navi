@@ -2,7 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.15
 import AppUtil 1.0
-import "SoftUI"
+import "qrc:///SoftUI"
 
 SoftGlassBox {
     id: root
@@ -10,6 +10,7 @@ SoftGlassBox {
     signal clicked(var mouse)
 
     property alias mouseArea: mouseArea
+    property alias imageColor: colorOverlay.color
 
     implicitHeight: 35
     implicitWidth: 35
@@ -25,10 +26,11 @@ SoftGlassBox {
         }
 
         visible: false
-        source: "../resources/close.svg"
+        source: "../resources/close.png"
     }
 
     ColorOverlay {
+        id: colorOverlay
 
         anchors.fill: source
 
