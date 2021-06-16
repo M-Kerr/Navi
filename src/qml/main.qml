@@ -5,14 +5,14 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtQml 2.15
-import com.mkerr.navi 1.0
+//import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 import EsriRouteModel 1.0
 import Logic 1.0
 import AppUtil 1.0
-import "pages/map"
-import "components"
-import "components/SoftUI"
+import "qrc:/pages/map/"
+import "qrc:/SoftUI"
+import "qrc:/components"
 
 ApplicationWindow {
     id: applicationWindow

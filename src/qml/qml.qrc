@@ -20,5 +20,14 @@
         <file>pages/map/MapPage.qml</file>
         <file>pages/map/MapPageStates.qml</file>
         <file>pages/map/MapStates.qml</file>
+        <file>animations/ActivateSearchBarAnimation.qml</file>
+        <file>animations/DeactivateSearchBarAnimation.qml</file>
+        <file>pages/map/DirectionsView.qml</file>
+        <file>pages/map/DirectionsViewImpl.qml</file>
+        <file>pages/map/RouteView.qml</file>
+        <file>HotReloader.qml</file>
+        <file>components/BackButton.qml</file>
+        <file>components/CloseButton.qml</file>
+        <file>singletons/WasmLocationPlugin.qml</file>
     </qresource>
 </RCC>

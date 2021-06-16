@@ -60,7 +60,7 @@ else()
     add_executable(Navi
         ${SRC_FILES}
         #WARNING: add the qrc_files for release
-#        $CACHE{QRC_FILES}
+        $CACHE{QRC_FILES}
         ${TS_FILES}
     )
 endif()

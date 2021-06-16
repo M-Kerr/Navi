@@ -6,15 +6,16 @@ import QtLocation 5.15
 import QtPositioning 5.15
 import QtQml 2.15
 import MapboxPlugin 1.0
+//import WasmLocationPlugin 1.0
 import EsriSearchModel 1.0
 import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
 import AppUtil 1.0
-import "../../components/SoftUI"
-import "../../components"
-import "../../animations"
-import ".."
+import "qrc:/SoftUI"
+import "qrc:/components"
+import "qrc:/animations"
+import "qrc:/pages"
 
 Item {
     id: root
@@ -89,7 +90,7 @@ Item {
             source: map
             radius: width
             blurRadius: 30
-            color: AppUtil.color.foreground
+            color: Qt.lighter(AppUtil.color.background, 1.50)
             enabled: false
             opacity: 0.0
             layer.enabled: true
@@ -110,16 +111,17 @@ Item {
                 }
 
                 visible: false
-                source: "../../resources/arrow.svg"
+                source: "qrc:/resources/arrow.png"
                 rotation: -90
             }
 
+            // Color the back arrow
             ColorOverlay {
 
                 anchors.fill: source
 
                 source: backImage
-                color: AppUtil.color.fontPrimary
+                color: AppUtil.color.fontSecondary
                 rotation: -90
             }
 
@@ -132,7 +134,7 @@ Item {
             }
 
             Component.onCompleted: {
-                color.a = 0.65
+                color.a = 0.70
             }
         }
 
@@ -148,10 +150,24 @@ Item {
                 bottom: parent.bottom
             }
 
+            iconColor: Qt.darker(AppUtil.color.fontSecondary, 1.25)
+//            iconColor: AppUtil.color.fontSecondary
             color: "transparent"
             input.placeholderTextColor: AppUtil.color.fontSecondary
             input.color: AppUtil.color.fontPrimary
-            clearButton.color: AppUtil.color.fontPrimary
+            input.selectionColor: AppUtil.color.foreground
+//            input.selectionColor: AppUtil.color.fontSelect
+            input.font: AppUtil.bodyFont
+            clearButton.height: background.height * 0.50
+            clearButton.color: Qt.lighter(AppUtil.color.background, 1.65)
+            clearButton.topShadow.visible: false
+            clearButton.topShadow.color: AppUtil.color.backgroundLightShadow
+            clearButton.bottomShadow.color: AppUtil.color.backgroundDarkShadow
+            clearButtonImage.visible: false
+            clearButton.text: "x"
+            clearButton.font: AppUtil.bodyFont
+            clearButton.label.color: Qt.darker(AppUtil.color.fontSecondary, 1.5)
+            clearButton.label.bottomPadding: 2.5
 
             onInputActiveFocusChanged: {
                 if (inputActiveFocus) {
@@ -176,10 +192,10 @@ Item {
                 source: map
                 radius: parent.radius
                 blurRadius: 50
-                color: AppUtil.color.foreground
+                color: Qt.lighter(AppUtil.color.background, 1.50)
 
                 Component.onCompleted: {
-                    color.a = 0.20
+                    color.a = 0.70
                 }
             }
         }
@@ -238,6 +254,7 @@ Item {
             }
         }
 
+//        plugin: WasmLocationPlugin
         plugin: MapboxPlugin
         activeMapType: {
             var style;
@@ -257,7 +274,7 @@ Item {
         minimumZoomLevel: 0
         maximumZoomLevel: 20
 
-        copyrightsVisible: false
+        copyrightsVisible: true
 
         MouseArea {
             anchors.fill: parent
@@ -346,8 +363,7 @@ Item {
             sourceItem: Image {
                 height: 30
                 width: 30
-                //                source: "qrc:../../resources/locationMarker.svg"
-                source: "../../resources/locationMarker.svg"
+                source: "qrc:/resources/locationMarker.png"
             }
         }
 
@@ -367,51 +383,51 @@ Item {
             map.zoomLevel = 17.5
         }
 
-        //        PlacesMapView {
-        //            id: placesMap
-        //        }
+        PlacesMapView {
+            id: placesMapView
+        }
 
-        //                    RouteView {
-        //                        id: routeView
-        //                    }
+        RouteView {
+            id: routeView
+        }
         // WARNING: dev tool above and below, delete and replace with above
         // View components
-        property var placesMapView: null
-        property var routeView: null
+//        property var placesMapView: null
+//        property var routeView: null
         // instantiate impl and assign directionsView as parent. When
         // directionsView visibility changes, it'll change the visibility
         // of its child impl.
-        property var directionsViewImpl: null
+//        property var directionsViewImpl: null
 
         function createViews () {
-            if (placesMapView) {
-                map.removeMapItemView(placesMapView)
-                placesMapView.destroy()
-            }
-            if (routeView) {
-                map.removeMapItemView(routeView)
-                routeView.destroy()
-            }
-            if (directionsViewImpl) {
-                directionsViewImpl.destroy()
-            }
+//            if (placesMapView) {
+//                map.removeMapItemView(placesMapView)
+//                placesMapView.destroy()
+//            }
+//            if (routeView) {
+//                map.removeMapItemView(routeView)
+//                routeView.destroy()
+//            }
+//            if (directionsViewImpl) {
+//                directionsViewImpl.destroy()
+//            }
 
-            placesMapView = null
-            routeView = null
-            directionsViewImpl = null
+//            placesMapView = null
+//            routeView = null
+//            directionsViewImpl = null
 
             $QmlEngine.clearCache();
 
-            var comp = Qt.createComponent("PlacesMapView.qml")
-            placesMapView = comp.createObject(map, {})
-            map.addMapItemView(placesMapView)
+//            var comp = Qt.createComponent("PlacesMapView.qml")
+//            placesMapView = comp.createObject(map, {})
+//            map.addMapItemView(placesMapView)
 
-            comp = Qt.createComponent("RouteView.qml")
-            routeView = comp.createObject(map, {})
-            map.addMapItemView(routeView)
+//            comp = Qt.createComponent("RouteView.qml")
+//            routeView = comp.createObject(map, {})
+//            map.addMapItemView(routeView)
 
-            comp = Qt.createComponent("DirectionsViewImpl.qml")
-            directionsViewImpl = comp.createObject(directionsView, {})
+//            comp = Qt.createComponent("DirectionsViewImpl.qml")
+//            directionsViewImpl = comp.createObject(directionsView, {})
         }
 
         Component.onCompleted: {
@@ -426,13 +442,12 @@ Item {
         width: parent.width
         y: -50
 
-        //        source: "qrc:edge-gradient.png"
-        source: "../../resources/edge-gradient.png"
+        source: "qrc:/resources/edge-gradient.png"
         opacity: 0.35
         visible: root.following
     }
 
-    Item {
+    Rectangle {
         id: cameraFocusImageRect
 
         z: 1
@@ -446,7 +461,8 @@ Item {
             margins: 10
         }
 
-        opacity: 0
+        color: Qt.lighter(AppUtil.color.background, 1.45)
+        radius: width / 8
 
         scale: cameraFocusMouseArea.pressed ? 0.85 : 1.0
 
@@ -544,8 +560,7 @@ Item {
             anchors.fill: parent
             visible: false
 
-            // source: "qrc:resources/focus.svg"
-            source: "../../resources/focus.png"
+            source: "qrc:/resources/focus.png"
 
         }
 
@@ -554,17 +569,7 @@ Item {
             source: cameraFocusImage
 
             anchors.fill: source
-            color: AppUtil.color.accent
-        }
-        DropShadow {
-            source: imageColorOverlay
-
-            anchors.fill: source
-            color: AppUtil.color.accentDarkShadow
-            radius: 6
-            samples: (radius * 2) + 1
-            verticalOffset: 4
-            horizontalOffset: -1
+            color: Qt.lighter(AppUtil.color.accent, 1.25)
         }
     }
 
@@ -576,7 +581,10 @@ Item {
         property real rowHeight: 40
         property real rowMargins: (minHeight / 2) - (rowHeight / 2)
 
+        anchors.bottomMargin: -5
+
         z: 1
+        radius: width / 40
         visible: false
         minHeight: 75
         source: map
@@ -984,7 +992,7 @@ Item {
                     }
 
                     text: "End"
-                    color: AppUtil.color.fontSecondary
+                    color: AppUtil.color.foreground
                     font: AppUtil.headerFont
                     Component.onCompleted: {
                         font.pixelSize = 16
@@ -1003,7 +1011,7 @@ Item {
                     text: "Route"
                     visible: false
                     opacity: 0
-                    color: AppUtil.color.fontSecondary
+                    color: AppUtil.color.foreground
                     font: AppUtil.headerFont
                     Component.onCompleted: {
                         font.pixelSize = 16

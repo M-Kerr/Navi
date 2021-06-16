@@ -3,11 +3,11 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 import QtLocation 5.15
 import QtGraphicalEffects 1.15
-import com.mkerr.navi 1.0
+//import com.mkerr.navi 1.0
 import EsriSearchModel 1.0
 import Logic 1.0
 import AppUtil 1.0
-import "../components/SoftUI"
+import "qrc:/SoftUI"
 
 Control {
     id: root
@@ -26,7 +26,7 @@ Control {
             left: parent.left
             right: parent.right
         }
-        color: "#ebebeb"
+        color: AppUtil.color.foreground
         opacity: 0.01
     }
 
@@ -51,7 +51,7 @@ Control {
             radius: 16
             samples: 32
             verticalOffset: -0.15
-            color: "#c8c8c8"
+            color: AppUtil.color.foregroundDarkShadow
         }
     }
 
@@ -63,12 +63,17 @@ Control {
         source: map
         radius: 0
         blurRadius: 60
-        color {
-            hsvHue: 0
-            hsvSaturation: 0
-            hsvValue: 0.92
-            a: 0.80
+        color: AppUtil.color.foreground
+        Component.onCompleted: {
+            color.a = 0.90
         }
+
+//        color {
+//            hsvHue: 0
+//            hsvSaturation: 0
+//            hsvValue: 0.92
+//            a: 0.80
+//        }
     }
 
     ListView {
@@ -99,8 +104,6 @@ Control {
             background: Rectangle {
                 border {
                     width: (index % 2 === 1)? 1: 0
-//                    color: night? Qt.lighter(AppUtil.color.primary, 1.15)
-//                                : Qt.darker(AppUtil.color.primary, 1.2)
                     color: AppUtil.color.backgroundBorder
                 }
 
@@ -139,7 +142,7 @@ Control {
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
-                        source: "../resources/marker2.png"
+                        source: "qrc:/resources/marker2.png"
                     }
                 }
 

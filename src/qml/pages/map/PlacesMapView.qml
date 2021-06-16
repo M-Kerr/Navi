@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 import QtLocation 5.15
 import EsriSearchModel 1.0
 import Logic 1.0
+import AppUtil 1.0
 
 MapItemView {
     id: root
@@ -72,7 +73,7 @@ MapItemView {
                         Image {
                             id: markerImage;
                             anchors.fill: parent
-                            source: "../../resources/marker2.png"
+                            source: "qrc:/resources/marker2.png"
                         }
                     }
 
@@ -89,7 +90,7 @@ MapItemView {
                             if (i !== -1) place.name.slice(0, i);
                             else place.name
                         }
-                        font.bold: true
+                        font: AppUtil.headerFont
                         horizontalAlignment: Qt.AlignHCenter
                         verticalAlignment: Qt.AlignVCenter
                     }

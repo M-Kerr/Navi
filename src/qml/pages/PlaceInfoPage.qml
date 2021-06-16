@@ -6,8 +6,8 @@ import QtGraphicalEffects 1.15
 import QtPositioning 5.15
 import Logic 1.0
 import AppUtil 1.0
-import "../components"
-import "../components/SoftUI"
+import "qrc:/components"
+import "qrc:/SoftUI"
 
 Item {
     id: root
@@ -28,6 +28,7 @@ Item {
         source: mainMapPage
         radius: width / 2
         color: AppUtil.color.backgroundDarkShadow
+        imageColor: AppUtil.color.fontAccent
 
         onClicked: {
             Logic.backToPlacesMap()
@@ -47,6 +48,7 @@ Item {
         source: mainMapPage
         radius: width / 2
         color: AppUtil.color.backgroundDarkShadow
+        imageColor: AppUtil.color.fontAccent
 
         onClicked: {
             Logic.fitViewportToPlacesMapView()
@@ -239,7 +241,7 @@ Item {
         }
 
         Component.onCompleted: {
-            color.a = 0.80
+            color.a = 0.825
         }
     }
 
@@ -297,7 +299,7 @@ Item {
             anchors.centerIn:directionsButton
             text: "Directions"
             font: AppUtil.headerFont
-            color: AppUtil.color.fontSecondary
+            color: AppUtil.color.fontAccent
         }
     }
 }

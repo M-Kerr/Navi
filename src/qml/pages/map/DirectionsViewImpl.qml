@@ -26,8 +26,8 @@ import EsriRouteModel 1.0
 import Logic 1.0
 import GPS 1.0
 import AppUtil 1.0
-import "../../components"
-import "../../components/SoftUI"
+import "qrc:/components"
+import "qrc:/SoftUI"
 
 Item {
     id: root
@@ -87,7 +87,7 @@ Item {
                 visible: text
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.Wrap
-                font: AppUtil.secondaryHeaderFont
+                font: AppUtil.subHeaderFont
                 color: AppUtil.color.foreground
 
                 Component.onCompleted: {
@@ -195,8 +195,8 @@ Item {
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
                 text: ""
-                color: AppUtil.color.fontSecondary
-                font: AppUtil.secondaryHeaderFont
+                color: AppUtil.color.foreground
+                font: AppUtil.subHeaderFont
 
                 Component.onCompleted: {
                     font.pixelSize = 12
@@ -212,8 +212,8 @@ Item {
                 visible: text
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
-                color: AppUtil.color.fontSecondary
-                font: AppUtil.secondaryHeaderFont
+                color: AppUtil.color.foreground
+                font: AppUtil.subHeaderFont
 
                 Component.onCompleted: {
                     font.pixelSize = 12
