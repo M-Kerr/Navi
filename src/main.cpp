@@ -3,7 +3,7 @@
 #include <QQmlContext>
 #include <QSettings>
 #include <QDebug>
-#include "nmealog/nmealog.h"
+//#include "nmealog/nmealog.h"
 #include "hotreload/hotreloadqmlapplicationengine.h"
 
 #include "mapbox/qcheapruler.hpp"
@@ -22,33 +22,36 @@ int main(int argc, char *argv[])
 //    QQmlApplicationEngine engine;
     HotReloadQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("$QmlEngine", &engine);
-    qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
+//    qmlRegisterType<NmeaLog>("com.mkerr.navi", 1, 0, "NmeaLog");
     qmlRegisterType<QCheapRuler>("com.mapbox.cheap_ruler", 1, 0, "CheapRuler");
 
 /*******************************
     Production objects, uncomment for production
+ *******************************/
 
-    qmlRegisterSingletonType(QUrl("qrc://singletons/AppUtil.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/AppUtil.qml"),
                              "AppUtil", 1, 0, "AppUtil");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/MapboxPlugin.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/MapboxPlugin.qml"),
                              "MapboxPlugin", 1, 0, "MapboxPlugin");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/EsriPlugin.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/WasmLocationPlugin.qml"),
+                             "WasmLocationPlugin", 1, 0, "WasmLocationPlugin");
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/EsriPlugin.qml"),
                             "EsriPlugin", 1, 0, "EsriPlugin");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/EsriSearchModel.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/EsriSearchModel.qml"),
                              "EsriSearchModel", 1, 0, "EsriSearchModel");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/EsriRouteModel.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/EsriRouteModel.qml"),
                              "EsriRouteModel", 1, 0, "EsriRouteModel");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/Logic.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/Logic.qml"),
                              "Logic", 1, 0, "Logic");
-    qmlRegisterSingletonType(QUrl("qrc://singletons/GPS.qml"),
+    qmlRegisterSingletonType(QUrl("qrc:///singletons/GPS.qml"),
                              "GPS", 1, 0, "GPS");
 
     QUrl url(QStringLiteral("qrc:///main.qml"));
- *******************************/
+ /*******************************/
 
-/*******************************
+ /*******************************
     Dev Objects, delete for production
- *******************************/
+ *******************************
     QUrl appUtil("file:" + qgetenv("SINGLETONS_QML") + "AppUtil.qml");
     qmlRegisterSingletonType(appUtil,
                              "AppUtil", 1, 0, "AppUtil");
@@ -75,7 +78,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType(GPS, "GPS", 1, 0, "GPS");
 
     QUrl url(qgetenv("MAIN_QML"));
-/*******************************
+*//******************************
     /DevObjects
  *******************************/
 
