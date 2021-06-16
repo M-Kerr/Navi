@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/">
+    <qresource prefix="/resources">
         <file>marker2.png</file>
         <file>scale_end.png</file>
         <file>scale.png</file>
@@ -199,5 +199,28 @@
         <file>locationMarker.svg</file>
         <file>cameraFocus.svg</file>
         <file>close.svg</file>
+        <file>fonts/Oswald/Oswald-VariableFont_wght.ttf</file>
+        <file>fonts/Vollkorn/Vollkorn-VariableFont_wght.ttf</file>
+        <file>arrow.svg</file>
+        <file>CMakeLists.txt</file>
+        <file>focus.png</file>
+        <file>fonts/Lato/Lato-Bold.ttf</file>
+        <file>fonts/Nunito/Nunito-Bold.ttf</file>
+        <file>fonts/Lato/Lato-Regular.ttf</file>
+        <file>fonts/Nunito/Nunito-Regular.ttf</file>
+        <file>fonts/Lato/Lato-Thin.ttf</file>
+        <file>fonts/Lato/Lato-Normal.sfd</file>
+        <file>arrow.png</file>
+        <file>cameraFocus.png</file>
+        <file>close.png</file>
+        <file>locationMarker.png</file>
+        <file>leftArrow.png</file>
+        <file>fonts/Nunito_Sans/NunitoSans-Bold.ttf</file>
+        <file>fonts/Nunito_Sans/NunitoSans-BoldItalic.ttf</file>
+        <file>fonts/Nunito_Sans/NunitoSans-Italic.ttf</file>
+        <file>fonts/Nunito_Sans/NunitoSans-Regular.ttf</file>
+        <file>fonts/Nunito_Sans/NunitoSans-SemiBold.ttf</file>
+        <file>fonts/Nunito_Sans/NunitoSans-SemiBoldItalic.ttf</file>
+        <file>fonts/Lato/Lato-Black.ttf</file>
     </qresource>
 </RCC>
