@@ -6,29 +6,26 @@ import QtQuick.Controls 2.15
 QtObject {
     id: root
 
-//    property font headerFont: Qt.font({bold: true, family: latoBold.name})
-    property font headerFont: Qt.font({bold: true, family: nunito.name})
-
-    property font secondaryHeaderFont: Qt.font({family: nunito.name})
-
-    property font subHeaderFont: Qt.font({family: lato.name})
-
+    property font headerFont: Qt.font({bold: true, family: latoBlack.name})
+    property font subHeaderFont: Qt.font({bold: true, family: latoBold.name})
     property font bodyFont: Qt.font({family: lato.name})
+    property font secondaryHeaderFont: Qt.font({bold: true, family: nunitoBold.name})
 
-    property QtObject vollkorn: FontLoader {
-                    source: "../resources/fonts/Vollkorn/Vollkorn-VariableFont_wght.ttf"
+
+    property FontLoader nunito: FontLoader {
+        source: "../resources/fonts/Nunito_Sans/NunitoSans-Regular.ttf"
     }
-    property QtObject lato: FontLoader {
-                    source: "../resources/fonts/lato/Lato-Regular.ttf"
+    property FontLoader nunitoBold: FontLoader {
+        source: "../resources/fonts/Nunito_Sans/NunitoSans-Bold.ttf"
     }
-    property QtObject latoBold: FontLoader {
-                    source: "../resources/fonts/lato/Lato-Bold.ttf"
+    property FontLoader lato: FontLoader {
+        source: "../resources/fonts/Lato/Lato-Regular.ttf"
     }
-    property QtObject oswald: FontLoader {
-                    source: "../resources/fonts/oswald/Oswald-VariableFont_wght.ttf"
+    property FontLoader latoBlack: FontLoader {
+        source: "../resources/fonts/Lato/Lato-Black.ttf"
     }
-    property QtObject nunito: FontLoader {
-                    source: "../resources/fonts/nunito/Nunito-Bold.ttf"
+    property FontLoader latoBold: FontLoader {
+        source: "../resources/fonts/Lato/Lato-Bold.ttf"
     }
 
     property QtObject color: QtObject {
@@ -54,7 +51,13 @@ QtObject {
         property color fontPrimaryDarkShadow: theme.fontPrimaryDarkShadow
 
         property color fontSecondary: theme.fontSecondary
+        property color fontSelect: Qt.hsva(212 * (1/360), 0.3, 1.0, 1.0)
         property color fontAccent: theme.fontAccent
+        //212 30 100
+
+            Component.onCompleted: {
+                fontSelect.a = 0.9
+            }
 
         property QtObject devTheme: QtObject{
             property color background: "#B9B7BD"
@@ -100,7 +103,7 @@ QtObject {
             property color fontPrimaryLightShadow: Qt.lighter(fontPrimary, 1.8)
             property color fontPrimaryDarkShadow: Qt.darker(fontPrimary, 2.5)
 
-            property color fontSecondary: "#D9C6A3"
+            property color fontSecondary: Qt.darker("#D9C6A3", 1.65)
             property color fontAccent: "#FEC97C"
         }
     }
