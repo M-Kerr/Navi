@@ -4,9 +4,8 @@ import QtQuick 2.15
 import QtPositioning 5.15
 import EsriRouteModel 1.0
 
-// WARNING remove below imports, CheapRuler, and NMEAlog for production
+// WARNING remove below imports, CheapRuler for production
 import com.mapbox.cheap_ruler 1.0
-import com.mkerr.navi 1.0 //NMEAlog
 import QtLocation 5.15
 
 Item {
@@ -90,15 +89,5 @@ Item {
         function onEndNavigation () {
             currentDistanceAnimation.stop();
         }
-    }
-
-    NmeaLog {
-        id: nmeaLog
-        logFile: "/Volumes/Sierra/Users/mdkerr/Programming/Projects/Navi/\
-src/qml/resources/output.nmea.txt"
-
-        //        Component.onCompleted: {
-        //            startUpdates()
-        //        }
     }
 }
